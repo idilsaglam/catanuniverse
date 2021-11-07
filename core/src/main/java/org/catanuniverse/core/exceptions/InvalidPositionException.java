@@ -5,4 +5,4 @@
 */
 package org.catanuniverse.core.exceptions;
 
-public class InvalidDirectionException extends Exception {}
+public class InvalidPositionException extends Exception {}

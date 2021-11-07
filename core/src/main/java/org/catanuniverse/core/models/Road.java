@@ -7,14 +7,14 @@ package org.catanuniverse.core.models;
 
 public class Road extends Pin {
 
-    protected static final Directions[] supportedDirections =
-            new Directions[] {
-                Directions.TopLeft,
-                Directions.TopRight,
-                Directions.Right,
-                Directions.BottomRight,
-                Directions.BottomLeft,
-                Directions.Left
+    protected static final Positions[] SUPPORTED_DIRECTIONS =
+            new Positions[] {
+                Positions.TOP_LEFT,
+                Positions.TOP_RIGHT,
+                Positions.RIGHT,
+                Positions.BOTTOM_RIGHT,
+                Positions.BOTTOM_LEFT,
+                Positions.LEFT
             };
     /**
      * Create a new Road object owned by the given player

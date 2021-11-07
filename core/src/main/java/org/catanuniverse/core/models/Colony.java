@@ -7,14 +7,14 @@ package org.catanuniverse.core.models;
 
 public class Colony extends Pin {
 
-    protected static final Directions[] supportedDirections =
-            new Directions[] {
-                Directions.Top,
-                Directions.TopRight,
-                Directions.BottomRight,
-                Directions.Bottom,
-                Directions.BottomLeft,
-                Directions.TopLeft
+    protected static final Positions[] SUPPORTED_DIRECTIONS =
+            new Positions[] {
+                Positions.TOP,
+                Positions.TOP_RIGHT,
+                Positions.BOTTOM_RIGHT,
+                Positions.BOTTOM,
+                Positions.BOTTOM_LEFT,
+                Positions.TOP_LEFT
             };
 
     /**

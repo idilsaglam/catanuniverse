@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.core.models;
 
-import org.catanuniverse.core.exceptions.InvalidDirectionException;
+import org.catanuniverse.core.exceptions.InvalidPositionException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 
 public class Tile {
@@ -47,50 +47,50 @@ public class Tile {
     }
 
     /**
-     * Returns the neighbor of the Tile on the given direction
+     * Returns the neighbor of the Tile on the given position
      *
-     * @param direction The direction of the neighbor
+     * @param position The position of the neighbor
      * @return The neighbor Tile
-     * @throws InvalidDirectionException if the direction is not valid
+     * @throws InvalidPositionException if the position is not valid
      */
-    public Tile getNeighbor(Directions direction) throws InvalidDirectionException {
-        return this.neighbors[direction.computeIndex(false)];
+    public Tile getNeighbor(Positions position) throws InvalidPositionException {
+        return this.neighbors[position.computeIndex(false)];
     }
 
     /**
-     * Returns the road slot on the given direction
+     * Returns the road slot on the given position
      *
-     * @param direction The direction of the road slot
+     * @param position The position of the road slot
      * @return The content of the road slot
-     * @throws InvalidDirectionException If direction is not valid
+     * @throws InvalidPositionException If position is not valid
      */
-    public Road getRoadSlot(Directions direction) throws InvalidDirectionException {
-        return this.roadSlots[direction.computeIndex(false)];
+    public Road getRoadSlot(Positions position) throws InvalidPositionException {
+        return this.roadSlots[position.computeIndex(false)];
     }
 
     /**
-     * Returns the colony slot on the given direction
+     * Returns the colony slot on the given position
      *
-     * @param direction The direction to check for the colony slot
+     * @param position The position to check for the colony slot
      * @return The content of the colony slot
-     * @throws InvalidDirectionException If the given direction is not valid
+     * @throws InvalidPositionException If the given position is not valid
      */
-    public Colony getColonySlot(Directions direction) throws InvalidDirectionException {
-        return this.colonySlots[direction.computeIndex(true)];
+    public Colony getColonySlot(Positions position) throws InvalidPositionException {
+        return this.colonySlots[position.computeIndex(true)];
     }
 
     /**
-     * Insert a road on the given direction if possible
+     * Adds a road on the given position if possible
      *
-     * @param direction The direction to insert the road
+     * @param position The position to insert the road
      * @param road The road to insert
-     * @throws InvalidDirectionException if the direction is not valid
+     * @throws InvalidPositionException if the position is not valid
      * @throws SlotAlreadyTakenException if the given slot is already occupied by another user
      */
-    public void insertRoad(Directions direction, Road road)
-            throws InvalidDirectionException, SlotAlreadyTakenException {
+    public void addRoad(Positions position, Road road)
+            throws InvalidPositionException, SlotAlreadyTakenException {
         // Calculate the index of the roadSlots
-        int index = direction.computeIndex(false);
+        int index = position.computeIndex(false);
         if (this.roadSlots[index] == null) {
             // We can insert only if the slot is empty
             this.roadSlots[index] = road;
@@ -100,15 +100,15 @@ public class Tile {
     }
 
     /**
-     * Inserts a colony on the given direction if possible
+     * Adds a colony on the given position if possible
      *
-     * @param direction The direction to insert the colony
+     * @param position The position to insert the colony
      * @param colony The colony to insert
      */
-    public void insertColony(Directions direction, Colony colony)
-            throws InvalidDirectionException, SlotAlreadyTakenException {
+    public void addColony(Positions position, Colony colony)
+            throws InvalidPositionException, SlotAlreadyTakenException {
         // Calculate the index of the colonySlots
-        int index = direction.computeIndex(true);
+        int index = position.computeIndex(true);
         if (this.colonySlots[index] == null) {
             // We can insert only if the slot is null
             this.colonySlots[index] = colony;
@@ -118,26 +118,27 @@ public class Tile {
     }
 
     /**
-     * Function inserts a new neighbor on the given direction
+     * Function add a new neighbor on the given position
      *
-     * @param direction The direction to add the neighbor
+     * @param position The position to add the neighbor
      * @param neighbor The neighbor tile to add
-     * @throws InvalidDirectionException If the direction is not valid
-     * @throws SlotAlreadyTakenException If there's already a neighbor on the given direction
+     * @throws InvalidPositionException If the position is not valid
+     * @throws SlotAlreadyTakenException If there's already a neighbor on the given position
      */
-    public void insertNeighbor(Directions direction, Tile neighbor)
-            throws InvalidDirectionException, SlotAlreadyTakenException {
+    public void addNeighbor(Positions position, Tile neighbor)
+            throws InvalidPositionException, SlotAlreadyTakenException {
         /*
           This can be tricky: The compute index uses the supported directions array of the road by default.
           As the supported directions for neighbors are the same as the roads,
           we'll just pass null for pin and compute the index.
         */
-        int index = direction.computeIndex(false);
+        int index = position.computeIndex(false);
         if (this.neighbors[index] == null) {
             // We can insert only if the neighbor slots on the given index is empty
             this.neighbors[index] = neighbor;
             // When we add a neighbor, the current Tile will automatically become the neighbor too.
-            neighbor.neighbors[direction.reversed().computeIndex(false)] = this;
+            neighbor.neighbors[position.reversed().computeIndex(false)] = this;
+            return;
         }
         throw new SlotAlreadyTakenException();
     }

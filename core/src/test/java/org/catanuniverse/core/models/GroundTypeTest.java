@@ -9,6 +9,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -27,6 +28,7 @@ public class GroundTypeTest {
 
     @ParameterizedTest
     @MethodSource("groundTypeResourceCouples")
+    @DisplayName("Test produced resource by each ground type")
     void producesTest(GroundType g, Resource r) {
         assert Objects.equals(g.produces(), r);
     }
