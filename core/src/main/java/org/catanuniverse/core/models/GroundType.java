@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.core.models;
 
@@ -14,10 +15,11 @@ public enum GroundType {
 
     /**
      * Returns the Resources produced by this ground type
+     *
      * @return The resource produced by this ground type
      */
     public Resource produces() {
-        return switch(this) {
+        return switch (this) {
             case Forest -> Resource.Wood;
             case Farm -> Resource.Corn;
             case Mountain -> Resource.Mineral;

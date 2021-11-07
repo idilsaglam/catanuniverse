@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.core.models;
 
@@ -9,7 +10,7 @@ import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 
 public class Tile {
 
-    private final static int NB_SIDES = 6;
+    private static final int NB_SIDES = 6;
 
     private final int id;
     private final GroundType type;
@@ -47,6 +48,7 @@ public class Tile {
 
     /**
      * Returns the neighbor of the Tile on the given direction
+     *
      * @param direction The direction of the neighbor
      * @return The neighbor Tile
      * @throws InvalidDirectionException if the direction is not valid
@@ -57,6 +59,7 @@ public class Tile {
 
     /**
      * Returns the road slot on the given direction
+     *
      * @param direction The direction of the road slot
      * @return The content of the road slot
      * @throws InvalidDirectionException If direction is not valid
@@ -67,6 +70,7 @@ public class Tile {
 
     /**
      * Returns the colony slot on the given direction
+     *
      * @param direction The direction to check for the colony slot
      * @return The content of the colony slot
      * @throws InvalidDirectionException If the given direction is not valid
