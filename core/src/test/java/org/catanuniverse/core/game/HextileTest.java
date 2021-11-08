@@ -16,13 +16,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class HextileTest {
 
-    private Tile tile, neighbor;
+    private Hextile tile, neighbor;
+    private Harbor harbor;
 
     @BeforeEach
     void initTile() {
         Random rnd = new Random();
         tile = new Hextile(rnd.nextInt(10), GroundType.Desert);
         neighbor = new Hextile(rnd.nextInt(10), GroundType.Farm);
+        harbor = new Harbor();
     }
 
     @ParameterizedTest
@@ -85,8 +87,92 @@ public class HextileTest {
         }
     }
 
-    class Square extends Tile {
+    @ParameterizedTest
+    @DisplayName("Adding a neighbor to a slot occupied by an harbor")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addNeighborOnAHarbor(int index) {
+        try {
+            tile.addHarbor(index, harbor);
+        } catch (NoSuchSlotException | SlotAlreadyTakenException e) {
+            assert false;
+        }
+        try {
+            tile.addNeighbor(index, neighbor);
+            assert false;
+        } catch (SlotAlreadyTakenException e) {
+            assert true;
+        } catch (NoSuchSlotException | TileTypeNotSupportedException e) {
+            assert false;
+        }
+    }
 
+    @ParameterizedTest
+    @DisplayName("Adding an harbor on an empty slot")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addHarborTest(int index) {
+        try {
+            tile.addHarbor(index, harbor);
+            assert tile.getHarbor(index).equals(harbor);
+        } catch (SlotAlreadyTakenException | NoSuchSlotException e) {
+            assert false;
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Adding an harbor on a inexisting slot")
+    @ValueSource(ints = {-1, 6})
+    void addHarborToInvalidSlot(int index) {
+        try {
+            tile.addHarbor(index, harbor);
+            assert false;
+        } catch (NoSuchSlotException e) {
+            assert true;
+        } catch (SlotAlreadyTakenException e) {
+            assert false;
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Adding multiple neighbors to the same slot")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addMultipleHarborsToTheSameSlot(int index) {
+        try {
+            tile.addHarbor(index, harbor);
+        } catch (SlotAlreadyTakenException | NoSuchSlotException e) {
+            assert false;
+        }
+        try {
+            tile.addHarbor(index, harbor);
+            assert false;
+        } catch (SlotAlreadyTakenException e) {
+            assert true;
+        } catch (NoSuchSlotException e) {
+            assert false;
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Add harbor on a neighbor")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addHarborOnANeighbor(int index) {
+        try {
+            tile.addNeighbor(index, neighbor);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
+            assert false;
+        }
+        try {
+            tile.addHarbor(index, harbor);
+            assert false;
+        } catch (NoSuchSlotException e) {
+            assert false;
+        } catch (SlotAlreadyTakenException e) {
+            assert true;
+        }
+    }
+
+    private static class Square extends Tile {
         /**
          * Create a new instance of Tile object
          *
@@ -201,6 +287,29 @@ public class HextileTest {
             assert true;
         } catch (SlotAlreadyTakenException e) {
             assert false;
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Test all possible positions of a newly created tile's harbor slots")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getHarborTest(int index) {
+        try {
+            assert tile.getHarbor(index) == null;
+        } catch (NoSuchSlotException e) {
+            assert false;
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Test invalid positions for harbor slots")
+    @ValueSource(ints = {-1, 6})
+    void getHarborInvalidPositionsTest(int index) {
+        try {
+            tile.getHarbor(index);
+            assert false;
+        } catch (NoSuchSlotException e) {
+            assert true;
         }
     }
 

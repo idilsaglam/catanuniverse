@@ -16,6 +16,7 @@ abstract class Tile {
     protected final Resource resource;
     protected final Tile[] neighbors;
     protected final Road[] roadSlots;
+    protected final Harbor[] harbors;
     protected final Settlement[] settlementSlots;
 
     /**
@@ -31,6 +32,8 @@ abstract class Tile {
         this.resource = this.type.produces();
         // Neighbors are counted from the top left on the clockwise
         this.neighbors = new Tile[nbSides];
+        // Harbor slots are the same as the neighbor slots
+        this.harbors = new Harbor[nbSides];
         // Road slots are the same as the neighbors, counted from the top left on the clockwise
         this.roadSlots = new Road[nbSides];
         // Settlement slots are corners, counted from the top on the clockwise
@@ -54,10 +57,20 @@ abstract class Tile {
      * @throws NoSuchSlotException If there's no slots for the given index
      */
     protected Tile getNeighbor(int index) throws NoSuchSlotException {
-        if (index < 0 || index >= this.neighbors.length) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
         return this.neighbors[index];
+    }
+
+    /**
+     * Returns the given harbor slot
+     *
+     * @param index The index of the Harbor slot
+     * @return The content of the harbor slot
+     * @throws NoSuchSlotException If there's not slot matching with the given index
+     */
+    protected Harbor getHarbor(int index) throws NoSuchSlotException {
+        this.isSlotExists(index);
+        return this.harbors[index];
     }
 
     /**
@@ -68,9 +81,7 @@ abstract class Tile {
      * @throws NoSuchSlotException If there's no slot for the given index
      */
     protected Road getRoadSlot(int index) throws NoSuchSlotException {
-        if (index < 0 || index >= this.roadSlots.length) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
         return this.roadSlots[index];
     }
 
@@ -82,9 +93,7 @@ abstract class Tile {
      * @throws NoSuchSlotException If there's no slot for the given index
      */
     protected Settlement getSettlementSlot(int index) throws NoSuchSlotException {
-        if (index < 0 || index >= this.settlementSlots.length) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
         return this.settlementSlots[index];
     }
 
@@ -98,9 +107,7 @@ abstract class Tile {
      */
     protected void addRoad(int index, Road road)
             throws SlotAlreadyTakenException, NoSuchSlotException {
-        if (index < 0 || index >= this.roadSlots.length) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
         if (this.roadSlots[index] == null) {
             // We can insert only if the slot is empty
             this.roadSlots[index] = road;
@@ -119,9 +126,7 @@ abstract class Tile {
      */
     protected void addSettlement(int index, Settlement settlement)
             throws SlotAlreadyTakenException, NoSuchSlotException {
-        if (index < 0 || index >= this.settlementSlots.length) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
         if (this.settlementSlots[index] == null) {
             // We can insert only if the slot is null
             this.settlementSlots[index] = settlement;
@@ -143,19 +148,35 @@ abstract class Tile {
     protected void addNeighbor(int index, Tile neighbor)
             throws NoSuchSlotException, SlotAlreadyTakenException, TileTypeNotSupportedException {
 
-        if (index < 0 || index >= this.neighbors.length) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
 
-        if (!(neighbor.getClass().equals(this.getClass()))) {
+        if (!neighbor.getClass().equals(this.getClass())) {
             // The neighbor and the current class should has the same class name
             throw new TileTypeNotSupportedException();
         }
-        if (this.neighbors[index] == null) {
+        if (this.neighbors[index] == null && this.harbors[index] == null) {
             // We can insert only if the neighbor slots on the given index is empty
             this.neighbors[index] = neighbor;
             // When we add a neighbor, the current Tile will automatically become the neighbor too.
             neighbor.neighbors[this.complementaryIndex(index)] = this;
+            return;
+        }
+        throw new SlotAlreadyTakenException();
+    }
+
+    /**
+     * Add harbor to the given slot
+     *
+     * @param index The index of the slot
+     * @param harbor The harbor object to add
+     * @throws NoSuchSlotException If there's no slot matching with the given index
+     * @throws SlotAlreadyTakenException If the slot is not empty
+     */
+    protected void addHarbor(int index, Harbor harbor)
+            throws NoSuchSlotException, SlotAlreadyTakenException {
+        this.isSlotExists(index);
+        if (this.neighbors[index] == null && this.harbors[index] == null) {
+            this.harbors[index] = harbor;
             return;
         }
         throw new SlotAlreadyTakenException();
@@ -170,9 +191,7 @@ abstract class Tile {
      */
     protected int complementaryIndex(int index) throws NoSuchSlotException {
         int max = this.neighbors.length;
-        if (index < 0 || index >= max) {
-            throw new NoSuchSlotException();
-        }
+        this.isSlotExists(index);
         if (max % 2 == 0) {
             int mid = max / 2;
             if (index < mid) {
@@ -184,5 +203,17 @@ abstract class Tile {
             return index;
         }
         return max - 2 - index;
+    }
+
+    /**
+     * Throws an exception if there's no slot matching with the given index
+     *
+     * @param index The index of the slot
+     * @throws NoSuchSlotException If there's no slot matching with the given index
+     */
+    private void isSlotExists(int index) throws NoSuchSlotException {
+        if (index < 0 || index >= this.neighbors.length) {
+            throw new NoSuchSlotException();
+        }
     }
 }
