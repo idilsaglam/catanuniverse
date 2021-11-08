@@ -18,7 +18,7 @@ public enum GroundType {
      *
      * @return The resource produced by this ground type
      */
-    public Resource produces() {
+    protected Resource produces() {
         return switch (this) {
             case Forest -> Resource.Wood;
             case Farm -> Resource.Corn;

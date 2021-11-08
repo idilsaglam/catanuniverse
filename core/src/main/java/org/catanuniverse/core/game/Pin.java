@@ -6,9 +6,9 @@
 package org.catanuniverse.core.game;
 
 abstract class Pin {
-    public final Player owner;
+    protected final Player owner;
 
-    public Pin(Player owner) {
+    protected Pin(Player owner) {
         this.owner = owner;
     }
 }

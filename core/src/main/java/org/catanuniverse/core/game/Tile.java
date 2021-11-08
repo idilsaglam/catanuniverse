@@ -25,7 +25,7 @@ public class Tile {
      * @param id The id of the Tile
      * @param type The type of the Tile
      */
-    public Tile(int id, GroundType type) {
+    protected Tile(int id, GroundType type) {
         this.id = id;
         this.type = type;
         this.resource = this.type.produces();
@@ -42,7 +42,7 @@ public class Tile {
      *
      * @return The resource produced by the current tile
      */
-    public Resource produce() {
+    protected Resource produce() {
         return this.resource;
     }
 
@@ -53,7 +53,7 @@ public class Tile {
      * @return The neighbor Tile
      * @throws InvalidPositionException if the position is not valid
      */
-    public Tile getNeighbor(Positions position) throws InvalidPositionException {
+    protected Tile getNeighbor(Positions position) throws InvalidPositionException {
         return this.neighbors[position.computeIndex(false)];
     }
 
@@ -64,7 +64,7 @@ public class Tile {
      * @return The content of the road slot
      * @throws InvalidPositionException If position is not valid
      */
-    public Road getRoadSlot(Positions position) throws InvalidPositionException {
+    protected Road getRoadSlot(Positions position) throws InvalidPositionException {
         return this.roadSlots[position.computeIndex(false)];
     }
 
@@ -75,7 +75,7 @@ public class Tile {
      * @return The content of the settlement slot
      * @throws InvalidPositionException If the given position is not valid
      */
-    public Settlement getSettlementSlot(Positions position) throws InvalidPositionException {
+    protected Settlement getSettlementSlot(Positions position) throws InvalidPositionException {
         return this.settlementSlots[position.computeIndex(true)];
     }
 
@@ -87,7 +87,7 @@ public class Tile {
      * @throws InvalidPositionException if the position is not valid
      * @throws SlotAlreadyTakenException if the given slot is already occupied by another user
      */
-    public void addRoad(Positions position, Road road)
+    protected void addRoad(Positions position, Road road)
             throws InvalidPositionException, SlotAlreadyTakenException {
         // Calculate the index of the roadSlots
         int index = position.computeIndex(false);
@@ -105,7 +105,7 @@ public class Tile {
      * @param position The position to insert the settlement
      * @param settlement The settlement to insert
      */
-    public void addSettlement(Positions position, Settlement settlement)
+    protected void addSettlement(Positions position, Settlement settlement)
             throws InvalidPositionException, SlotAlreadyTakenException {
         // Calculate the index of the settlementSlots
         int index = position.computeIndex(true);
@@ -125,7 +125,7 @@ public class Tile {
      * @throws InvalidPositionException If the position is not valid
      * @throws SlotAlreadyTakenException If there's already a neighbor on the given position
      */
-    public void addNeighbor(Positions position, Tile neighbor)
+    protected void addNeighbor(Positions position, Tile neighbor)
             throws InvalidPositionException, SlotAlreadyTakenException {
         /*
           This can be tricky: The compute index uses the supported directions array of the road by default.

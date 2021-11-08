@@ -22,7 +22,7 @@ public enum Positions {
      *
      * @return The reversed directions
      */
-    public Positions reversed() {
+    protected Positions reversed() {
         return switch (this) {
             case TOP_LEFT -> BOTTOM_RIGHT;
             case TOP -> BOTTOM;

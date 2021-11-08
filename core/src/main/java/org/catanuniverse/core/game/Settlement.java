@@ -22,7 +22,7 @@ public class Settlement extends Pin {
      *
      * @param owner The owner of the Settlement
      */
-    public Settlement(Player owner) {
+    protected Settlement(Player owner) {
         super(owner);
     }
 }
