@@ -44,7 +44,7 @@ public enum Positions {
      */
     protected int computeIndex(boolean isCorner) throws InvalidPositionException {
         Positions[] supportedDirections =
-                (isCorner ? Colony.SUPPORTED_DIRECTIONS : Road.SUPPORTED_DIRECTIONS);
+                (isCorner ? Settlement.SUPPORTED_DIRECTIONS : Road.SUPPORTED_DIRECTIONS);
         for (int i = 0; i < supportedDirections.length; i++) {
             if (supportedDirections[i].equals(this)) {
                 return i;

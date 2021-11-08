@@ -17,7 +17,7 @@ public class Tile {
     private final Resource resource;
     private final Tile[] neighbors;
     private final Road[] roadSlots;
-    private final Colony[] colonySlots;
+    private final Settlement[] settlementSlots;
 
     /**
      * Create a new instance of Tile object
@@ -33,8 +33,8 @@ public class Tile {
         this.neighbors = new Tile[Tile.NB_SIDES];
         // Road slots are the same as the neighbors, counted from the top left on the clockwise
         this.roadSlots = new Road[Tile.NB_SIDES];
-        // Colony slots are corners, counted from the top on the clockwise
-        this.colonySlots = new Colony[Tile.NB_SIDES];
+        // Settlement slots are corners, counted from the top on the clockwise
+        this.settlementSlots = new Settlement[Tile.NB_SIDES];
     }
 
     /**
@@ -69,14 +69,14 @@ public class Tile {
     }
 
     /**
-     * Returns the colony slot on the given position
+     * Returns the settlement slot on the given position
      *
-     * @param position The position to check for the colony slot
-     * @return The content of the colony slot
+     * @param position The position to check for the settlement slot
+     * @return The content of the settlement slot
      * @throws InvalidPositionException If the given position is not valid
      */
-    public Colony getColonySlot(Positions position) throws InvalidPositionException {
-        return this.colonySlots[position.computeIndex(true)];
+    public Settlement getSettlementSlot(Positions position) throws InvalidPositionException {
+        return this.settlementSlots[position.computeIndex(true)];
     }
 
     /**
@@ -100,18 +100,18 @@ public class Tile {
     }
 
     /**
-     * Adds a colony on the given position if possible
+     * Adds a settlement on the given position if possible
      *
-     * @param position The position to insert the colony
-     * @param colony The colony to insert
+     * @param position The position to insert the settlement
+     * @param settlement The settlement to insert
      */
-    public void addColony(Positions position, Colony colony)
+    public void addSettlement(Positions position, Settlement settlement)
             throws InvalidPositionException, SlotAlreadyTakenException {
-        // Calculate the index of the colonySlots
+        // Calculate the index of the settlementSlots
         int index = position.computeIndex(true);
-        if (this.colonySlots[index] == null) {
+        if (this.settlementSlots[index] == null) {
             // We can insert only if the slot is null
-            this.colonySlots[index] = colony;
+            this.settlementSlots[index] = settlement;
             return;
         }
         throw new SlotAlreadyTakenException();

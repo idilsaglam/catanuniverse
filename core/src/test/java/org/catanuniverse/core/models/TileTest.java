@@ -139,14 +139,14 @@ public class TileTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Adding a colony to a non empty slot")
+    @DisplayName("Adding a settlement to a non empty slot")
     @EnumSource(
             value = Positions.class,
             names = {"TOP_LEFT", "TOP", "TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT"})
-    void addColonyTest(Positions position) {
+    void addSettlementTest(Positions position) {
         try {
-            tile.addColony(position, new Colony(null));
-            assert tile.getColonySlot(position) != null;
+            tile.addSettlement(position, new Settlement(null));
+            assert tile.getSettlementSlot(position) != null;
         } catch (InvalidPositionException | SlotAlreadyTakenException e) {
             assert false;
         }
@@ -157,15 +157,15 @@ public class TileTest {
     @EnumSource(
             value = Positions.class,
             names = {"TOP_LEFT", "TOP", "TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT"})
-    void addColonyNotEmptySlot(Positions position) {
-        Colony c = new Colony(null);
+    void addSettlementNotEmptySlot(Positions position) {
+        Settlement c = new Settlement(null);
         try {
-            tile.addColony(position, c);
+            tile.addSettlement(position, c);
         } catch (InvalidPositionException | SlotAlreadyTakenException e) {
             assert false;
         }
         try {
-            tile.addColony(position, c);
+            tile.addSettlement(position, c);
             assert false;
         } catch (InvalidPositionException e) {
             assert false;
@@ -175,13 +175,13 @@ public class TileTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Add colony to an invalid position")
+    @DisplayName("Add settlement to an invalid position")
     @EnumSource(
             value = Positions.class,
             names = {"LEFT", "RIGHT"})
-    void addColonyInvalidPosition(Positions position) {
+    void addSettlementInvalidPosition(Positions position) {
         try {
-            tile.addColony(position, new Colony(null));
+            tile.addSettlement(position, new Settlement(null));
             assert false;
         } catch (InvalidPositionException e) {
             assert true;
@@ -245,26 +245,26 @@ public class TileTest {
     }
 
     @ParameterizedTest
-    @DisplayName("Test all possible positions for colony slots")
+    @DisplayName("Test all possible positions for settlement slots")
     @EnumSource(
             value = Positions.class,
             names = {"TOP_LEFT", "TOP", "TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT"})
-    void getColonyTest(Positions position) {
+    void getSettlementTest(Positions position) {
         try {
-            assert tile.getColonySlot(position) == null;
+            assert tile.getSettlementSlot(position) == null;
         } catch (InvalidPositionException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
-    @DisplayName("Testing invalid positions for getColony")
+    @DisplayName("Testing to access an invalid settlement slot")
     @EnumSource(
             value = Positions.class,
             names = {"LEFT", "RIGHT"})
-    void getColonyInvalidPositionsTest(Positions position) {
+    void getSettlementInvalidPositionsTest(Positions position) {
         try {
-            tile.getColonySlot(position);
+            tile.getSettlementSlot(position);
             assert false;
         } catch (InvalidPositionException e) {
             assert true;

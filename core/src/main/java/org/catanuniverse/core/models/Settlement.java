@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.core.models;
 
-public class Colony extends Pin {
+public class Settlement extends Pin {
 
     protected static final Positions[] SUPPORTED_DIRECTIONS =
             new Positions[] {
@@ -18,11 +18,11 @@ public class Colony extends Pin {
             };
 
     /**
-     * Creates a new Colony pin owned by the given user
+     * Creates a new Settlement pin owned by the given user
      *
-     * @param owner The owner of the Colony
+     * @param owner The owner of the Settlement
      */
-    public Colony(Player owner) {
+    public Settlement(Player owner) {
         super(owner);
     }
 }
