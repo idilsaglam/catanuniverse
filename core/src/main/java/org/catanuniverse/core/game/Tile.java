@@ -3,7 +3,7 @@
 	22015094 - Idil Saglam
 	 - Abderrahim Arous
 */
-package org.catanuniverse.core.models;
+package org.catanuniverse.core.game;
 
 import org.catanuniverse.core.exceptions.InvalidPositionException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;

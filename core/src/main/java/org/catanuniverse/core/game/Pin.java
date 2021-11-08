@@ -3,7 +3,7 @@
 	22015094 - Idil Saglam
 	 - Abderrahim Arous
 */
-package org.catanuniverse.core.models;
+package org.catanuniverse.core.game;
 
 abstract class Pin {
     public final Player owner;
