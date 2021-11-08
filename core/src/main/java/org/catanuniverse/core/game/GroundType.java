@@ -6,12 +6,18 @@
 package org.catanuniverse.core.game;
 
 enum GroundType {
-    Forest,
-    Hill,
-    Meadow,
-    Farm,
-    Mountain,
-    Desert;
+    Forest(Resource.Wood),
+    Hill(Resource.Corn),
+    Meadow(Resource.Mineral),
+    Farm(Resource.Wool),
+    Mountain(Resource.Clay),
+    Desert(null);
+
+    private final Resource resource;
+
+    GroundType(Resource resource) {
+        this.resource = resource;
+    }
 
     /**
      * Returns the Resources produced by this ground type
@@ -19,13 +25,6 @@ enum GroundType {
      * @return The resource produced by this ground type
      */
     protected Resource produces() {
-        return switch (this) {
-            case Forest -> Resource.Wood;
-            case Farm -> Resource.Corn;
-            case Mountain -> Resource.Mineral;
-            case Meadow -> Resource.Wool;
-            case Hill -> Resource.Clay;
-            default -> null;
-        };
+        return this.resource;
     }
 }
