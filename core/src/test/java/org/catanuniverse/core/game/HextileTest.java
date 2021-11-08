@@ -13,15 +13,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-public class TileTest {
+public class HextileTest {
 
     private Tile tile, neighbor;
 
     @BeforeEach
     void initTile() {
         Random rnd = new Random();
-        tile = new Tile(rnd.nextInt(10), GroundType.Desert);
-        neighbor = new Tile(rnd.nextInt(10), GroundType.Farm);
+        tile = new Hextile(rnd.nextInt(10), GroundType.Desert);
+        neighbor = new Hextile(rnd.nextInt(10), GroundType.Farm);
     }
 
     @ParameterizedTest
