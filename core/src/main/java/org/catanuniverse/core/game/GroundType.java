@@ -7,10 +7,10 @@ package org.catanuniverse.core.game;
 
 enum GroundType {
     Forest(Resource.Wood),
-    Hill(Resource.Corn),
-    Meadow(Resource.Mineral),
-    Farm(Resource.Wool),
-    Mountain(Resource.Clay),
+    Hill(Resource.Clay),
+    Meadow(Resource.Wool),
+    Farm(Resource.Corn),
+    Mountain(Resource.Mineral),
     Desert(null);
 
     private final Resource resource;
