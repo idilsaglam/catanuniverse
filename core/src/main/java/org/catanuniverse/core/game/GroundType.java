@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
-public enum GroundType {
+enum GroundType {
     Forest,
     Hill,
     Meadow,

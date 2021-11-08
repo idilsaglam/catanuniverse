@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
-public class Road extends Pin {
+class Road extends Pin {
 
     protected static final Positions[] SUPPORTED_DIRECTIONS =
             new Positions[] {

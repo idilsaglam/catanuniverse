@@ -6,12 +6,13 @@
 package org.catanuniverse.core.game;
 
 import java.util.Random;
-import org.catanuniverse.core.exceptions.InvalidPositionException;
+import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
+import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class HextileTest {
 
@@ -26,44 +27,44 @@ public class HextileTest {
 
     @ParameterizedTest
     @DisplayName("Test adding neighbor to an empty slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "TOP_LEFT", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT"})
-    void addNeighborTest(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addNeighborTest(int index) {
         try {
-            assert tile.getNeighbor(position) == null;
-            assert neighbor.getNeighbor(position.reversed()) == null;
-        } catch (InvalidPositionException e) {
+            assert tile.getNeighbor(index) == null;
+            assert neighbor.getNeighbor(tile.complementaryIndex(index)) == null;
+        } catch (NoSuchSlotException e) {
             assert false;
         }
         try {
-            tile.addNeighbor(position, neighbor);
-        } catch (InvalidPositionException | SlotAlreadyTakenException e) {
+            tile.addNeighbor(index, neighbor);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
             assert false;
         }
         try {
-            assert tile.getNeighbor(position).equals(neighbor);
-            assert neighbor.getNeighbor(position.reversed()).equals(tile);
-        } catch (InvalidPositionException e) {
+            assert tile.getNeighbor(index).equals(neighbor);
+            assert neighbor.getNeighbor(tile.complementaryIndex(index)).equals(tile);
+        } catch (NoSuchSlotException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Test adding multiple neighbors to the same slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "TOP_LEFT", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT"})
-    void addMultipleNeighborsToSamePositionTest(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addMultipleNeighborsToSamePositionTest(int index) {
         try {
-            tile.addNeighbor(position, neighbor);
-        } catch (InvalidPositionException | SlotAlreadyTakenException e) {
+            tile.addNeighbor(index, neighbor);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
             assert false;
         }
         try {
-            tile.addNeighbor(position, neighbor);
+            tile.addNeighbor(index, neighbor);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException | TileTypeNotSupportedException e) {
             assert false;
         } catch (SlotAlreadyTakenException e) {
             assert true;
@@ -72,50 +73,71 @@ public class HextileTest {
 
     @ParameterizedTest
     @DisplayName("Adding a neighbor to an invalid position")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP", "BOTTOM"})
-    void addNeighborInvalidPositionTest(Positions position) {
+    @ValueSource(ints = {-1, 6})
+    void addNeighborInvalidPositionTest(int index) {
         try {
-            tile.addNeighbor(position, neighbor);
+            tile.addNeighbor(index, neighbor);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert true;
-        } catch (SlotAlreadyTakenException e) {
+        } catch (SlotAlreadyTakenException | TileTypeNotSupportedException e) {
             assert false;
+        }
+    }
+
+    class Square extends Tile {
+
+        /**
+         * Create a new instance of Tile object
+         *
+         * @param id The id of the Tile
+         * @param type The type of the Tile
+         */
+        protected Square(int id, GroundType type) {
+            super(id, type, 4);
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Adding another tile type with hextile")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addInvalidTileType(int index) {
+        try {
+            tile.addNeighbor(index, new Square(4, GroundType.Desert));
+            assert false;
+        } catch (NoSuchSlotException | SlotAlreadyTakenException e) {
+            assert false;
+        } catch (TileTypeNotSupportedException e) {
+            assert true;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Adding a new road to an empty slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "TOP_LEFT", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT"})
-    void addRoadTest(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addRoadTest(int position) {
         try {
             tile.addRoad(position, new Road(null));
             assert tile.getRoadSlot(position) != null;
-        } catch (InvalidPositionException | SlotAlreadyTakenException e) {
+        } catch (NoSuchSlotException | SlotAlreadyTakenException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Adding two roads to the same slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "TOP_LEFT", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT"})
-    void addRoadNotEmptySlotTest() {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addRoadNotEmptySlotTest(int position) {
         Road r = new Road(null);
         try {
-            tile.addRoad(Positions.LEFT, r);
-        } catch (InvalidPositionException | SlotAlreadyTakenException e) {
+            tile.addRoad(position, r);
+        } catch (NoSuchSlotException | SlotAlreadyTakenException e) {
             assert false;
         }
         try {
-            tile.addRoad(Positions.LEFT, r);
+            tile.addRoad(position, r);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert false;
         } catch (SlotAlreadyTakenException e) {
             assert true;
@@ -124,14 +146,12 @@ public class HextileTest {
 
     @ParameterizedTest
     @DisplayName("Testing to add a road on an invalid position")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP", "BOTTOM"})
-    void addRoadInvalidPosition(Positions position) {
+    @ValueSource(ints = {-1, 6})
+    void addRoadInvalidPosition(int position) {
         try {
             tile.addRoad(position, new Road(null));
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert true;
         } catch (SlotAlreadyTakenException e) {
             assert false;
@@ -140,34 +160,30 @@ public class HextileTest {
 
     @ParameterizedTest
     @DisplayName("Adding a settlement to a non empty slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP_LEFT", "TOP", "TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT"})
-    void addSettlementTest(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addSettlementTest(int position) {
         try {
             tile.addSettlement(position, new Settlement(null));
             assert tile.getSettlementSlot(position) != null;
-        } catch (InvalidPositionException | SlotAlreadyTakenException e) {
+        } catch (NoSuchSlotException | SlotAlreadyTakenException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Adding two colonies to a same slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP_LEFT", "TOP", "TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT"})
-    void addSettlementNotEmptySlot(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addSettlementNotEmptySlot(int position) {
         Settlement c = new Settlement(null);
         try {
             tile.addSettlement(position, c);
-        } catch (InvalidPositionException | SlotAlreadyTakenException e) {
+        } catch (NoSuchSlotException | SlotAlreadyTakenException e) {
             assert false;
         }
         try {
             tile.addSettlement(position, c);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert false;
         } catch (SlotAlreadyTakenException e) {
             assert true;
@@ -176,14 +192,12 @@ public class HextileTest {
 
     @ParameterizedTest
     @DisplayName("Add settlement to an invalid position")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "RIGHT"})
-    void addSettlementInvalidPosition(Positions position) {
+    @ValueSource(ints = {-1, 6})
+    void addSettlementInvalidPosition(int position) {
         try {
             tile.addSettlement(position, new Settlement(null));
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert true;
         } catch (SlotAlreadyTakenException e) {
             assert false;
@@ -192,81 +206,69 @@ public class HextileTest {
 
     @ParameterizedTest
     @DisplayName("Test all possible positions of a newly created tile's neighbors")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "TOP_LEFT", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT"})
-    void getNeighborTest(Positions p) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getNeighborTest(int p) {
         try {
             assert tile.getNeighbor(p) == null;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Get neighbors from invalid positions")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP", "BOTTOM"})
-    void getNeighborInvalidPositionTest(Positions position) {
+    @ValueSource(ints = {-1, 6})
+    void getNeighborInvalidPositionTest(int position) {
         try {
             tile.getNeighbor(position);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert true;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Test all possible positions possible for road slots")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP_LEFT", "TOP_RIGHT", "RIGHT", "BOTTOM_RIGHT", "BOTTOM_LEFT", "LEFT"})
-    void getRoadTest(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getRoadTest(int position) {
         try {
             assert tile.getRoadSlot(position) == null;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Test invalid positions for road slots")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP", "BOTTOM"})
-    void getRoadInvalidPositionsTest(Positions position) {
+    @ValueSource(ints = {-1, 6})
+    void getRoadInvalidPositionsTest(int position) {
         try {
             tile.getRoadSlot(position);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert true;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Test all possible positions for settlement slots")
-    @EnumSource(
-            value = Positions.class,
-            names = {"TOP_LEFT", "TOP", "TOP_RIGHT", "BOTTOM_RIGHT", "BOTTOM", "BOTTOM_LEFT"})
-    void getSettlementTest(Positions position) {
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getSettlementTest(int position) {
         try {
             assert tile.getSettlementSlot(position) == null;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert false;
         }
     }
 
     @ParameterizedTest
     @DisplayName("Testing to access an invalid settlement slot")
-    @EnumSource(
-            value = Positions.class,
-            names = {"LEFT", "RIGHT"})
-    void getSettlementInvalidPositionsTest(Positions position) {
+    @ValueSource(ints = {-1, 6})
+    void getSettlementInvalidPositionsTest(int position) {
         try {
             tile.getSettlementSlot(position);
             assert false;
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchSlotException e) {
             assert true;
         }
     }

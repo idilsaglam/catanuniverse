@@ -5,4 +5,4 @@
 */
 package org.catanuniverse.core.exceptions;
 
-public class InvalidPositionException extends Exception {}
+public class NoSuchSlotException extends Exception {}

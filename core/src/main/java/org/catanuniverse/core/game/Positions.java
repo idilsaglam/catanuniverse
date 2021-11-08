@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
-import org.catanuniverse.core.exceptions.InvalidPositionException;
+import org.catanuniverse.core.exceptions.NoSuchSlotException;
 
 public enum Positions {
     TOP_LEFT,
@@ -40,9 +40,9 @@ public enum Positions {
      *
      * @param isCorner If true the index will be calculated for corners
      * @return The computed index for the given direction and given pin
-     * @throws InvalidPositionException If the direction not supported by the given pin
+     * @throws NoSuchSlotException If the direction not supported by the given pin
      */
-    protected int computeIndex(boolean isCorner) throws InvalidPositionException {
+    protected int computeIndex(boolean isCorner) throws NoSuchSlotException {
         Positions[] supportedDirections =
                 (isCorner ? Settlement.SUPPORTED_DIRECTIONS : Road.SUPPORTED_DIRECTIONS);
         for (int i = 0; i < supportedDirections.length; i++) {
@@ -50,6 +50,6 @@ public enum Positions {
                 return i;
             }
         }
-        throw new InvalidPositionException();
+        throw new NoSuchSlotException();
     }
 }

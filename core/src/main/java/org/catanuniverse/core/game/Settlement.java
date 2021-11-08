@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
-public class Settlement extends Pin {
+class Settlement extends Pin {
 
     protected static final Positions[] SUPPORTED_DIRECTIONS =
             new Positions[] {
