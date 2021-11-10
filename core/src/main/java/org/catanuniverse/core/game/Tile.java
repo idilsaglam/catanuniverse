@@ -5,13 +5,16 @@
 */
 package org.catanuniverse.core.game;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
 
 abstract class Tile {
-
+    private static int TILE_COUNTER = 0;
     protected final int id;
+    protected final int uid;
     protected final GroundType type;
     protected final Resource resource;
     protected final Tile[] neighbors;
@@ -27,6 +30,8 @@ abstract class Tile {
      * @param nbSides The number of sides that the tile has
      */
     protected Tile(int id, GroundType type, int nbSides) {
+        Tile.TILE_COUNTER++;
+        this.uid = Tile.TILE_COUNTER;
         this.id = id;
         this.type = type;
         this.resource = this.type.produces();
@@ -191,6 +196,61 @@ abstract class Tile {
             return;
         }
         throw new SlotAlreadyTakenException();
+    }
+
+    /**
+     * Returns the list of Tiles on the intersection of the given corner
+     *
+     * @param index The corner index
+     * @return The list of tiles intersecting with the given corner with the current Tile
+     */
+    protected List<Tile> getInsersectingNeighbors(int index) throws NoSuchSlotException {
+        this.isSlotExists(index);
+        /*
+           A corner is the intersection of 2 sides.
+           The lower bounding side is the side with the same index and the upper bounding side
+           is the side with (index + 1) % nbSides.
+           For example:
+               On a hextile:
+                   Corner index 0 will be bounded by sides 0 and 1 and
+                   corner 5 is bounded by sides 5 and 0.
+               On a square:
+                   Corner index 0 is bounded by sides 0 and 1 and
+                   corner 3 is bounded by sides 3 and 0
+        */
+        Tile neighbor = this.neighbors[index];
+        int bound = -1;
+        if (neighbor == null) {
+            // if the lower bound side is empty we'll look for the upper bound
+            index = (index + 1) % this.neighbors.length;
+            neighbor = this.neighbors[index];
+            bound = 1;
+        }
+        if (neighbor == null) {
+            /*
+               For instance we do not need to handle the case that 2 tiles are intersecting
+               on a same corner with no common neighbors
+            */
+            return new ArrayList<>();
+        }
+        List<Tile> result = new ArrayList<>();
+        do {
+            result.add(neighbor);
+            index =
+                    (this.complementaryIndex(index) + bound + this.neighbors.length)
+                            % this.neighbors.length;
+            neighbor = neighbor.neighbors[index];
+            bound *= -1;
+        } while (neighbor != null && !neighbor.equals(this));
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Tile) {
+            return ((Tile) o).uid == this.uid;
+        }
+        return false;
     }
 
     /**

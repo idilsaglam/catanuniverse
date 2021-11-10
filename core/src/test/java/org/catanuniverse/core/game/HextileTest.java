@@ -5,6 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
+import java.util.List;
 import java.util.Random;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
@@ -16,7 +17,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 public class HextileTest {
 
-    private Hextile tile, neighbor;
+    private Hextile tile, neighbor, neighbor1, neighbor2;
     private Harbor harbor;
 
     @BeforeEach
@@ -24,6 +25,8 @@ public class HextileTest {
         Random rnd = new Random();
         tile = new Hextile(rnd.nextInt(10), GroundType.Desert);
         neighbor = new Hextile(rnd.nextInt(10), GroundType.Farm);
+        neighbor1 = new Hextile(rnd.nextInt(10), GroundType.Forest);
+        neighbor2 = new Hextile(rnd.nextInt(10), GroundType.Hill);
         harbor = new Harbor();
     }
 
@@ -224,6 +227,61 @@ public class HextileTest {
                 | SlotAlreadyTakenException
                 | TileTypeNotSupportedException e) {
             assert false;
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Get intersecting neighbors with 2 neighbors")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getIntersectingNeighborsWith2Neighbors(int index) {
+        int baseIndex = index;
+        try {
+            tile.addNeighbor(index, neighbor);
+            index = (tile.complementaryIndex(index) - 1) % 6;
+            neighbor.addNeighbor(index, neighbor1);
+            index = (tile.complementaryIndex(index) + 1) % 6;
+            assert baseIndex == index;
+            List<Tile> intersection = tile.getInsersectingNeighbors(index);
+            assert intersection.size() == 2;
+            assert intersection.get(0).equals(neighbor);
+            assert intersection.get(1).equals(neighbor1);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Get intersecting neighbors with only lower bound neighbor")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getIntersectingNeighborsWithLowerNeighbor(int index) {
+        try {
+            tile.addNeighbor(index, neighbor);
+            List<Tile> intersection = tile.getInsersectingNeighbors(index);
+            assert intersection.size() == 1;
+            assert intersection.get(0).equals(neighbor);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @ParameterizedTest
+    @DisplayName("Get intersecting neighbors with only upper bound neighbor")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void getIntersectingNeighborsWithUpperNeighbor(int index) {
+        try {
+            index++;
+            tile.addNeighbor(index, neighbor);
+            List<Tile> intersection = tile.getInsersectingNeighbors(index);
+            assert intersection.size() == 1;
+            assert intersection.get(0).equals(neighbor);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
+            e.printStackTrace();
         }
     }
 
