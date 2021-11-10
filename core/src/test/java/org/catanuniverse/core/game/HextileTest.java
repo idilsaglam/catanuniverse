@@ -211,6 +211,23 @@ public class HextileTest {
     }
 
     @ParameterizedTest
+    @DisplayName("Adding a road to the intersection with the neighbor")
+    @ValueSource(ints = {0, 1, 2, 3, 4, 5})
+    void addRoadIntersectionWithNeighborTest(int position) {
+        Road r = new Road(null);
+        try {
+            tile.addNeighbor(position, neighbor);
+            tile.addRoad(position, r);
+            assert tile.getRoadSlot(position).equals(r);
+            assert neighbor.getRoadSlot(tile.complementaryIndex(position)).equals(r);
+        } catch (NoSuchSlotException
+                | SlotAlreadyTakenException
+                | TileTypeNotSupportedException e) {
+            assert false;
+        }
+    }
+
+    @ParameterizedTest
     @DisplayName("Adding two roads to the same slot")
     @ValueSource(ints = {0, 1, 2, 3, 4, 5})
     void addRoadNotEmptySlotTest(int position) {

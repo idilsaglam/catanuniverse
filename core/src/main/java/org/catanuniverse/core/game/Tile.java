@@ -111,7 +111,18 @@ abstract class Tile {
         if (this.roadSlots[index] == null) {
             // We can insert only if the slot is empty
             this.roadSlots[index] = road;
-            return;
+            if (this.neighbors[index] == null) {
+                return;
+            }
+            /*
+               Road slots are the same as the neighbor slots
+               when we add road, we need to add the complementary road for our neighbor too
+            */
+            if (this.neighbors[index].roadSlots[this.complementaryIndex(index)] == null) {
+                this.neighbors[index].roadSlots[this.complementaryIndex(index)] = road;
+                return;
+            }
+            throw new SlotAlreadyTakenException();
         }
         throw new SlotAlreadyTakenException();
     }
