@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.commons;
 
-import org.catanuniverse.core.models.Configuration;
+import org.catanuniverse.core.game.Configuration;
 
 public class ClientConfiguration {
     public void test() {
