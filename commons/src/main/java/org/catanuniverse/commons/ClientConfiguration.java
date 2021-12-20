@@ -1,10 +1,11 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.commons;
 
-import org.catanuniverse.core.models.Configuration;
+import org.catanuniverse.core.game.Configuration;
 
 public class ClientConfiguration {
     public void test() {
