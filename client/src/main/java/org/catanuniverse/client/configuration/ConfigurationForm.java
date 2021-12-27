@@ -33,6 +33,11 @@ class ConfigurationForm extends JPanel {
         this.settingsPane = new SettingsPane(null);
         this.startButton = new StartGameButton();
 
+        this.playersInputContainer.setOnPlayersUpdated((Boolean playersValid) -> {
+          System.out.printf("Players input container is valid %b\n", playersValid);
+          ConfigurationForm.this.playersInputContainerChanged(playersValid);
+        });
+
         this.settingsPane.setOnGameSettingsChanged(
                 (GameSettings settings) -> {
                     System.out.println("Game settings changed");
@@ -52,7 +57,7 @@ class ConfigurationForm extends JPanel {
                             // TODO: Update client configuration object
                             this.settingsPane.changeGameType(type);
                             this.startButton.setGameType(type);
-                            this.startButton.setEnabled(this.settingsPane.isSettingsValid());
+                            this.startButton.setEnabled(this.isConfigurationValid());
                             if (type == GameType.LOCAL) {
                                 this.playersInputContainer.setNumberOfPlayers(4);
                             } else {
@@ -69,5 +74,17 @@ class ConfigurationForm extends JPanel {
         this.add(this.settingsPane, constraints);
         constraints.gridy = 3;
         this.add(this.startButton, constraints);
+    }
+
+    private boolean isConfigurationValid() {
+      return this.playersInputContainer.arePlayersValid() && this.settingsPane.isSettingsValid();
+    }
+
+    private void playersInputContainerChanged(boolean playersAreValid) {
+      this.startButton.setEnabled(
+          playersAreValid &&
+          this.settingsPane.isSettingsValid()
+      );
+      this.startButton.repaint();
     }
 }
