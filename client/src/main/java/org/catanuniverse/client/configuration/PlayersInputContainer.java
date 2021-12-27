@@ -133,7 +133,7 @@ class PlayersInputContainer extends JPanel {
 
         PlayerInputContainer(String labelText) {
             JLabel label = new JLabel(labelText);
-
+            label.setHorizontalAlignment(0);
             this.usernameField = new JTextField(10);
             this.errorMessageLabel = new JLabel();
             this.errorMessageLabel.setVisible(false);
