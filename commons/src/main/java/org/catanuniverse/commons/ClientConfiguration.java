@@ -4,12 +4,27 @@
 */
 package org.catanuniverse.commons;
 
-import org.catanuniverse.core.models.Configuration;
+import org.catanuniverse.core.models.Player;
 
 public class ClientConfiguration {
-    public void test() {
-        Configuration c = new Configuration();
-        c.test();
-        System.out.println("Hello from Client configuration");
+
+    private GameSettings gameSettings;
+    private Player[] players;
+
+    public ClientConfiguration() {
+        this.gameSettings = null;
+        this.players = null;
+    }
+
+    public Player[] getPlayers() {
+        return this.players;
+    }
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+    public void setGameSettings(GameSettings settings) {
+        this.gameSettings = settings;
     }
 }
