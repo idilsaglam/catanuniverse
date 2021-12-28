@@ -16,6 +16,8 @@ scopes:
       description: All changes related to the web module
     - name: config
       description: All changes related configuration files
+    - name: readme
+      description: All changes related to the README file
 conventions:
     - name: build
       description: Changes that affect the build system or external dependencies
