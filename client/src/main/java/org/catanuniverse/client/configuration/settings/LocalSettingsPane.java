@@ -43,8 +43,8 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
                                 this.difficultySelector.setSliderEnabled(!disable);
                                 this.difficultySelector.repaintSlider();
                             }
-                          super.settings.setNumberOfAI(numberOfAI);
-                          super.onGameSettingsChanged.accept(super.settings);
+                            super.settings.setNumberOfAI(numberOfAI);
+                            super.onGameSettingsChanged.accept(super.settings);
                         });
 
         this.capacitySelector =

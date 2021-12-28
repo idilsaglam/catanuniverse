@@ -4,9 +4,11 @@
 */
 package org.catanuniverse.client;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import org.catanuniverse.client.configuration.ConfigurationPane;
 import org.catanuniverse.commons.ClientConfiguration;
 
@@ -46,6 +48,11 @@ public class MainFrame extends JFrame {
         this.configuration = configuration;
         System.out.println("Configuration updated");
         // TODO: Change contentPane with game pane with given configuration
+        JPanel panel = new JPanel();
+        panel.setBackground(Color.RED);
+        super.setContentPane(panel);
+        super.revalidate();
+        super.repaint();
     }
 
     /**

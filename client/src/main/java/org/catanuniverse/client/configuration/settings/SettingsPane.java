@@ -58,6 +58,15 @@ public class SettingsPane extends JPanel {
         return false;
     }
 
+    public GameSettings getSettings() {
+        if (this.getComponentCount() == 1) {
+            GameSettingsPane<? extends GameSettings> settingsPane =
+                    (GameSettingsPane<? extends GameSettings>) this.getComponent(0);
+            return settingsPane.getSettings();
+        }
+        return null;
+    }
+
     /** Build view components and add them to the current container */
     private void build() {
         // Check if there's a settings component created previously
