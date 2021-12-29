@@ -5,7 +5,7 @@
 */
 package org.catanuniverse.commons;
 
-import org.catanuniverse.core.models.Player;
+import org.catanuniverse.core.game.Player;
 
 public class ClientConfiguration {
 
