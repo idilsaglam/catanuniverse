@@ -100,7 +100,7 @@ public class MainFrame extends JFrame {
     private void loadGameBoard() {
         // TODO: Pass game settings to the board bane
         GameBoard gameBoard = new GameBoard(
-            this.size,
+            this.getSafeAreaSize(),
             this.configuration);
         super.setContentPane(gameBoard);
         super.revalidate();
