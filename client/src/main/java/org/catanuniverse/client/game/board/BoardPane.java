@@ -13,7 +13,6 @@ public class BoardPane extends JPanel {
 
   public BoardPane(Dimension size, ClientConfiguration configuration) {
     this.initSizes(size);
-    // TODO: Check if we need to update the layout
     this.configuration = configuration;
     this.topStatusPane = new TopStatusBar();
     this.gameBoardPane = new GameBoardPane();
