@@ -14,7 +14,7 @@ import org.catanuniverse.commons.ClientConfiguration;
 import org.catanuniverse.commons.GameSettings;
 import org.catanuniverse.commons.GameType;
 import org.catanuniverse.commons.LocalGameSettings;
-import org.catanuniverse.core.models.Player;
+import org.catanuniverse.core.game.Player;
 
 class ConfigurationForm extends JPanel {
 

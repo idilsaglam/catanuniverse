@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
-import org.catanuniverse.core.models.Player;
+import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.utils.EmptyCallback;
 
 class PlayersInputContainer extends JPanel {
