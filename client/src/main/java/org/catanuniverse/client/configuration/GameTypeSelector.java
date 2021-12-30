@@ -4,25 +4,24 @@
 */
 package org.catanuniverse.client.configuration;
 
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.util.function.Consumer;
 import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
 import org.catanuniverse.commons.GameType;
 
-class GameTypeSelector extends SizedContainer {
+class GameTypeSelector extends JPanel {
 
     private final ButtonGroup buttonGroup;
 
     private final RadioButton hostServer, joinServer, localGame;
 
-    private Consumer<GameType> onGameTypeSelcted;
+    private Consumer<GameType> onGameTypeSelected;
 
-    GameTypeSelector(Dimension size, Consumer<GameType> onGameTypeSelcted) {
+    GameTypeSelector(Consumer<GameType> onGameTypeSelected) {
 
-        super(size);
-        this.onGameTypeSelcted = onGameTypeSelcted;
+        this.onGameTypeSelected = onGameTypeSelected;
         // JLabel label = new JLabel(labelText == null ? "Game type" : labelText);
 
         this.buttonGroup = new ButtonGroup();
@@ -70,16 +69,15 @@ class GameTypeSelector extends SizedContainer {
      */
     private void callback(ActionEvent e) {
         if (this.localGame.isSelected()) {
-            this.onGameTypeSelcted.accept(GameType.LOCAL);
+            this.onGameTypeSelected.accept(GameType.LOCAL);
             return;
         }
         if (this.joinServer.isSelected()) {
-            this.onGameTypeSelcted.accept(GameType.MP_GUEST);
+            this.onGameTypeSelected.accept(GameType.MP_GUEST);
             return;
         }
         if (this.hostServer.isSelected()) {
-            this.onGameTypeSelcted.accept(GameType.MP_HOST);
-            return;
+            this.onGameTypeSelected.accept(GameType.MP_HOST);
         }
     }
 }
