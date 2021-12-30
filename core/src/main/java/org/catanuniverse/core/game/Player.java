@@ -5,4 +5,18 @@
 */
 package org.catanuniverse.core.game;
 
-public class Player {}
+public class Player {
+  private String username;
+
+  public Player(String username) {
+      this.username = username;
+  }
+
+  public Player() {
+    this("");
+  }
+
+  public String getUsername() {
+    return this.username;
+  }
+}
