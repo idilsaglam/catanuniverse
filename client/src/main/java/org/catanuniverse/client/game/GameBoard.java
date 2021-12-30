@@ -11,6 +11,11 @@ public class GameBoard extends JSplitPane {
   private final BoardPane board;
   private final ChatPane chat;
 
+  /**
+   * Creates a GameBoard with given size and configuration
+   * @param size The size of the game board panel
+   * @param configuration The configuration of the client
+   */
   public GameBoard(Dimension size, ClientConfiguration configuration) {
     super();
     if (configuration.isOnline()) {

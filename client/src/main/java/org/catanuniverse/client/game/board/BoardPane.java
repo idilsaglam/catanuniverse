@@ -11,6 +11,11 @@ public class BoardPane extends JPanel {
   private final ClientConfiguration configuration;
   private final JPanel topStatusPane, gameBoardPane, bottomStatusPane;
 
+  /**
+   * Creates a BoardPane with given size and configuration
+   * @param size The size of the board pane
+   * @param configuration The configuration related to the game
+   */
   public BoardPane(Dimension size, ClientConfiguration configuration) {
     this.initSizes(size);
     this.configuration = configuration;

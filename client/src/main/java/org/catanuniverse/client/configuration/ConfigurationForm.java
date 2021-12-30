@@ -90,34 +90,62 @@ class ConfigurationForm extends JPanel {
         this.add(this.startButton, constraints);
     }
 
-    public void setOnConfigurationSaved(Consumer<ClientConfiguration> callback) {
+  /**
+   * Update the on configuration saved callback
+   * @param callback The callback function to add
+   */
+  public void setOnConfigurationSaved(Consumer<ClientConfiguration> callback) {
       this.onConfigurationSaved = callback;
     }
 
-    private boolean isConfigurationValid() {
+  /**
+   * Checks if configuration is valid
+   * @return True if the configuration in the configuration pane is valid
+   */
+  private boolean isConfigurationValid() {
         return this.playersInputContainer.arePlayersValid() && this.settingsPane.isSettingsValid();
     }
 
-    private void playersInputContainerChanged(boolean playersAreValid) {
+  /**
+   * Enables the start button if given players and settings are valid
+   * @param playersAreValid Boolean indicating that if players are valid
+   */
+  private void playersInputContainerChanged(boolean playersAreValid) {
         this.startButton.setEnabled(playersAreValid && this.settingsPane.isSettingsValid());
         this.startButton.repaint();
     }
 
-    private void updateClientConfiguration() {
+  /**
+   * Updates client configuration with players and settings
+   */
+  private void updateClientConfiguration() {
         this.configuration.setPlayers(this.playersInputContainer.getPlayers());
         this.configuration.setGameSettings(this.settingsPane.getSettings());
     }
 
-    private void updateClientConfiguration(GameSettings settings) {
+  /**
+   * Update client configuration with given settings
+   * @param settings The settings to update the client configuration
+   */
+  private void updateClientConfiguration(GameSettings settings) {
         this.configuration.setPlayers(this.playersInputContainer.getPlayers());
         this.configuration.setGameSettings(settings);
     }
 
-    private void updateClientConfiguration(Player[] players) {
+  /**
+   * Updates the client configuration with given array of players
+   * @param players An array of players to update the client configuration
+   */
+  private void updateClientConfiguration(Player[] players) {
         this.configuration.setPlayers(players);
         this.configuration.setGameSettings(this.settingsPane.getSettings());
     }
 
+  /**
+   * Updates the client configuration with given settings and array of players
+   * @param players An array of players
+   * @param settings New settings to update client configuration
+   */
     private void updateClientConfiguration(Player[] players, GameSettings settings) {
         this.configuration.setPlayers(players);
         this.configuration.setGameSettings(settings);

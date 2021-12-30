@@ -11,6 +11,10 @@ import org.catanuniverse.commons.ClientConfiguration;
 
 public class ConfigurationPane extends JPanel {
 
+    /**
+     * Create a configuration pane with a callback function
+     * @param callback A callback function which will be ran when the configuration is saved
+     */
     public ConfigurationPane(Consumer<ClientConfiguration> callback) {
         ConfigurationForm configurationForm = new ConfigurationForm();
         configurationForm.setOnConfigurationSaved(callback);

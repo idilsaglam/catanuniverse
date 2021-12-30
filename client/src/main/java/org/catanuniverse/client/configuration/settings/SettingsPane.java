@@ -19,6 +19,10 @@ public class SettingsPane extends JPanel {
 
     private Consumer<GameSettings> onGameSettingsChanged;
 
+    /**
+     * Creates a settings pane with a given game type
+     * @param gameType The game type related to the settings pane
+     */
     public SettingsPane(GameType gameType) {
         this.gameType = gameType;
         this.setLayout(new GridLayout(1, 0));
@@ -49,6 +53,10 @@ public class SettingsPane extends JPanel {
         }
     }
 
+    /**
+     * Verify if settings are valid
+     * @return True if settings related to the settings pane is valid
+     */
     public boolean isSettingsValid() {
         if (this.getComponentCount() == 1 && this.getComponent(0) instanceof GameSettingsPane) {
             System.out.println("HERE");
@@ -58,6 +66,10 @@ public class SettingsPane extends JPanel {
         return false;
     }
 
+    /**
+     * Returns the game settings related to te settings pane
+     * @return Game settings related to the settings pane
+     */
     public GameSettings getSettings() {
         if (this.getComponentCount() == 1) {
             GameSettingsPane<? extends GameSettings> settingsPane =

@@ -11,6 +11,15 @@ import javax.swing.event.ChangeEvent;
 class NumberOfAISelector extends GameSettingsSelectorPanel {
     private final JSlider slider;
 
+    /**
+     * Creates a new Number of AI selector
+     * @param labelText The text of the label of the selector
+     * @param toolTipText The text of the tooltip
+     * @param min The minimum selectable value
+     * @param max The maximum selectable value
+     * @param current The current value of the selector
+     * @param callback The callback function that will be called each time the selector is updated
+     */
     private NumberOfAISelector(
             String labelText,
             String toolTipText,
@@ -32,10 +41,19 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
         this.add(this.slider);
     }
 
+    /**
+     * Creates a new number of AI selector with a callback function
+     * @param callback The callback function that will be called each time the selector isupdated
+     */
     NumberOfAISelector(Consumer<Integer> callback) {
         this(0, callback);
     }
 
+    /**
+     * Creates a new number of AI selector with current value and callback function
+     * @param currentValue The current value of the selector
+     * @param callback The callback function that will be called each time the selector is updated
+     */
     NumberOfAISelector(int currentValue, Consumer<Integer> callback) {
         this(
                 "Select the number of AIs in the room",
@@ -46,6 +64,10 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
                 callback);
     }
 
+    /**
+     * Updates the maximum selectable value of the selector
+     * @param n The new maximum selectable value
+     */
     protected void setMaximum(int n) {
         this.slider.setMaximum(n);
         if (this.slider.getValue() > this.slider.getMaximum()) {
@@ -53,6 +75,9 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
         }
     }
 
+    /**
+     * Repaint the slider
+     */
     protected void repaintSlider() {
         this.slider.repaint();
     }

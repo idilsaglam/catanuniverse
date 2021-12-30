@@ -54,9 +54,14 @@ class GameTypeSelector extends SizedContainer {
         super.setLayout(new GridLayout(1, 3));
     }
 
-    GameTypeSelector(Consumer<GameType> onGameTypeSelcted) {
-        this(null, onGameTypeSelcted);
+    /**
+     * Updates the on game type selected callback
+     * @param callback The new callback function
+     */
+    public void onGameTypeSelected(Consumer<GameType> callback) {
+        this.onGameTypeSelected = callback;
     }
+
 
     /**
      * Handles the radio button call back with related game type

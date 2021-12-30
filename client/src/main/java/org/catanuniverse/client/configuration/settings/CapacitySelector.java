@@ -11,6 +11,15 @@ import javax.swing.event.ChangeEvent;
 class CapacitySelector extends GameSettingsSelectorPanel {
     private final JSlider slider;
 
+    /**
+     * Creates a new capacity selector
+     * @param labelText The label text on the capacity selector
+     * @param toolTipText The tooltip text of the capacity selector
+     * @param min The minimum selectable value
+     * @param max The maximum selectable value
+     * @param current The current value of the selector
+     * @param callback The callback function which will be called each time the selector is updated
+     */
     private CapacitySelector(
             String labelText,
             String toolTipText,
@@ -33,10 +42,19 @@ class CapacitySelector extends GameSettingsSelectorPanel {
         this.add(this.slider);
     }
 
+    /**
+     * Creates a capacity selector with only the callback function
+     * @param callback The callback function of the capacity selector
+     */
     CapacitySelector(Consumer<Integer> callback) {
         this(4, callback);
     }
 
+    /**
+     * Creates a capacity selector with current value and callback function
+     * @param currentValue The current value of the capacity selector
+     * @param callback The callback function which will be called each time the selector is updated
+     */
     CapacitySelector(int currentValue, Consumer<Integer> callback) {
         this(
                 "Select the room capacity",
@@ -47,10 +65,18 @@ class CapacitySelector extends GameSettingsSelectorPanel {
                 callback);
     }
 
+    /**
+     * Return the value of the capacity selector
+      * @return The value of the capacity selector
+     */
     int getValue() {
         return this.slider.getValue();
     }
 
+    /**
+     * Updates the value of the capacity selector
+     * @param value The new value of the selector to update with
+     */
     void setValue(int value) {
         this.slider.setValue(value);
     }

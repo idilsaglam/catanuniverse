@@ -13,7 +13,11 @@ final class MPGuestSettingsPane extends GameSettingsPane<MultiPlayerGuestGameSet
 
     private ServerAddressSelector serverAddressSelector;
 
-    protected MPGuestSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
+  /**
+   * Creates a new settings pane for multi player guest settings
+   * @param onGameSettingsChanged The callback function that called each time the settings are updated
+   */
+  protected MPGuestSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
         super(onGameSettingsChanged);
         super.settings = new MultiPlayerGuestGameSettings();
         this.serverAddressSelector =
@@ -26,7 +30,11 @@ final class MPGuestSettingsPane extends GameSettingsPane<MultiPlayerGuestGameSet
         this.add(this.serverAddressSelector);
     }
 
-    @Override
+  /**
+   * Verify if given settings are valid
+   * @return True if the given server address is valid
+   */
+  @Override
     boolean isSettingsValid() {
         return this.serverAddressSelector.isServerAddressValid();
     }

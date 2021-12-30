@@ -11,6 +11,10 @@ import javax.swing.text.DocumentFilter;
 class MaximumInputLengthFilter extends DocumentFilter {
     private final int limit;
 
+    /**
+     * Creates a new Maximum input length filter
+     * @param limit The maximum length of the filter
+     */
     public MaximumInputLengthFilter(int limit) {
         if (limit <= 0) {
             throw new IllegalArgumentException("Limit can not be <= 0");

@@ -18,7 +18,11 @@ final class MPHostSettingsPane extends GameSettingsPane<MultiPlayerHostGameSetti
     private DifficultySelector difficultySelector;
     private PortNumberSelector portNumberSelector;
 
-    protected MPHostSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
+  /**
+   * Creates a new settings pane for multi player host settings pane
+   * @param onGameSettingsChanged The callback function that will be called each time the settings are updated
+   */
+  protected MPHostSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
         super(onGameSettingsChanged);
         GridBagConstraints gbc = new GridBagConstraints();
         super.setLayout(new GridBagLayout());
@@ -78,7 +82,11 @@ final class MPHostSettingsPane extends GameSettingsPane<MultiPlayerHostGameSetti
         this.add(this.portNumberSelector, gbc);
     }
 
-    boolean isSettingsValid() {
+  /**
+   * Verify if settings are valid
+   * @return True if the settings are valid, false if not
+   */
+  boolean isSettingsValid() {
         return this.portNumberSelector.isPortNumberValid();
     }
 }

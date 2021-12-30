@@ -10,6 +10,11 @@ import javax.swing.JPanel;
 
 abstract class GameSettingsSelectorPanel extends JPanel {
 
+    /**
+     * Creates a game settings selector panel with given parameters
+     * @param labelText The text of the label
+     * @param toolTipText The text of the tooltip
+     */
     protected GameSettingsSelectorPanel(String labelText, String toolTipText) {
         JLabel label = new JLabel(labelText);
         this.setToolTipText(toolTipText);

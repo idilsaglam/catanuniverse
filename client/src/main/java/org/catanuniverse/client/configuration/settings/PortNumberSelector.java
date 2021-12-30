@@ -27,6 +27,13 @@ class PortNumberSelector extends JPanel {
     private final JButton randomPortNumberButton;
     private JLabel errorMessage;
 
+    /**
+     * Create a new port number selector
+     * @param labelText The text of the label of the selector panel
+     * @param toolTipText The tooltip text of the selector
+     * @param columns The number of the columns in the JTextField
+     * @param callback The callback function that will be called each time the text field is updated
+     */
     protected PortNumberSelector(
             String labelText, String toolTipText, int columns, Consumer<Integer> callback) {
 
@@ -129,14 +136,26 @@ class PortNumberSelector extends JPanel {
         this.add(this.errorMessage, constraints);
     }
 
+    /**
+     * Creates a port number selector with a callback function
+     * @param callback The callback function that will be called each time the selector is updated
+     */
     PortNumberSelector(Consumer<Integer> callback) {
         this("Select a port number of the game server", "Set the game server port", 10, callback);
     }
 
+    /**
+     * Verify if the port number is valid
+     * @return True if the port number is valid, false if not
+     */
     boolean isPortNumberValid() {
         return this.textField.isValid();
     }
 
+    /**
+     * Selects a random port from available ports on the computer
+     * @return An available port on the current computer
+     */
     private Integer findRandomPort() {
         try {
             ServerSocket socket = new ServerSocket(0);

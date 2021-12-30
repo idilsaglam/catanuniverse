@@ -26,15 +26,28 @@ class PlayersInputContainer extends JPanel {
     private int numberOfPlayers;
     private Consumer<Boolean> onPlayersUpdated;
 
+    /**
+     * Creates a new PlayersInputContainer
+     * @param labelText Label text
+     * @param numberOfPlayers The number of players
+     */
     PlayersInputContainer(String labelText, int numberOfPlayers) {
         this.numberOfPlayers = numberOfPlayers;
         this.players = new PlayerInputContainer[4];
     }
 
+    /**
+     * Creates a new PlayerInputContainer
+     * @param numberOfPlayers The number of players
+     */
     PlayersInputContainer(int numberOfPlayers) {
         this("Create players", numberOfPlayers);
     }
 
+    /**
+     * Updates the number of players
+     * @param numberOfPlayers The number of players to update with
+     */
     void setNumberOfPlayers(int numberOfPlayers) {
         System.out.printf(
                 "Players input container set number of players function called with %d\n",
@@ -83,10 +96,18 @@ class PlayersInputContainer extends JPanel {
         super.repaint();
     }
 
+    /**
+     * Updates the on players updated callback function
+     * @param callback The new callback function
+     */
     void setOnPlayersUpdated(Consumer<Boolean> callback) {
         this.onPlayersUpdated = callback;
     }
 
+    /**
+     * Returns the array of players from the players input
+     * @return The array of players
+     */
     Player[] getPlayers() {
         Player[] result = new Player[this.numberOfPlayers];
         for (int i = 0; i < this.numberOfPlayers; i++) {
@@ -95,6 +116,10 @@ class PlayersInputContainer extends JPanel {
         return result;
     }
 
+    /**
+     * Checks if players in the input cases are valid or not
+     * @return True if players are valid, false if not
+     */
     boolean arePlayersValid() {
         if (this.numberOfPlayers == 0) {
             System.out.println("No players to validate in arePlayersValid function");
@@ -110,6 +135,11 @@ class PlayersInputContainer extends JPanel {
         return this.verifyAllPlayerNamesAreUnique() && result;
     }
 
+    /**
+     * Verify if a given player name appears only once in the array of players
+     * @param playerName The player name to check with
+     * @return True if the given player name is unique, false if not
+     */
     private boolean verifyPlayerNameUnique(String playerName) {
         int occ = 0;
         for (int i = 0; i < this.numberOfPlayers; i++) {
@@ -123,6 +153,10 @@ class PlayersInputContainer extends JPanel {
         return true;
     }
 
+    /**
+     * Verify if all player names are unique or not
+     * @return True if all players have unique names
+     */
     private boolean verifyAllPlayerNamesAreUnique() {
         Set<String> playerNames = new HashSet<>();
         for (int i = 0; i < this.numberOfPlayers; i++) {
@@ -138,6 +172,10 @@ class PlayersInputContainer extends JPanel {
         private Consumer<String> onFocusLost, onChanged;
         private EmptyCallback onFocusGained;
 
+        /**
+         * Creates a new PlayerInputContainer with given label text
+         * @param labelText The label text to create the player input container with
+         */
         PlayerInputContainer(String labelText) {
             JLabel label = new JLabel(labelText);
             label.setHorizontalAlignment(0);
@@ -189,22 +227,42 @@ class PlayersInputContainer extends JPanel {
             this.add(this.errorMessageLabel);
         }
 
+        /**
+         * Updates the on focus lost callback function
+         * @param callback The new callback function
+         */
         void setOnFocusLost(Consumer<String> callback) {
             this.onFocusLost = callback;
         }
 
+        /**
+         * Updates the on focus gaines callback function with a new one
+         * @param callback The new callback function
+         */
         void setOnFocusGained(EmptyCallback callback) {
             this.onFocusGained = callback;
         }
 
+        /**
+         * Updates on changed callback function
+         * @param callback The new callback function
+         */
         void setOnChanged(Consumer<String> callback) {
             this.onChanged = callback;
         }
 
+        /**
+         * Return the player name in the given input
+         * @return The name of the player on the given input
+         */
         String getPlayerName() {
             return this.usernameField.getText();
         }
 
+        /**
+         * Verify if the player is valid or not. A player name is valid if it contains upper case, lower case and digit characters and its length is between 3 and 10 inclusive
+         * @return True if the player is valid, false if not
+         */
         boolean isPlayerValid() {
             System.out.printf(
                     "Is player valid function called. Is error message is visible ? %b\n"
@@ -215,18 +273,34 @@ class PlayersInputContainer extends JPanel {
                     && this.usernameField.getText().matches("^[a-zA-Z0-9]{4,10}$");
         }
 
+        /**
+         * Creates a PlayerInput container with an index
+         * @param playerIndex The index of the player
+         */
         PlayerInputContainer(int playerIndex) {
             this(String.format("Player %d", playerIndex + 1));
         }
 
+
+        /**
+         * Return the player related to the player input container
+         * @return The player related to the player input container
+         */
         Player getPlayer() {
             return null;
         }
 
+        /**
+         * Hide the error message on the input
+         */
         void hideErrorMessage() {
             this.errorMessageLabel.setVisible(false);
         }
 
+        /**
+         * Show error message with a given message
+         * @param message The given error message to show
+         */
         void showErrorMessage(String message) {
             this.errorMessageLabel.setText(message);
             this.errorMessageLabel.setVisible(true);
