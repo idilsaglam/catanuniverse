@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client;
 
@@ -10,19 +11,18 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 import org.catanuniverse.client.configuration.ConfigurationPane;
 import org.catanuniverse.client.game.GameBoard;
-import org.catanuniverse.client.game.board.BoardPane;
-import org.catanuniverse.commons.ClientConfiguration;
+import org.catanuniverse.commons.GameSettings;
 
 public class MainFrame extends JFrame {
 
-    private ClientConfiguration configuration;
+    private GameSettings gameSettings;
     private final ConfigurationPane configurationPane;
     private Dimension size;
     private Point position;
 
     public MainFrame() {
         this.init();
-        this.configurationPane = new ConfigurationPane(this::setConfiguration);
+        this.configurationPane = new ConfigurationPane(this::setGameSettings);
         this.build();
         super.setVisible(true);
     }
@@ -35,37 +35,22 @@ public class MainFrame extends JFrame {
         this.initSizes();
     }
 
-    /**
-     * Initialize the position and the size of the current frame
-     */
+    /** Initialize the position and the size of the current frame */
     private void initSizes() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         // Initialise the dimension of the screen
-        this.size = new Dimension(
-            screenSize.width / 2,
-            screenSize.height / 2
-        );
+        this.size = new Dimension(screenSize.width / 2, screenSize.height / 2);
         // The frame should not be smaller than this size
         super.setMinimumSize(this.size);
         // Set the position attribute of the frame
-        this.position = new Point(
-            screenSize.width / 4,
-            screenSize.height / 4
-        );
+        this.position = new Point(screenSize.width / 4, screenSize.height / 4);
         // the maximum size of the screen should not be bigger than the screen size
         super.setMaximumSize(screenSize);
         // Set the JFrame bound with the given position and the given size
-        super.setBounds(
-            this.position.x,
-            this.position.y,
-            this.size.width,
-            this.size.height
-        );
+        super.setBounds(this.position.x, this.position.y, this.size.width, this.size.height);
     }
 
-    /**
-     * Maximise the current frame for the entire screen
-     */
+    /** Maximise the current frame for the entire screen */
     private void maximise() {
         // Get the current screen size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -84,24 +69,20 @@ public class MainFrame extends JFrame {
     /**
      * Updates the configuration of the current game
      *
-     * @param configuration The configuration object to update with
+     * @param gameSettings The configuration object to update with
      */
-    private void setConfiguration(ClientConfiguration configuration) {
-        this.configuration = configuration;
+    private void setGameSettings(GameSettings gameSettings) {
+        this.gameSettings = gameSettings;
         System.out.println("Configuration updated");
         // TODO: Start the game
         this.maximise();
         this.loadGameBoard();
     }
 
-    /**
-     * Load the game board after the configuration
-     */
+    /** Load the game board after the configuration */
     private void loadGameBoard() {
         // TODO: Pass game settings to the board bane
-        GameBoard gameBoard = new GameBoard(
-            this.getSafeAreaSize(),
-            this.configuration);
+        GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings);
         super.setContentPane(gameBoard);
         super.revalidate();
         super.repaint();
@@ -120,7 +101,7 @@ public class MainFrame extends JFrame {
 
     /** Adds the current screen to the contentPane with current configuration state */
     private void build() {
-        if (this.configuration == null) {
+        if (this.gameSettings == null) {
             // If the configuration is null, we need to add configuration pane to the screen
             super.setContentPane(this.configurationPane);
         }

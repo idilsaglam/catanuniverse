@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -13,6 +14,7 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a new Number of AI selector
+     *
      * @param labelText The text of the label of the selector
      * @param toolTipText The text of the tooltip
      * @param min The minimum selectable value
@@ -43,6 +45,7 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a new number of AI selector with a callback function
+     *
      * @param callback The callback function that will be called each time the selector isupdated
      */
     NumberOfAISelector(Consumer<Integer> callback) {
@@ -51,6 +54,7 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a new number of AI selector with current value and callback function
+     *
      * @param currentValue The current value of the selector
      * @param callback The callback function that will be called each time the selector is updated
      */
@@ -66,6 +70,7 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
 
     /**
      * Updates the maximum selectable value of the selector
+     *
      * @param n The new maximum selectable value
      */
     protected void setMaximum(int n) {
@@ -75,9 +80,7 @@ class NumberOfAISelector extends GameSettingsSelectorPanel {
         }
     }
 
-    /**
-     * Repaint the slider
-     */
+    /** Repaint the slider */
     protected void repaintSlider() {
         this.slider.repaint();
     }

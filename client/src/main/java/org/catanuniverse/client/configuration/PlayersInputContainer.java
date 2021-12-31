@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration;
 
@@ -24,10 +25,11 @@ class PlayersInputContainer extends JPanel {
 
     private final PlayerInputContainer[] players;
     private int numberOfPlayers;
-    private Consumer<Boolean> onPlayersUpdated;
+    private Consumer<Player[]> onPlayersUpdated;
 
     /**
      * Creates a new PlayersInputContainer
+     *
      * @param labelText Label text
      * @param numberOfPlayers The number of players
      */
@@ -38,6 +40,7 @@ class PlayersInputContainer extends JPanel {
 
     /**
      * Creates a new PlayerInputContainer
+     *
      * @param numberOfPlayers The number of players
      */
     PlayersInputContainer(int numberOfPlayers) {
@@ -46,6 +49,7 @@ class PlayersInputContainer extends JPanel {
 
     /**
      * Updates the number of players
+     *
      * @param numberOfPlayers The number of players to update with
      */
     void setNumberOfPlayers(int numberOfPlayers) {
@@ -86,7 +90,7 @@ class PlayersInputContainer extends JPanel {
                                 return;
                             }
                             PlayersInputContainer.this.onPlayersUpdated.accept(
-                                    PlayersInputContainer.this.arePlayersValid());
+                                    PlayersInputContainer.this.getPlayers());
                         });
                 this.players[old + i] = playerContainerToAdd;
                 this.add(this.players[old + i]);
@@ -98,14 +102,16 @@ class PlayersInputContainer extends JPanel {
 
     /**
      * Updates the on players updated callback function
+     *
      * @param callback The new callback function
      */
-    void setOnPlayersUpdated(Consumer<Boolean> callback) {
+    void setOnPlayersUpdated(Consumer<Player[]> callback) {
         this.onPlayersUpdated = callback;
     }
 
     /**
      * Returns the array of players from the players input
+     *
      * @return The array of players
      */
     Player[] getPlayers() {
@@ -118,6 +124,7 @@ class PlayersInputContainer extends JPanel {
 
     /**
      * Checks if players in the input cases are valid or not
+     *
      * @return True if players are valid, false if not
      */
     boolean arePlayersValid() {
@@ -137,6 +144,7 @@ class PlayersInputContainer extends JPanel {
 
     /**
      * Verify if a given player name appears only once in the array of players
+     *
      * @param playerName The player name to check with
      * @return True if the given player name is unique, false if not
      */
@@ -155,6 +163,7 @@ class PlayersInputContainer extends JPanel {
 
     /**
      * Verify if all player names are unique or not
+     *
      * @return True if all players have unique names
      */
     private boolean verifyAllPlayerNamesAreUnique() {
@@ -174,6 +183,7 @@ class PlayersInputContainer extends JPanel {
 
         /**
          * Creates a new PlayerInputContainer with given label text
+         *
          * @param labelText The label text to create the player input container with
          */
         PlayerInputContainer(String labelText) {
@@ -229,6 +239,7 @@ class PlayersInputContainer extends JPanel {
 
         /**
          * Updates the on focus lost callback function
+         *
          * @param callback The new callback function
          */
         void setOnFocusLost(Consumer<String> callback) {
@@ -237,6 +248,7 @@ class PlayersInputContainer extends JPanel {
 
         /**
          * Updates the on focus gaines callback function with a new one
+         *
          * @param callback The new callback function
          */
         void setOnFocusGained(EmptyCallback callback) {
@@ -245,6 +257,7 @@ class PlayersInputContainer extends JPanel {
 
         /**
          * Updates on changed callback function
+         *
          * @param callback The new callback function
          */
         void setOnChanged(Consumer<String> callback) {
@@ -253,6 +266,7 @@ class PlayersInputContainer extends JPanel {
 
         /**
          * Return the player name in the given input
+         *
          * @return The name of the player on the given input
          */
         String getPlayerName() {
@@ -260,7 +274,9 @@ class PlayersInputContainer extends JPanel {
         }
 
         /**
-         * Verify if the player is valid or not. A player name is valid if it contains upper case, lower case and digit characters and its length is between 3 and 10 inclusive
+         * Verify if the player is valid or not. A player name is valid if it contains upper case,
+         * lower case and digit characters and its length is between 3 and 10 inclusive
+         *
          * @return True if the player is valid, false if not
          */
         boolean isPlayerValid() {
@@ -275,30 +291,30 @@ class PlayersInputContainer extends JPanel {
 
         /**
          * Creates a PlayerInput container with an index
+         *
          * @param playerIndex The index of the player
          */
         PlayerInputContainer(int playerIndex) {
             this(String.format("Player %d", playerIndex + 1));
         }
 
-
         /**
          * Return the player related to the player input container
+         *
          * @return The player related to the player input container
          */
         Player getPlayer() {
-            return null;
+            return new Player(this.usernameField.getText());
         }
 
-        /**
-         * Hide the error message on the input
-         */
+        /** Hide the error message on the input */
         void hideErrorMessage() {
             this.errorMessageLabel.setVisible(false);
         }
 
         /**
          * Show error message with a given message
+         *
          * @param message The given error message to show
          */
         void showErrorMessage(String message) {

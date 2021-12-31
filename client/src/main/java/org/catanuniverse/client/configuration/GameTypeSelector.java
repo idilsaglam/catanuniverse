@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration;
 
@@ -55,12 +56,12 @@ class GameTypeSelector extends JPanel {
 
     /**
      * Updates the on game type selected callback
+     *
      * @param callback The new callback function
      */
     public void onGameTypeSelected(Consumer<GameType> callback) {
         this.onGameTypeSelected = callback;
     }
-
 
     /**
      * Handles the radio button call back with related game type

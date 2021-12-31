@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -13,6 +14,7 @@ class MaximumInputLengthFilter extends DocumentFilter {
 
     /**
      * Creates a new Maximum input length filter
+     *
      * @param limit The maximum length of the filter
      */
     public MaximumInputLengthFilter(int limit) {

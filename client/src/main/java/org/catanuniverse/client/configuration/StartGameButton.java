@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration;
 
@@ -11,19 +12,18 @@ class StartGameButton extends JButton {
 
     private GameType gameType;
 
-  /**
-   * Creates a new Start game button
-   */
-  StartGameButton() {
+    /** Creates a new Start game button */
+    StartGameButton() {
         this.gameType = null;
         super.setVisible(false);
     }
 
-  /**
-   * Update the text in the start button with the game type
-   * @param gameType The new game type to update with
-   */
-  void setGameType(GameType gameType) {
+    /**
+     * Update the text in the start button with the game type
+     *
+     * @param gameType The new game type to update with
+     */
+    void setGameType(GameType gameType) {
         this.gameType = gameType;
         if (this.gameType == null) {
             this.setVisible(false);

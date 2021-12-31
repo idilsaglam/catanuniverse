@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -21,6 +22,7 @@ public class SettingsPane extends JPanel {
 
     /**
      * Creates a settings pane with a given game type
+     *
      * @param gameType The game type related to the settings pane
      */
     public SettingsPane(GameType gameType) {
@@ -55,6 +57,7 @@ public class SettingsPane extends JPanel {
 
     /**
      * Verify if settings are valid
+     *
      * @return True if settings related to the settings pane is valid
      */
     public boolean isSettingsValid() {
@@ -68,6 +71,7 @@ public class SettingsPane extends JPanel {
 
     /**
      * Returns the game settings related to te settings pane
+     *
      * @return Game settings related to the settings pane
      */
     public GameSettings getSettings() {

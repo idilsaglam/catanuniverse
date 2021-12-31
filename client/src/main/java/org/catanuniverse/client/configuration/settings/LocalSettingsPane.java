@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -27,7 +28,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
                 new DifficultySelector(
                         (Difficulty difficulty) -> {
                             System.out.printf("Difficulty level changed to %s\n", difficulty);
-                            super.settings.setAiDifficulty(difficulty);
+                            super.settings.setDifficulty(difficulty);
                             super.onGameSettingsChanged.accept(super.settings);
                         });
 
