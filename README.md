@@ -12,7 +12,6 @@ This project is composed of 5 Java modules and a web application. Each module co
 - [`commons`](./commons): Contains all the common classes and client logic which cli and client will use.
 - [`server`](./server): Contains the source code of the game server.
 - [`client`](./client): Contains the source code of the JavaFX client.
-- [`cli`](./cli):  Contains the source code of the command line client
 - [`web`](./web): Contains the source code of the web client.
 
 
