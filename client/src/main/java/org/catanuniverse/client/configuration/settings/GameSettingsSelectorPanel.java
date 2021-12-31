@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -12,6 +13,7 @@ abstract class GameSettingsSelectorPanel extends JPanel {
 
     /**
      * Creates a game settings selector panel with given parameters
+     *
      * @param labelText The text of the label
      * @param toolTipText The text of the tooltip
      */

@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -17,6 +18,7 @@ class DifficultySelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a difficulty selector with given parameters
+     *
      * @param labelText The label text of the difficulty selector
      * @param toolTipText The tooltip text of the selector
      * @param min The minimum selectable value
@@ -53,6 +55,7 @@ class DifficultySelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a difficulty selector with only the callback function
+     *
      * @param callback The callback function that will be called each time the selector is updated
      */
     DifficultySelector(Consumer<Difficulty> callback) {
@@ -61,6 +64,7 @@ class DifficultySelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a difficulty selector with current value and the callback function
+     *
      * @param currentValue The current value of the selector
      * @param callback The callback function that will be called each time the selector is updated
      */
@@ -76,6 +80,7 @@ class DifficultySelector extends GameSettingsSelectorPanel {
 
     /**
      * Updates the value of the selector
+     *
      * @param n The new value of the selector
      */
     void setValue(int n) {
@@ -84,21 +89,21 @@ class DifficultySelector extends GameSettingsSelectorPanel {
 
     /**
      * Sets if the slider is enabled or not
+     *
      * @param v A boolean indicating that if the slider is enabled or not
      */
     void setSliderEnabled(boolean v) {
         this.slider.setEnabled(v);
     }
 
-    /**
-     * Reapints the slider
-     */
+    /** Reapints the slider */
     void repaintSlider() {
         this.slider.repaint();
     }
 
     /**
      * Verify if the slider is enabled or not
+     *
      * @return True if the slider is enabled, false if not
      */
     boolean isSliderEnabled() {

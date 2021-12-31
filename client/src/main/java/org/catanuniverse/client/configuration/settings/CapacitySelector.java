@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -13,6 +14,7 @@ class CapacitySelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a new capacity selector
+     *
      * @param labelText The label text on the capacity selector
      * @param toolTipText The tooltip text of the capacity selector
      * @param min The minimum selectable value
@@ -44,6 +46,7 @@ class CapacitySelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a capacity selector with only the callback function
+     *
      * @param callback The callback function of the capacity selector
      */
     CapacitySelector(Consumer<Integer> callback) {
@@ -52,6 +55,7 @@ class CapacitySelector extends GameSettingsSelectorPanel {
 
     /**
      * Creates a capacity selector with current value and callback function
+     *
      * @param currentValue The current value of the capacity selector
      * @param callback The callback function which will be called each time the selector is updated
      */
@@ -67,7 +71,8 @@ class CapacitySelector extends GameSettingsSelectorPanel {
 
     /**
      * Return the value of the capacity selector
-      * @return The value of the capacity selector
+     *
+     * @return The value of the capacity selector
      */
     int getValue() {
         return this.slider.getValue();
@@ -75,6 +80,7 @@ class CapacitySelector extends GameSettingsSelectorPanel {
 
     /**
      * Updates the value of the capacity selector
+     *
      * @param value The new value of the selector to update with
      */
     void setValue(int value) {

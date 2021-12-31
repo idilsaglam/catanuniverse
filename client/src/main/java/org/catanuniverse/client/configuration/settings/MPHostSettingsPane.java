@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -18,22 +19,24 @@ final class MPHostSettingsPane extends GameSettingsPane<MultiPlayerHostGameSetti
     private DifficultySelector difficultySelector;
     private PortNumberSelector portNumberSelector;
 
-  /**
-   * Creates a new settings pane for multi player host settings pane
-   * @param onGameSettingsChanged The callback function that will be called each time the settings are updated
-   */
-  protected MPHostSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
+    /**
+     * Creates a new settings pane for multi player host settings pane
+     *
+     * @param onGameSettingsChanged The callback function that will be called each time the settings
+     *     are updated
+     */
+    protected MPHostSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
         super(onGameSettingsChanged);
         GridBagConstraints gbc = new GridBagConstraints();
         super.setLayout(new GridBagLayout());
         // TODO: Create with default values of sliders
-        super.settings = new MultiPlayerHostGameSettings();
+        super.settings = new MultiPlayerHostGameSettings(GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI);
 
         this.difficultySelector =
                 new DifficultySelector(
                         (Difficulty difficulty) -> {
                             System.out.printf("Difficulty level changed to %s\n", difficulty);
-                            super.settings.setAiDifficulty(difficulty);
+                            super.settings.setDifficulty(difficulty);
                             super.onGameSettingsChanged.accept(super.settings);
                         });
 
@@ -82,11 +85,12 @@ final class MPHostSettingsPane extends GameSettingsPane<MultiPlayerHostGameSetti
         this.add(this.portNumberSelector, gbc);
     }
 
-  /**
-   * Verify if settings are valid
-   * @return True if the settings are valid, false if not
-   */
-  boolean isSettingsValid() {
+    /**
+     * Verify if settings are valid
+     *
+     * @return True if the settings are valid, false if not
+     */
+    boolean isSettingsValid() {
         return this.portNumberSelector.isPortNumberValid();
     }
 }

@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -20,13 +21,14 @@ class ServerAddressSelector extends JPanel {
     private final JTextField textField;
     private String defaultValue;
 
-  /**
-   * Creates a serer address selector
-   * @param labelText The text of the label of the selector panel
-   * @param toolTipText The tooltip text
-   * @param columns The number of columns on the text field
-   * @param callback The callback function that will be called each time the selector is updated
-   */
+    /**
+     * Creates a serer address selector
+     *
+     * @param labelText The text of the label of the selector panel
+     * @param toolTipText The tooltip text
+     * @param columns The number of columns on the text field
+     * @param callback The callback function that will be called each time the selector is updated
+     */
     protected ServerAddressSelector(
             String labelText, String toolTipText, int columns, Consumer<URI> callback) {
         this.textField = new JTextField(columns);
@@ -68,19 +70,21 @@ class ServerAddressSelector extends JPanel {
         this.add(this.textField);
     }
 
-  /**
-   * Creates a server address selector with a callback function
-   * @param callback The callback function that will be called each time the selector is updated
-   */
-  protected ServerAddressSelector(Consumer<URI> callback) {
+    /**
+     * Creates a server address selector with a callback function
+     *
+     * @param callback The callback function that will be called each time the selector is updated
+     */
+    protected ServerAddressSelector(Consumer<URI> callback) {
         this("Enter the game server URI", "Set the URI of the game server to join", 32, callback);
     }
 
-  /**
-   * Verify if the server address is valid
-   * @return True if the server address is valid or not
-   */
-  boolean isServerAddressValid() {
+    /**
+     * Verify if the server address is valid
+     *
+     * @return True if the server address is valid or not
+     */
+    boolean isServerAddressValid() {
         return this.textField.isValid();
     }
 }

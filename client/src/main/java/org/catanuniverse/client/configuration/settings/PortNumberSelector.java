@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -29,6 +30,7 @@ class PortNumberSelector extends JPanel {
 
     /**
      * Create a new port number selector
+     *
      * @param labelText The text of the label of the selector panel
      * @param toolTipText The tooltip text of the selector
      * @param columns The number of the columns in the JTextField
@@ -58,6 +60,7 @@ class PortNumberSelector extends JPanel {
                     int rp = this.findRandomPort();
                     this.defaultPortNumber = "" + rp;
                     this.textField.setText("" + rp);
+                    callback.accept(rp);
                 });
 
         this.textField.setInputVerifier(
@@ -138,6 +141,7 @@ class PortNumberSelector extends JPanel {
 
     /**
      * Creates a port number selector with a callback function
+     *
      * @param callback The callback function that will be called each time the selector is updated
      */
     PortNumberSelector(Consumer<Integer> callback) {
@@ -146,6 +150,7 @@ class PortNumberSelector extends JPanel {
 
     /**
      * Verify if the port number is valid
+     *
      * @return True if the port number is valid, false if not
      */
     boolean isPortNumberValid() {
@@ -154,6 +159,7 @@ class PortNumberSelector extends JPanel {
 
     /**
      * Selects a random port from available ports on the computer
+     *
      * @return An available port on the current computer
      */
     private Integer findRandomPort() {

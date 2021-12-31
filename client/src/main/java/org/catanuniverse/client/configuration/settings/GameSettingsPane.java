@@ -1,6 +1,7 @@
 /*
-	Idil Saglam
-	Abdulrahim Toto
+	Binôme 35
+	22015094 - Idil Saglam
+	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -18,7 +19,9 @@ abstract class GameSettingsPane<T extends GameSettings> extends JPanel {
 
     /**
      * Creates a new game settings pane with the given callback function
-     * @param onGameSettingsChanged The callback function that will be called each time the game settings are changed
+     *
+     * @param onGameSettingsChanged The callback function that will be called each time the game
+     *     settings are changed
      */
     protected GameSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
         this.onGameSettingsChanged = onGameSettingsChanged;
@@ -27,6 +30,7 @@ abstract class GameSettingsPane<T extends GameSettings> extends JPanel {
 
     /**
      * Adds a label and component to the current pane
+     *
      * @param label the label object to add
      * @param component The component to add
      */
@@ -37,6 +41,7 @@ abstract class GameSettingsPane<T extends GameSettings> extends JPanel {
 
     /**
      * Updates the callback function
+     *
      * @param onGameSettingsChanged The new callback function to update with
      */
     protected void setOnGameSettingsChanged(Consumer<GameSettings> onGameSettingsChanged) {
@@ -45,6 +50,7 @@ abstract class GameSettingsPane<T extends GameSettings> extends JPanel {
 
     /**
      * Returns the game settings related to the settings pane
+     *
      * @return The game setting related to the settings pane
      */
     protected GameSettings getSettings() {
@@ -53,6 +59,7 @@ abstract class GameSettingsPane<T extends GameSettings> extends JPanel {
 
     /**
      * Verify that if settings are valid
+     *
      * @return True if settings are valid, false if not
      */
     abstract boolean isSettingsValid();
