@@ -22,6 +22,7 @@ class ConfigurationFormController {
 
     /**
      * Creates a new configuration form controller
+     *
      * @param configurationForm The configuration form
      * @param onSaved The onSaved callback which will be called when configuration is saved
      */
@@ -33,6 +34,7 @@ class ConfigurationFormController {
 
     /**
      * Creates a new configuration form controller
+     *
      * @param configurationForm The configuration form related to the controller
      */
     public ConfigurationFormController(ConfigurationForm configurationForm) {
@@ -41,6 +43,7 @@ class ConfigurationFormController {
 
     /**
      * Updates the on saved callback function
+     *
      * @param onSavedCallback The new callback function
      */
     void setOnSavedCallback(Consumer<GameSettings> onSavedCallback) {
@@ -49,6 +52,7 @@ class ConfigurationFormController {
 
     /**
      * Handles the start button click event
+     *
      * @param event The action event related to the click on the button click
      */
     void startButtonListener(ActionEvent event) {
@@ -60,6 +64,7 @@ class ConfigurationFormController {
 
     /**
      * Listener function to handle each time the players input container is updated
+     *
      * @param players The array of players from the players input container
      */
     void playersInputContainerUpdatedListener(Player[] players) {
@@ -69,6 +74,7 @@ class ConfigurationFormController {
 
     /**
      * Change listener for the game type
+     *
      * @param type The new game type
      */
     void gameTypeSelectedListener(GameType type) {
@@ -80,6 +86,7 @@ class ConfigurationFormController {
 
     /**
      * listener for the game settings pane
+     *
      * @param settings The updated game settings
      */
     void gameSettingsPaneListener(GameSettings settings) {
@@ -94,6 +101,7 @@ class ConfigurationFormController {
 
     /**
      * Update game settings for the given game type
+     *
      * @param type The new game type
      */
     private void updateSettings(GameType type) {
@@ -115,6 +123,7 @@ class ConfigurationFormController {
 
     /**
      * Update game settings with an other game settings
+     *
      * @param settings The new game settings
      */
     private void updateSettings(GameSettings settings) {
@@ -131,9 +140,7 @@ class ConfigurationFormController {
         this.updatePlayersInputContainer();
     }
 
-    /**
-     * Updates players input container
-     */
+    /** Updates players input container */
     private void updatePlayersInputContainer() {
         this.configurationForm
                 .getPlayersInputContainer()
@@ -142,9 +149,7 @@ class ConfigurationFormController {
         this.configurationForm.getPlayersInputContainer().repaint();
     }
 
-    /**
-     * Updates the enabled property of the start button
-     */
+    /** Updates the enabled property of the start button */
     private void updateStartButtonEnabled() {
         System.out.printf("Settings are valid ? %b\n", this.settings.isValid());
         this.configurationForm.getStartButton().setEnabled(this.settings.isValid());
@@ -152,9 +157,7 @@ class ConfigurationFormController {
         this.configurationForm.getStartButton().repaint();
     }
 
-    /**
-     * Function calls the onSaved callback with correct parameters
-     */
+    /** Function calls the onSaved callback with correct parameters */
     private void callCallback() {
         if (this.onSavedCallback == null) {
             return;

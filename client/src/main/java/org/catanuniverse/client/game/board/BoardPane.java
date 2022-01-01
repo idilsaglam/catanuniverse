@@ -23,10 +23,12 @@ public class BoardPane extends JPanel {
      */
     public BoardPane(Dimension size, GameSettings gameSettings) {
         this.initSizes(size);
+        final Dimension sideSize = new Dimension(size.width, size.height / 8),
+                centerSize = new Dimension(size.width, 3 * size.height / 4);
         this.gameSettings = gameSettings;
         this.topStatusPane =
                 new TopStatusBar(gameSettings.getPlayers(), gameSettings.getCapacity());
-        this.gameBoardPane = new GameBoardPane();
+        this.gameBoardPane = new GameBoardPane(centerSize);
         this.bottomStatusPane = new BottomStatusBar();
         this.initPanes(size);
     }
