@@ -6,8 +6,6 @@
 package org.catanuniverse.client.game.board;
 
 import java.awt.GridLayout;
-import java.io.IOException;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.catanuniverse.core.game.Player;
@@ -45,6 +43,7 @@ class TopStatusBar extends JPanel {
 
     private static class PlayerContainer extends JPanel {
         public PlayerContainer(Player p) {
+            /*
             ImageIcon avatar;
             try {
                 avatar = new Avatar(p.getUsername());
@@ -52,6 +51,10 @@ class TopStatusBar extends JPanel {
                 avatar = new ImageIcon();
             }
             this.add(new JLabel(avatar));
+            */
+            JLabel label = new JLabel(p.getUsername());
+            System.out.printf("Player container created for %s\n", p.getUsername());
+            super.add(label);
         }
     }
 
