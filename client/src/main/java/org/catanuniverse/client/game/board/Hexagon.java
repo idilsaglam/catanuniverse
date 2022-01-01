@@ -22,7 +22,8 @@ public class Hextile extends Polygon {
     private Point center = new Point(0, 0);
     private int radius;
     private int rotation = 90;
-
+    private final org.catanuniverse.core.game.Hextile hextile;
+    
     public Hextile(Point center, int radius) {
         npoints = SIDES;
         xpoints = new int[SIDES];
