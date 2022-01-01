@@ -25,8 +25,7 @@ public class BoardPane extends JPanel {
         this.initSizes(size);
         this.gameSettings = gameSettings;
         this.topStatusPane =
-                new TopStatusBar(
-                        gameSettings.getPlayers(), gameSettings.getCapacity());
+                new TopStatusBar(gameSettings.getPlayers(), gameSettings.getCapacity());
         this.gameBoardPane = new GameBoardPane();
         this.bottomStatusPane = new BottomStatusBar();
         this.initPanes(size);

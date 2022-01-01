@@ -30,7 +30,9 @@ final class MPHostSettingsPane extends GameSettingsPane<MultiPlayerHostGameSetti
         GridBagConstraints gbc = new GridBagConstraints();
         super.setLayout(new GridBagLayout());
         // TODO: Create with default values of sliders
-        super.settings = new MultiPlayerHostGameSettings(GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI);
+        super.settings =
+                new MultiPlayerHostGameSettings(
+                        GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI);
 
         this.difficultySelector =
                 new DifficultySelector(

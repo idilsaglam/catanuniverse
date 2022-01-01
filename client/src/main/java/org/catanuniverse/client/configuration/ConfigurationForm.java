@@ -7,14 +7,10 @@ package org.catanuniverse.client.configuration;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
 import java.util.function.Consumer;
 import javax.swing.JPanel;
 import org.catanuniverse.client.configuration.settings.SettingsPane;
 import org.catanuniverse.commons.GameSettings;
-import org.catanuniverse.commons.GameType;
-import org.catanuniverse.commons.LocalGameSettings;
-import org.catanuniverse.core.game.Player;
 
 class ConfigurationForm extends JPanel {
 
@@ -41,12 +37,12 @@ class ConfigurationForm extends JPanel {
 
         this.startButton.addActionListener(controller::startButtonListener);
 
-        this.playersInputContainer.setOnPlayersUpdated(controller::playersInputContainerUpdatedListener);
+        this.playersInputContainer.setOnPlayersUpdated(
+                controller::playersInputContainerUpdatedListener);
 
         this.settingsPane.setOnGameSettingsChanged(controller::gameSettingsPaneListener);
 
-        this.gameTypeSelector =
-            new GameTypeSelector(controller::gameTypeSelectedListener);
+        this.gameTypeSelector = new GameTypeSelector(controller::gameTypeSelectedListener);
 
         constraints.gridx = 0;
         constraints.gridy = 0;
@@ -69,14 +65,14 @@ class ConfigurationForm extends JPanel {
     }
 
     SettingsPane getSettingsPane() {
-      return this.settingsPane;
+        return this.settingsPane;
     }
 
     StartGameButton getStartButton() {
-      return this.startButton;
+        return this.startButton;
     }
 
     PlayersInputContainer getPlayersInputContainer() {
-      return this.playersInputContainer;
+        return this.playersInputContainer;
     }
 }
