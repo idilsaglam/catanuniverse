@@ -15,6 +15,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import javax.swing.JPanel;
+import org.catanuniverse.core.game.GroundType;
 
 class GameBoardPane extends JPanel {
 
@@ -38,8 +39,8 @@ class GameBoardPane extends JPanel {
         g2d.setFont(font);
         metrics = g.getFontMetrics();
 
-        drawCircle(g2d, origin, 380, true, true, 0x4488FF, 0);
-        drawHexGridLoop(g2d, origin, 5, 50, 8);
+        //drawCircle(g2d, origin, 380, true, true, 0x4488FF, 0);
+        drawHexGridLoop(g2d, origin, 7, 50, 8);
     }
 
     private void drawHexGridLoop(Graphics g, Point origin, int size, int radius, int padding) {
@@ -47,7 +48,7 @@ class GameBoardPane extends JPanel {
         double xOff = Math.cos(ang30) * (radius + padding);
         double yOff = Math.sin(ang30) * (radius + padding);
         int half = size / 2;
-
+        int counter = 0;
         for (int row = 0; row < size; row++) {
             int cols = size - java.lang.Math.abs(row - half);
 
@@ -56,22 +57,31 @@ class GameBoardPane extends JPanel {
                 int yLbl = row - half;
                 int x = (int) (origin.x + xOff * (col * 2 + 1 - cols));
                 int y = (int) (origin.y + yOff * (row - half) * 3);
+                if (
+                    (row == 0) ||
+                    (row == size -1) ||
+                    (col == 0) ||
+                    (col == cols -1)
+                ) {
+                    drawHex(g, xLbl, yLbl, x, y, radius, counter++, GroundType.Water, 0x000000, 0xC1F8C0);
 
-                drawHex(g, xLbl, yLbl, x, y, radius);
+                    continue;
+                }
+                drawHex(g, xLbl, yLbl, x, y, radius, counter++, GroundType.Farm, 0x000000, 0xDC198A);
             }
         }
     }
 
-    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r) {
+    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r, int id, GroundType groundType, int borderColor, int color) {
         Graphics2D g2d = (Graphics2D) g;
 
-        Hextile hex = new Hextile(x, y, r);
+        Hexagon hex = new Hexagon(x, y, r, id, groundType);
         String text = String.format("%s : %s", coord(posX), coord(posY));
         int w = metrics.stringWidth(text);
         int h = metrics.getHeight();
 
-        hex.draw(g2d, x, y, 0, 0xFFDD88, true);
-        hex.draw(g2d, x, y, 4, 0x5F5233, false);
+        hex.draw(g2d, x, y, 0, color, true);
+        hex.draw(g2d, x, y, 4, borderColor, false);
 
         g.setColor(new Color(0xFFFFFF));
         g.drawString(text, x - w / 2, y + h / 2);
