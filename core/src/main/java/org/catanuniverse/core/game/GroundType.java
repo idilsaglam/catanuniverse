@@ -5,12 +5,14 @@
 */
 package org.catanuniverse.core.game;
 
-enum GroundType {
+public enum GroundType {
     Forest(Resource.Wood),
     Hill(Resource.Clay),
     Meadow(Resource.Wool),
     Farm(Resource.Corn),
     Mountain(Resource.Mineral),
+    // TODO: Update the resource with water or something else
+    Water(null),
     Desert(null);
 
     private final Resource resource;
