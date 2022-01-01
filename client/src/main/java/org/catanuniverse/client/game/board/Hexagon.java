@@ -11,8 +11,10 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Stroke;
+import org.catanuniverse.core.game.GroundType;
+import org.catanuniverse.core.game.Hextile;
 
-public class Hextile extends Polygon {
+public class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
 
@@ -22,9 +24,10 @@ public class Hextile extends Polygon {
     private Point center = new Point(0, 0);
     private int radius;
     private int rotation = 90;
-    private final org.catanuniverse.core.game.Hextile hextile;
-    
-    public Hextile(Point center, int radius) {
+    private final Hextile hextile;
+
+    public Hexagon(Point center, int radius, Hextile hextile) {
+        this.hextile = hextile;
         npoints = SIDES;
         xpoints = new int[SIDES];
         ypoints = new int[SIDES];
@@ -35,8 +38,16 @@ public class Hextile extends Polygon {
         updatePoints();
     }
 
-    public Hextile(int x, int y, int radius) {
-        this(new Point(x, y), radius);
+    public Hexagon(int x, int y, int radius, Hextile hextile) {
+        this(new Point(x, y), radius, hextile);
+    }
+
+    public Hexagon(Point center, int radius, int id, GroundType groundType) {
+        this(center, radius, new Hextile(id, groundType));
+    }
+
+    public Hexagon(int x, int y, int radius, int id, GroundType groundType) {
+        this(new Point(x, y), radius, new Hextile(id, groundType));
     }
 
     public int getRadius() {
