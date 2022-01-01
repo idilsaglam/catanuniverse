@@ -82,9 +82,11 @@ public abstract class GameSettings {
         this.capacity = capacity;
         Player[] oldPlayers = this.players;
         this.players = new Player[this.capacity];
-        System.out.printf("Capacity %d Requested players number %d old players capacity %d\n", this.capacity, this.getNumberOfRequestedPlayers(), oldPlayers.length);
-        System.arraycopy(oldPlayers, 0, this.players, 0,
-            Math.min(oldPlayers.length, this.players.length));
+        System.out.printf(
+                "Capacity %d Requested players number %d old players capacity %d\n",
+                this.capacity, this.getNumberOfRequestedPlayers(), oldPlayers.length);
+        System.arraycopy(
+                oldPlayers, 0, this.players, 0, Math.min(oldPlayers.length, this.players.length));
     }
 
     /**
