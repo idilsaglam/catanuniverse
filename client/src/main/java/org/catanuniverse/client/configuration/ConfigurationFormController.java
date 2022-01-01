@@ -20,20 +20,37 @@ class ConfigurationFormController {
     private GameSettings settings;
     private Consumer<GameSettings> onSavedCallback;
 
+    /**
+     * Creates a new configuration form controller
+     * @param configurationForm The configuration form
+     * @param onSaved The onSaved callback which will be called when configuration is saved
+     */
     public ConfigurationFormController(
             ConfigurationForm configurationForm, Consumer<GameSettings> onSaved) {
         this.configurationForm = configurationForm;
         this.onSavedCallback = onSaved;
     }
 
+    /**
+     * Creates a new configuration form controller
+     * @param configurationForm The configuration form related to the controller
+     */
     public ConfigurationFormController(ConfigurationForm configurationForm) {
         this(configurationForm, null);
     }
 
+    /**
+     * Updates the on saved callback function
+     * @param onSavedCallback The new callback function
+     */
     void setOnSavedCallback(Consumer<GameSettings> onSavedCallback) {
         this.onSavedCallback = onSavedCallback;
     }
 
+    /**
+     * Handles the start button click event
+     * @param event The action event related to the click on the button click
+     */
     void startButtonListener(ActionEvent event) {
         System.out.printf(
                 "Start button clicked. Current client configuration %s\n",
@@ -41,11 +58,19 @@ class ConfigurationFormController {
         this.callCallback();
     }
 
+    /**
+     * Listener function to handle each time the players input container is updated
+     * @param players The array of players from the players input container
+     */
     void playersInputContainerUpdatedListener(Player[] players) {
         this.settings.setPlayers(players);
         this.updateStartButtonEnabled();
     }
 
+    /**
+     * Change listener for the game type
+     * @param type The new game type
+     */
     void gameTypeSelectedListener(GameType type) {
         System.out.printf("Selected game type %s\n", type);
         this.configurationForm.getSettingsPane().changeGameType(type);
@@ -53,6 +78,10 @@ class ConfigurationFormController {
         this.updateSettings(type);
     }
 
+    /**
+     * listener for the game settings pane
+     * @param settings The updated game settings
+     */
     void gameSettingsPaneListener(GameSettings settings) {
         System.out.println("Game settings changed");
         if (settings instanceof LocalGameSettings) {
@@ -63,6 +92,10 @@ class ConfigurationFormController {
         this.updateSettings(settings);
     }
 
+    /**
+     * Update game settings for the given game type
+     * @param type The new game type
+     */
     private void updateSettings(GameType type) {
         GameSettings oldSettings = this.settings;
         this.settings =
@@ -80,6 +113,10 @@ class ConfigurationFormController {
         this.updatePlayersInputContainer();
     }
 
+    /**
+     * Update game settings with an other game settings
+     * @param settings The new game settings
+     */
     private void updateSettings(GameSettings settings) {
         if (settings instanceof MultiPlayerGuestGameSettings) {
             System.out.println("Multi player guest settings detected");
@@ -94,6 +131,9 @@ class ConfigurationFormController {
         this.updatePlayersInputContainer();
     }
 
+    /**
+     * Updates players input container
+     */
     private void updatePlayersInputContainer() {
         this.configurationForm
                 .getPlayersInputContainer()
@@ -102,6 +142,9 @@ class ConfigurationFormController {
         this.configurationForm.getPlayersInputContainer().repaint();
     }
 
+    /**
+     * Updates the enabled property of the start button
+     */
     private void updateStartButtonEnabled() {
         System.out.printf("Settings are valid ? %b\n", this.settings.isValid());
         this.configurationForm.getStartButton().setEnabled(this.settings.isValid());
@@ -109,6 +152,9 @@ class ConfigurationFormController {
         this.configurationForm.getStartButton().repaint();
     }
 
+    /**
+     * Function calls the onSaved callback with correct parameters
+     */
     private void callCallback() {
         if (this.onSavedCallback == null) {
             return;
