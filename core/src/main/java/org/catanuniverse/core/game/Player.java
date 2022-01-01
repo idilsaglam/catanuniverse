@@ -10,21 +10,21 @@ public class Player {
 
     /**
      * Create a player with the given username
+     *
      * @param username The username of the player to create
      */
     public Player(String username) {
         this.username = username;
     }
 
-    /**
-     * Create a player instance with an empty username
-     */
+    /** Create a player instance with an empty username */
     public Player() {
         this("");
     }
 
     /**
      * Get the username of the current player
+     *
      * @return The username of the current player
      */
     public String getUsername() {
@@ -33,6 +33,7 @@ public class Player {
 
     /**
      * Verify if the given player is valid or not
+     *
      * @return True if the given player is valid, false if not
      */
     public boolean isValid() {
