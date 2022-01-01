@@ -7,7 +7,6 @@ package org.catanuniverse.commons;
 
 public class LocalGameSettings extends GameSettings {
 
-
     /**
      * Create a local game settings with given capcity
      *
@@ -24,7 +23,7 @@ public class LocalGameSettings extends GameSettings {
      * @param nbOfAI The number of AIs in the game room
      */
     public LocalGameSettings(int capacity, int nbOfAI) {
-        super(capacity,  nbOfAI);
+        super(capacity, nbOfAI);
     }
 
     @Override

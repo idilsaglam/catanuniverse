@@ -22,8 +22,7 @@ public abstract class GameSettings {
         this.players = new Player[0];
     }
 
-    public GameSettings(
-            int capacity, int numberOfAI, Difficulty difficulty) {
+    public GameSettings(int capacity, int numberOfAI, Difficulty difficulty) {
         if (numberOfAI >= capacity)
             throw new IllegalArgumentException(
                     "There should be at least one non AI player in the room");
@@ -43,10 +42,7 @@ public abstract class GameSettings {
     }
 
     public GameSettings(int capacity, int numberOfAI) {
-        this(
-                capacity,
-                numberOfAI,
-                numberOfAI == 0 ? null : Difficulty.EASY);
+        this(capacity, numberOfAI, numberOfAI == 0 ? null : Difficulty.EASY);
     }
 
     /**
@@ -60,6 +56,7 @@ public abstract class GameSettings {
 
     /**
      * Get the array of players
+     *
      * @return The array of players
      */
     public Player[] getPlayers() {
@@ -68,6 +65,7 @@ public abstract class GameSettings {
 
     /**
      * Get the number of requested players
+     *
      * @return The number of requested players
      */
     public abstract int getNumberOfRequestedPlayers();
@@ -84,8 +82,9 @@ public abstract class GameSettings {
         this.capacity = capacity;
         Player[] oldPlayers = this.players;
         this.players = new Player[this.capacity];
-        if (this.getNumberOfRequestedPlayers() >= 0)
-            System.arraycopy(oldPlayers, 0, this.players, 0, this.getNumberOfRequestedPlayers());
+        System.out.printf("Capacity %d Requested players number %d old players capacity %d\n", this.capacity, this.getNumberOfRequestedPlayers(), oldPlayers.length);
+        System.arraycopy(oldPlayers, 0, this.players, 0,
+            Math.min(oldPlayers.length, this.players.length));
     }
 
     /**
@@ -119,7 +118,6 @@ public abstract class GameSettings {
         this.difficulty = difficulty;
     }
 
-
     /**
      * Get the number of AI players in the current game room
      *
@@ -148,7 +146,6 @@ public abstract class GameSettings {
         return this.capacity - this.numberOfAI;
     }
 
-
     /**
      * Verify if the game settings are valid or not
      *
@@ -159,21 +156,25 @@ public abstract class GameSettings {
         return (this.areRequestedPlayersValid() && this.capacity != -1 && this.areAIsValid());
     }
 
-
-
     @Override
     public String toString() {
         return String.format(
-                "Capacity %d\n Number of AI players%d\nNumber of real players%d\nDifficulty %s\nNumber of requested players%d",
+                "Capacity %d\n"
+                        + " Number of AI players%d\n"
+                        + "Number of real players%d\n"
+                        + "Difficulty %s\n"
+                        + "Number of requested players%d",
                 this.capacity,
                 this.numberOfAI,
                 this.getNumberOfRealPlayers(),
                 this.getDifficulty() == null ? "N/A" : this.getDifficulty().toString(),
-            this.getNumberOfRequestedPlayers());
+                this.getNumberOfRequestedPlayers());
     }
 
     /**
-     * Merge an other game settings instance to the current game settings instance by keeping the same players
+     * Merge an other game settings instance to the current game settings instance by keeping the
+     * same players
+     *
      * @param settings The other game settings instance
      * @return The result GameSettings object
      */
@@ -183,15 +184,21 @@ public abstract class GameSettings {
             result = new LocalGameSettings(settings.getCapacity(), settings.getNumberOfAI());
         }
         if (settings instanceof MultiPlayerHostGameSettings) {
-            result = new MultiPlayerHostGameSettings(settings.getCapacity(), settings.getNumberOfAI());
-            ((MultiPlayerHostGameSettings)result).setPortNumber(((MultiPlayerHostGameSettings)settings).getPortNumber());
+            result =
+                    new MultiPlayerHostGameSettings(
+                            settings.getCapacity(), settings.getNumberOfAI());
+            ((MultiPlayerHostGameSettings) result)
+                    .setPortNumber(((MultiPlayerHostGameSettings) settings).getPortNumber());
         }
         if (settings instanceof MultiPlayerGuestGameSettings) {
             result = new MultiPlayerGuestGameSettings();
-            ((MultiPlayerGuestGameSettings) result).setServerAddress(((MultiPlayerGuestGameSettings)settings).getServerAddress());
+            ((MultiPlayerGuestGameSettings) result)
+                    .setServerAddress(((MultiPlayerGuestGameSettings) settings).getServerAddress());
         }
         if (result == null) {
-            throw new RuntimeException("Merge failed, game settings to merge should be instance of LocalGameSettings, MultiPlayerHostGameSettings or MultiPlayerGuestGameSettings");
+            throw new RuntimeException(
+                    "Merge failed, game settings to merge should be instance of LocalGameSettings,"
+                            + " MultiPlayerHostGameSettings or MultiPlayerGuestGameSettings");
         }
         result.setDifficulty(settings.getDifficulty());
         result.setPlayers(this.players);
@@ -199,9 +206,8 @@ public abstract class GameSettings {
     }
 
     public abstract void start();
+
     public abstract boolean isOnline();
-
-
 
     /**
      * Verify if requested players are valid
@@ -213,7 +219,13 @@ public abstract class GameSettings {
                 || this.players == null
                 || this.getNumberOfRequestedPlayers() > this.capacity
                 || this.getNumberOfRequestedPlayers() + this.numberOfAI > this.capacity) {
-            System.out.printf("Number of requested players %d players null ? %b capacity %d  number of AI %d\n", this.getNumberOfRequestedPlayers(), this.players == null, this.capacity, this.numberOfAI);
+            System.out.printf(
+                    "Number of requested players %d players null ? %b capacity %d  number of AI"
+                            + " %d\n",
+                    this.getNumberOfRequestedPlayers(),
+                    this.players == null,
+                    this.capacity,
+                    this.numberOfAI);
             return false;
         }
         for (Player p : this.players) {
