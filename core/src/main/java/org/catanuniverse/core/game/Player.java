@@ -5,9 +5,12 @@
 */
 package org.catanuniverse.core.game;
 
+import java.awt.Color;
+import org.catanuniverse.core.utils.Helpers;
+
 public class Player {
     private String username;
-
+    private Color color;
     /**
      * Create a player with the given username
      *
@@ -15,11 +18,12 @@ public class Player {
      */
     public Player(String username) {
         this.username = username;
+        this.color = Helpers.randomColor();
     }
 
     /** Create a player instance with an empty username */
     public Player() {
-        this("");
+        this(String.format("Auto %d", (int)(Math.random() * 10)));
     }
 
     /**
@@ -38,5 +42,13 @@ public class Player {
      */
     public boolean isValid() {
         return this.username.matches("^[a-zA-Z0-9]{4,10}$");
+    }
+
+    /**
+     * Get the color of the player
+     * @return The color related to the current player
+     */
+    public Color getColor() {
+        return this.color;
     }
 }
