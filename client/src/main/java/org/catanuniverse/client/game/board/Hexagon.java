@@ -15,10 +15,14 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import org.catanuniverse.core.game.GroundType;
 import org.catanuniverse.core.game.Hextile;
+import org.catanuniverse.core.game.Road;
+import org.catanuniverse.core.game.Settlement;
 
 public class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
+    // TODO: Add a static variable for harbor color
+
     private static final Color ROAD_COLOR = new Color(0x19DCCD);
     private static final Color SETTLEMENT_COLOR = new Color(0x000000);
     private static final int SETTLEMENT_CIRCLE_RADIUS = 10;
@@ -118,12 +122,14 @@ public class Hexagon extends Polygon {
 
     void drawRoads(Graphics2D g) {
         Color c = g.getColor();
-        g.setColor(Hexagon.ROAD_COLOR);
         Line2D line;
+        Road r;
         for (int i = 0; i < 6; i++) {
-            if (this.getHextile().getRoadSlot(i) == null) {
+            r = this.getHextile().getRoadSlot(i);
+            if (r == null) {
                 continue;
             }
+            g.setColor(r.getOwner().getColor());
             line = new Line2D.Float(this.getCorner((i - 1 + 6) % 6), this.getCorner(i));
             g.draw(line);
         }
@@ -132,12 +138,15 @@ public class Hexagon extends Polygon {
 
     void drawSettlements(Graphics2D g) {
         Color c = g.getColor();
-        g.setColor(Hexagon.SETTLEMENT_COLOR);
+
         Graphics2D g2d = (Graphics2D) g;
+        Settlement settlement;
         for (int i = 0; i < 6; i++) {
+            settlement = this.getHextile().getSettlementSlot(i);
             if (this.getHextile().getSettlementSlot(i) == null) {
-                // continue;
+                continue;
             }
+            g.setColor(settlement.getOwner().getColor());
             this.drawSettlementCircle(g2d, this.getCorner(i));
         }
         g.setColor(c);
