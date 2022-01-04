@@ -17,5 +17,13 @@ public final class Hextile extends Tile {
         super(id, type, Hextile.NB_SIDES);
     }
 
+    @Override
+    public GroundType getGroundType() {
+        return super.getGroundType();
+    }
 
+    @Override
+    public int getId() {
+        return super.getId();
+    }
 }

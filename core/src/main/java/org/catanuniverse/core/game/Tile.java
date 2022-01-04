@@ -103,6 +103,22 @@ abstract class Tile {
     }
 
     /**
+     * Return the resource type
+     * @return The resource of the tile
+     */
+    protected GroundType getGroundType() {
+        return this.type;
+    }
+
+    /**
+     * Get the id of the tile
+     * @return the id of the tile
+     */
+    protected int getId() {
+        return this.id;
+    }
+
+    /**
      * Adds a road on the given position if possible
      *
      * @param index The index of the road slot
