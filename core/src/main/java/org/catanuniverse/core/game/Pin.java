@@ -14,6 +14,7 @@ abstract class Pin {
 
     /**
      * Get the owner of the pin
+     *
      * @return The player who owns the current pin
      */
     public Player getOwner() {

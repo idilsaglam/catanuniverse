@@ -23,7 +23,7 @@ public class Player {
 
     /** Create a player instance with an empty username */
     public Player() {
-        this(String.format("Auto %d", (int)(Math.random() * 10)));
+        this(String.format("Auto %d", (int) (Math.random() * 10)));
     }
 
     /**
@@ -46,6 +46,7 @@ public class Player {
 
     /**
      * Get the color of the player
+     *
      * @return The color related to the current player
      */
     public Color getColor() {
