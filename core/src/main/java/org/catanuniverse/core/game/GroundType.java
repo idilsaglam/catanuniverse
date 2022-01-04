@@ -52,7 +52,7 @@ public enum GroundType {
             case 2 -> GroundType.Meadow;
             case 3 -> GroundType.Farm;
             case 4 -> GroundType.Mountain;
-            // TODO: There should be only one desert
+                // TODO: There should be only one desert
             default -> desertExists ? random(true) : GroundType.Desert;
         };
     }
