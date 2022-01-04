@@ -15,20 +15,32 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import javax.swing.JPanel;
+import org.catanuniverse.core.exceptions.NoSuchSlotException;
+import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
+import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
+import org.catanuniverse.core.game.Board;
 import org.catanuniverse.core.game.GroundType;
+import org.catanuniverse.core.game.Hextile;
 
 class GameBoardPane extends JPanel {
 
+    private final static int SIZE = 7;
+    private static final long serialVersionUID = 1L;
+    private Font font = new Font("Arial", Font.BOLD, 18);
+
     private final Dimension size;
+    private final Board board;
+    private FontMetrics metrics;
 
     public GameBoardPane(Dimension size) {
         this.size = size;
+        try {
+            this.board = new Board(GameBoardPane.SIZE);
+        } catch (NoSuchSlotException|SlotAlreadyTakenException|TileTypeNotSupportedException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error happened while creating the board pane");
+        }
     }
-
-    private static final long serialVersionUID = 1L;
-
-    private Font font = new Font("Arial", Font.BOLD, 18);
-    FontMetrics metrics;
 
     @Override
     public void paintComponent(Graphics g) {
@@ -47,49 +59,38 @@ class GameBoardPane extends JPanel {
         double ang30 = Math.toRadians(30);
         double xOff = Math.cos(ang30) * (radius + padding);
         double yOff = Math.sin(ang30) * (radius + padding);
-        int half = size / 2;
+        int half = GameBoardPane.SIZE / 2;
         int counter = 0;
-        for (int row = 0; row < size; row++) {
+        for (int row = 0; row < GameBoardPane.SIZE; row++) {
             int cols = size - java.lang.Math.abs(row - half);
 
-            for (int col = 0; col < cols; col++) {
-                int xLbl = row < half ? col - row : col - half;
+            for (int column = 0; column < cols; column++) {
+                int xLbl = row < half ? column - row : column - half;
                 int yLbl = row - half;
-                int x = (int) (origin.x + xOff * (col * 2 + 1 - cols));
+                int x = (int) (origin.x + xOff * (column * 2 + 1 - cols));
                 int y = (int) (origin.y + yOff * (row - half) * 3);
-                if (
-                    (row == 0) ||
-                    (row == size -1) ||
-                    (col == 0) ||
-                    (col == cols -1)
-                ) {
-                    drawHex(g, xLbl, yLbl, x, y, radius, counter++, GroundType.Water, 0x000000, 0xC1F8C0);
-
-                    continue;
-                }
-                drawHex(g, xLbl, yLbl, x, y, radius, counter++, GroundType.Farm, 0x000000, 0xDC198A);
+                drawHex(g, x, y, radius, this.board.get(row, column));
             }
         }
     }
 
-    private void drawHex(Graphics g, int posX, int posY, int x, int y, int r, int id, GroundType groundType, int borderColor, int color) {
+    private void drawHex(Graphics g, int x, int y, int r, Hextile tile) {
         Graphics2D g2d = (Graphics2D) g;
-
-        Hexagon hex = new Hexagon(x, y, r, id, groundType);
-        String text = String.format("%s : %s", coord(posX), coord(posY));
+        Hexagon hex = new Hexagon(x, y, r, tile);
+        String text = tile.getId() + "";
         int w = metrics.stringWidth(text);
         int h = metrics.getHeight();
 
-        hex.draw(g2d, x, y, 0, color, true);
-        hex.draw(g2d, x, y, 4, borderColor, false);
+        hex.draw(g2d, x, y, 0, tile.getGroundType().getColor(), true);
+        hex.draw(g2d, x, y, 4, tile.getGroundType().getColor(), false);
 
         g.setColor(new Color(0xFFFFFF));
-        g.drawString(text, x - w / 2, y + h / 2);
+        //TODO: Add road and settlements like that
+        if (tile.getGroundType() != GroundType.Water && tile.getGroundType() != GroundType.Desert) {
+            g.drawString(text, x - w / 2, y + h / 2);
+        }
     }
 
-    private String coord(int value) {
-        return (value > 0 ? "+" : "") + Integer.toString(value);
-    }
 
     public void drawCircle(
             Graphics2D g,
