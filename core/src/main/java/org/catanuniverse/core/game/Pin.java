@@ -11,4 +11,12 @@ abstract class Pin {
     protected Pin(Player owner) {
         this.owner = owner;
     }
+
+    /**
+     * Get the owner of the pin
+     * @return The player who owns the current pin
+     */
+    public Player getOwner() {
+        return this.owner;
+    }
 }
