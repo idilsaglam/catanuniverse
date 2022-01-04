@@ -55,7 +55,7 @@ class GameBoardPane extends JPanel {
         metrics = g.getFontMetrics();
 
         // drawCircle(g2d, origin, 380, true, true, 0x4488FF, 0);
-        drawHexGridLoop(g2d, origin, 7, 50, 8);
+        drawHexGridLoop(g2d, origin, 7, 50, 0);
     }
 
     private void drawHexGridLoop(Graphics g, Point origin, int size, int radius, int padding) {
@@ -84,8 +84,8 @@ class GameBoardPane extends JPanel {
         int w = metrics.stringWidth(text);
         int h = metrics.getHeight();
 
-        hex.draw(g2d, 0, tile.getGroundType().getColor(), true);
-        hex.draw(g2d, 4, tile.getGroundType().getColor(), false);
+        hex.draw(g2d,  tile.getGroundType().getColor(), true);
+        hex.draw(g2d,  super.getBackground().getRGB(), false);
         hex.drawRoads(g2d);
         hex.drawSettlements(g2d);
         g.setColor(new Color(0xFFFFFF));

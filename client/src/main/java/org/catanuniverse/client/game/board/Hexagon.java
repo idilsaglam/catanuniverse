@@ -27,7 +27,7 @@ public class Hexagon extends Polygon {
     private static final Color SETTLEMENT_COLOR = new Color(0x000000);
     private static final int SETTLEMENT_CIRCLE_RADIUS = 10;
     private static final int SIDES = 6;
-
+    private static final int CLICKABLE_AREA_WIDTH = 12;
     private Point[] points = new Point[SIDES];
     private Point center = new Point(0, 0);
     private int radius;
@@ -104,11 +104,11 @@ public class Hexagon extends Polygon {
         return this.hextile;
     }
 
-    void draw(Graphics2D g, int lineThickness, int colorValue, boolean filled) {
+    void draw(Graphics2D g, int colorValue, boolean filled) {
         // Store before changing.
         Stroke tmpS = g.getStroke();
         Color tmpC = g.getColor();
-
+        int lineThickness = filled ? 0 : Hexagon.CLICKABLE_AREA_WIDTH;
         g.setColor(new Color(colorValue));
         g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
 
