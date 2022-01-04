@@ -5,22 +5,15 @@
 */
 package org.catanuniverse.client.game.board;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Stroke;
 import javax.swing.JPanel;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
 import org.catanuniverse.core.game.Board;
-import org.catanuniverse.core.game.GroundType;
-import org.catanuniverse.core.game.Hextile;
 
 class GameBoardPane extends JPanel {
 
@@ -43,16 +36,39 @@ class GameBoardPane extends JPanel {
             e.printStackTrace();
             throw new RuntimeException("Error happened while creating the board pane");
         }
+        this.setLayout(null);
+        this.setHexagons(7, 50, 0);
     }
 
-    @Override
+    private void setHexagons(int s, int radius, int padding) {
+        Point origin = new Point(size.width / 2, size.height / 2);
+
+        double ang30 = Math.toRadians(30);
+        double xOff = Math.cos(ang30) * (radius + padding);
+        double yOff = Math.sin(ang30) * (radius + padding);
+        int half = GameBoardPane.SIZE / 2;
+        int counter = 0;
+        for (int row = 0; row < GameBoardPane.SIZE; row++) {
+            int cols = s - java.lang.Math.abs(row - half);
+
+            for (int column = 0; column < cols; column++) {
+                int xLbl = row < half ? column - row : column - half;
+                int yLbl = row - half;
+                int x = (int) (origin.x + xOff * (column * 2 + 1 - cols));
+                int y = (int) (origin.y + yOff * (row - half) * 3);
+                HexagonTile tile = new HexagonTile(x, y, radius, this.board.get(row, column));
+                this.add(tile);
+            }
+        }
+    }
+
+    /*@Override
     public void paintComponent(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
         Point origin = new Point(size.width / 2, size.height / 2);
 
         g2d.setStroke(new BasicStroke(4.0f, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
         g2d.setFont(font);
-        metrics = g.getFontMetrics();
 
         // drawCircle(g2d, origin, 380, true, true, 0x4488FF, 0);
         drawHexGridLoop(g2d, origin, 7, 50, 0);
@@ -121,4 +137,5 @@ class GameBoardPane extends JPanel {
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
+     */
 }

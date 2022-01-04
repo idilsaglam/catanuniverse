@@ -72,9 +72,10 @@ public class MainFrame extends JFrame {
      * @param gameSettings The configuration object to update with
      */
     private void setGameSettings(GameSettings gameSettings) {
+        System.out.println("HEREEEEEEEEEE");
         this.gameSettings = gameSettings;
         System.out.println("Configuration updated");
-        // TODO: Start the game
+        // TODO: Start the game in a background thread
         this.maximise();
         this.loadGameBoard();
     }

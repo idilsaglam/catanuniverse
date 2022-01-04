@@ -36,14 +36,30 @@ public class Hexagon extends Polygon {
 
     public Hexagon(Point center, int radius, Hextile hextile) {
         this.hextile = hextile;
-        npoints = SIDES;
-        xpoints = new int[SIDES];
-        ypoints = new int[SIDES];
+        final double r3 = Math.sqrt(3);
+        super.xpoints =
+                new int[] {
+                    (int) Math.ceil(center.x - radius * r3 / 2),
+                    center.x,
+                    (int) Math.ceil(center.x + radius * r3 / 2),
+                    (int) Math.ceil(center.x + radius * r3 / 2),
+                    center.x,
+                    (int) Math.ceil(center.x - radius * r3 / 2)
+                };
+        super.ypoints =
+                new int[] {
+                    (int) Math.ceil(center.y - radius / 2.),
+                    center.y - radius,
+                    (int) Math.ceil(center.y - radius / 2.),
+                    (int) Math.ceil(center.y + radius / 2.),
+                    center.y + radius,
+                    (int) Math.ceil(center.y + radius / 2.),
+                };
 
         this.center = center;
         this.radius = radius;
-
-        updatePoints();
+        this.npoints = SIDES;
+        // updatePoints();
     }
 
     public Hexagon(int x, int y, int radius, Hextile hextile) {
@@ -86,7 +102,9 @@ public class Hexagon extends Polygon {
     }
 
     Point getCorner(int index) {
-        return switch (index % Hexagon.SIDES) {
+        index = index % super.npoints;
+        return new Point(super.xpoints[index], super.ypoints[index]);
+        /*   return switch (index % Hexagon.SIDES) {
             case 0 -> new Point(
                     this.center.x - this.radius, this.center.y - (int) (this.radius / 2));
             case 1 -> new Point(this.center.x, this.center.y - this.radius);
@@ -97,7 +115,7 @@ public class Hexagon extends Polygon {
             case 4 -> new Point(this.center.x, this.center.y + this.radius);
             default -> new Point(
                     this.center.x - this.radius, this.center.y + (int) (this.radius / 2));
-        };
+        };*/
     }
 
     Hextile getHextile() {
@@ -111,7 +129,11 @@ public class Hexagon extends Polygon {
         int lineThickness = filled ? 0 : Hexagon.CLICKABLE_AREA_WIDTH;
         g.setColor(new Color(colorValue));
         g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-
+        System.out.println("HEXAGON DRAW FUNCTION");
+        System.out.println(this.center);
+        for (int i = 0; i < npoints; i++) {
+            System.out.printf("(%d,%d)", xpoints[i], ypoints[i]);
+        }
         if (filled) g.fillPolygon(xpoints, ypoints, npoints);
         else g.drawPolygon(xpoints, ypoints, npoints);
 
@@ -143,7 +165,7 @@ public class Hexagon extends Polygon {
         Settlement settlement;
         for (int i = 0; i < 6; i++) {
             settlement = this.getHextile().getSettlementSlot(i);
-            if (this.getHextile().getSettlementSlot(i) == null) {
+            if (settlement == null) {
                 continue;
             }
             g.setColor(settlement.getOwner().getColor());
@@ -180,5 +202,9 @@ public class Hexagon extends Polygon {
             ypoints[p] = point.y;
             points[p] = point;
         }
+    }
+
+    Point getCenter() {
+        return this.center;
     }
 }
