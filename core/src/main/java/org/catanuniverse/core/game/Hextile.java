@@ -5,8 +5,12 @@
 */
 package org.catanuniverse.core.game;
 
+import org.catanuniverse.core.exceptions.NoSuchSlotException;
+
 public final class Hextile extends Tile {
+
     private static final int NB_SIDES = 6;
+
     /**
      * Create a new instance of Tile object
      *
@@ -25,5 +29,32 @@ public final class Hextile extends Tile {
     @Override
     public int getId() {
         return super.getId();
+    }
+
+    @Override
+    public Hextile getNeighbor(int index) {
+        try {
+            return (Hextile) super.getNeighbor(index);
+        } catch (NoSuchSlotException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Settlement getSettlementSlot(int index) {
+        try {
+            return super.getSettlementSlot(index);
+        } catch (NoSuchSlotException ignore) {
+            return null;
+        }
+    }
+
+    @Override
+    public Road getRoadSlot(int index) {
+        try {
+            return super.getRoadSlot(index);
+        } catch (NoSuchSlotException ignore) {
+            return null;
+        }
     }
 }

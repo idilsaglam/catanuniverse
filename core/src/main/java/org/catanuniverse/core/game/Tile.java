@@ -104,6 +104,7 @@ abstract class Tile {
 
     /**
      * Return the resource type
+     *
      * @return The resource of the tile
      */
     protected GroundType getGroundType() {
@@ -112,6 +113,7 @@ abstract class Tile {
 
     /**
      * Get the id of the tile
+     *
      * @return the id of the tile
      */
     protected int getId() {
