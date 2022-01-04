@@ -27,8 +27,6 @@ class GameBoardPane extends JPanel {
     private static final int SIZE = 7;
     private static final long serialVersionUID = 1L;
 
-    // TODO: Add a static variable for other settlement colors
-    // TODO: Add a static variable for harbor color
     private Font font = new Font("Arial", Font.BOLD, 18);
 
     private final Dimension size;
@@ -88,12 +86,10 @@ class GameBoardPane extends JPanel {
 
         hex.draw(g2d, 0, tile.getGroundType().getColor(), true);
         hex.draw(g2d, 4, tile.getGroundType().getColor(), false);
-        // TODO: Change line color for road
         hex.drawRoads(g2d);
         hex.drawSettlements(g2d);
         g.setColor(new Color(0xFFFFFF));
 
-        // TODO: Add road and settlements like that
         if (tile.getGroundType() != GroundType.Water && tile.getGroundType() != GroundType.Desert) {
             g.drawString(text, x - w / 2, y + h / 2);
         }
