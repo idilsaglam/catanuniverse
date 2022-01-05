@@ -73,21 +73,16 @@ class HexagonTile extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        System.out.println("MOUSE CLICKED");
         Integer cornerIndex = this.hexagon.getCornerFromPoint(e.getPoint()),
             sideIndex = this.hexagon.getSideFromPoint(e.getPoint());
         boolean needUpdate =
             cornerIndex != null && this.onAddSettlement != null && this.onAddSettlement
                 .test(this.hexagon.getHextile(), cornerIndex);
-
+        System.out.printf("Mouse clicked will update %b\n", needUpdate);
         if (sideIndex != null && this.onAddRoad != null && this.onAddRoad.test(this.hexagon.getHextile(), sideIndex)) {
             needUpdate = true;
         }
-
-        if (needUpdate) {
-            this.revalidate();
-            this.repaint();
-        }
-
 
     }
 

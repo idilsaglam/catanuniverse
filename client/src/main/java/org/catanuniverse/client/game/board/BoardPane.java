@@ -38,14 +38,19 @@ public class BoardPane extends JPanel {
                 new TopStatusBar(gameSettings.getPlayers(), gameSettings.getCapacity());
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
+            System.out.printf("Game board pane on settlement added to %d\n", settlementIndex);
             if (tile.getSettlementSlot(settlementIndex) != null) return false;
             tile.addSettlement(settlementIndex, new Settlement(new Player("Test")));
+            this.revalidate();
+            this.repaint();
             return true;
         });
         this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
             if (tile.getRoadSlot(roadIndex) != null) return false;
             try {
                 tile.addRoad(roadIndex, new Road(new Player("Test")));
+                this.revalidate();
+                this.repaint();
                 return true;
             } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                 return false;
