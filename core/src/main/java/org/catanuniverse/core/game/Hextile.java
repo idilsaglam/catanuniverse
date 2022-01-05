@@ -57,4 +57,10 @@ public final class Hextile extends Tile {
             return null;
         }
     }
+
+    @Override
+    public void addSettlement(int index, Settlement settlement) {
+
+    }
+
 }

@@ -12,6 +12,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+
 import javax.swing.JPanel;
 import org.catanuniverse.core.game.GroundType;
 import org.catanuniverse.core.game.Hextile;
@@ -21,6 +24,7 @@ class HexagonTile extends JPanel implements MouseListener {
 
     private final Hexagon hexagon;
     private FontMetrics metrics;
+    private BiPredicate<Hextile, Integer> onAddSettlement, onAddRoad;
 
     public HexagonTile(int x, int y, int radius, Hextile tile) {
         final double r3 = Math.sqrt(3);
@@ -32,6 +36,14 @@ class HexagonTile extends JPanel implements MouseListener {
                 (int) Math.ceil(radius * r3),
                 2 * radius);
         this.addMouseListener(this);
+    }
+
+    public void setOnAddSettlementCallback(BiPredicate<Hextile,Integer> onAddSettlement) {
+        this.onAddSettlement = onAddSettlement;
+    }
+
+    public void setOnAddRoadCallback(BiPredicate<Hextile, Integer> onAddRoad) {
+        this.onAddRoad = onAddRoad;
     }
 
     @Override
@@ -61,7 +73,22 @@ class HexagonTile extends JPanel implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.printf("Mouse clicked at (%d,%d)\n", e.getX(), e.getY());
+        Integer cornerIndex = this.hexagon.getCornerFromPoint(e.getPoint()),
+            sideIndex = this.hexagon.getSideFromPoint(e.getPoint());
+        boolean needUpdate =
+            cornerIndex != null && this.onAddSettlement != null && this.onAddSettlement
+                .test(this.hexagon.getHextile(), cornerIndex);
+
+        if (sideIndex != null && this.onAddRoad != null && this.onAddRoad.test(this.hexagon.getHextile(), sideIndex)) {
+            needUpdate = true;
+        }
+
+        if (needUpdate) {
+            this.revalidate();
+            this.repaint();
+        }
+
+
     }
 
     @Override

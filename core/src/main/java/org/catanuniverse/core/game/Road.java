@@ -21,7 +21,7 @@ public class Road extends Pin {
      *
      * @param owner The owner of the road pion
      */
-    protected Road(Player owner) {
+    public Road(Player owner) {
         super(owner);
     }
 }

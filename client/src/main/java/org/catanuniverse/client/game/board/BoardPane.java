@@ -9,11 +9,17 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import org.catanuniverse.commons.GameSettings;
+import org.catanuniverse.core.game.Hextile;
+import org.catanuniverse.core.game.Player;
+import org.catanuniverse.core.game.Road;
+import org.catanuniverse.core.game.Settlement;
 
 public class BoardPane extends JPanel {
 
     private final GameSettings gameSettings;
-    private final JPanel topStatusPane, gameBoardPane, bottomStatusPane;
+    private final TopStatusBar topStatusPane;
+    private final GameBoardPane gameBoardPane;
+    private final BottomStatusBar bottomStatusPane;
 
     /**
      * Creates a BoardPane with given size and configuration
@@ -29,6 +35,15 @@ public class BoardPane extends JPanel {
         this.topStatusPane =
                 new TopStatusBar(gameSettings.getPlayers(), gameSettings.getCapacity());
         this.gameBoardPane = new GameBoardPane(centerSize);
+        this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
+            if (tile.getSettlementSlot(settlementIndex) != null) return false;
+            tile.addSettlement(settlementIndex, new Settlement(new Player("Test")));
+            return true;
+        });
+        this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
+            if (tile.getRoadSlot(roadIndex) != null) return false;
+            tile.addRoad(roadIndex, new Road(new Player("Test")));
+        });
         this.bottomStatusPane = new BottomStatusBar();
         this.initPanes(size);
     }

@@ -18,9 +18,11 @@ import org.catanuniverse.core.game.Hextile;
 import org.catanuniverse.core.game.Road;
 import org.catanuniverse.core.game.Settlement;
 
-public class Hexagon extends Polygon {
+class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
+    private static final int RADIUS_CORNER_CIRCLE = 25;
+    private static final int AUTHORIZED_DISTANCE_FOR_CLICK_TO_SIDE = 10;
     // TODO: Add a static variable for harbor color
 
     private static final Color ROAD_COLOR = new Color(0x19DCCD);
@@ -33,10 +35,14 @@ public class Hexagon extends Polygon {
     private int radius;
     private int rotation = 90;
     private final Hextile hextile;
+    private final Ellipse2D[] circles;
+    private final Line2D[] sides;
 
     public Hexagon(Point center, int radius, Hextile hextile) {
         this.hextile = hextile;
         final double r3 = Math.sqrt(3);
+        this.circles = new Ellipse2D[Hexagon.SIDES];
+        this.sides = new Line2D[Hexagon.SIDES];
         super.xpoints =
                 new int[] {
                     (int) Math.ceil(center.x - radius * r3 / 2),
@@ -59,6 +65,20 @@ public class Hexagon extends Polygon {
         this.center = center;
         this.radius = radius;
         this.npoints = SIDES;
+        for (int i = 0; i < Hexagon.SIDES; i++) {
+            this.circles[i] = new Ellipse2D.Double(
+                super.xpoints[i],
+                super.ypoints[i],
+                Hexagon.RADIUS_CORNER_CIRCLE,
+                Hexagon.RADIUS_CORNER_CIRCLE
+            );
+            this.sides[i] = new Line2D.Double(
+                this.xpoints[i],
+                this.ypoints[i],
+                this.xpoints[(i+1) % Hexagon.SIDES],
+                this.ypoints[(i+1) % Hexagon.SIDES]
+            );
+        }
         // updatePoints();
     }
 
@@ -172,6 +192,29 @@ public class Hexagon extends Polygon {
             this.drawSettlementCircle(g2d, this.getCorner(i));
         }
         g.setColor(c);
+    }
+
+    /**
+     * Check if a given point is in a corner
+     * @param point The point to check
+     * @return The number of the corner slot or null
+     */
+    Integer getCornerFromPoint(Point point) {
+        for (int i = 0; i<Hexagon.SIDES; i++) {
+            if (this.circles[i].contains(point.x, point.y)) {
+                return i;
+            }
+        }
+        return null;
+    }
+
+    Integer getSideFromPoint(Point point) {
+        for (int i = 0; i < Hexagon.SIDES; i++) {
+            if (this.sides[i].ptLineDist(point) <= Hexagon.AUTHORIZED_DISTANCE_FOR_CLICK_TO_SIDE) {
+                return i;
+            }
+        }
+        return null;
     }
 
     private void drawSettlementCircle(Graphics2D g2d, Point point) {
