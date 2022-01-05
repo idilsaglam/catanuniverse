@@ -117,10 +117,6 @@ class TopStatusBar extends JPanel {
         chars3.setSize(300, 300);
 
 
-
-
-
-
         JPanel j2 = new JPanel();
         j2.setBorder(new EmptyBorder(20, 20, 70, 250));
         j2.setBackground(Color.yellow);
