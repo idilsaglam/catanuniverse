@@ -128,7 +128,7 @@ abstract class Tile {
      * @throws SlotAlreadyTakenException if the given slot is already occupied by another user
      * @throws NoSuchSlotException If there's no slot for the given index
      */
-    protected void addRoad(int index, Road road)
+    public void addRoad(int index, Road road)
             throws SlotAlreadyTakenException, NoSuchSlotException {
         this.isSlotExists(index);
         if (this.roadSlots[index] == null) {
