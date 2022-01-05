@@ -186,7 +186,7 @@ abstract class Tile {
                     System.out
                         .printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(),
                             compIndex);
-                    this.neighbors[index].settlementSlots[compIndex + 1] = settlement;
+                    this.neighbors[index].settlementSlots[(compIndex + 1)%this.neighbors.length] = settlement;
                 }
                 index = (index + this.neighbors.length - 1) % this.neighbors.length;
                 compIndex = complementaryIndex(index);
