@@ -28,7 +28,6 @@ class TopStatusBar extends JPanel {
             this.playerCards[i] = new PlayerCard(this.players[i], i+1);
             this.add(this.playerCards[i]);
         }
-        this.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
     }
 
 }

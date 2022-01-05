@@ -21,19 +21,29 @@ class PlayerCard extends JPanel {
 
   PlayerCard(Player player, int index) throws IOException {
     this.player = player;
+    this.setBackground(Color.PINK);
     JLabel avatarLabel;
     PlayerAchievementsContainer achievementsContainer = new PlayerAchievementsContainer();
     String avatarURL = String.format("/avatar%d.png", index);
     System.out.printf("Avatar URL %s\n", avatarURL);
     BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
-    Image scaledImage = bufferedAvatarImage.getScaledInstance(100,100,Image.SCALE_SMOOTH);
+    Image scaledImage = bufferedAvatarImage.getScaledInstance(250,250,Image.SCALE_SMOOTH);
     avatarLabel = new JLabel(new ImageIcon(scaledImage));
+    JLabel username = new JLabel();
+    username.setText(player.getUsername());
     this.setLayout(new GridLayout(1, 2));
+    JPanel avatarPanel = new JPanel();
+    GridBagConstraints gbc= new GridBagConstraints();
+    avatarPanel.setLayout(new GridBagLayout());
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    avatarPanel.add(avatarLabel, gbc);
+    gbc.gridy = 1;
+    avatarPanel.add(username, gbc);
 
-    this.add(avatarLabel);
+    this.add(avatarPanel);
     this.add(achievementsContainer);
 
-    this.setBorder(BorderFactory.createMatteBorder(1,1,1,1, Color.GRAY));
   }
 
   private class PlayerAchievementsContainer extends JPanel {
