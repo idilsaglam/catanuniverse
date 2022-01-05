@@ -64,7 +64,7 @@ class GameBoardPane extends JPanel {
         int half = GameBoardPane.SIZE / 2;
         int counter = 0;
         for (int row = 0; row < GameBoardPane.SIZE; row++) {
-            int cols = s - java.lang.Math.abs(row - half);
+            int cols = s - Math.abs(row - half);
             for (int column = 0; column < cols; column++) {
                 int xLbl = row < half ? column - row : column - half;
                 int yLbl = row - half;

@@ -13,6 +13,7 @@ import java.awt.Polygon;
 import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
 import org.catanuniverse.core.game.GroundType;
 import org.catanuniverse.core.game.Hextile;
 import org.catanuniverse.core.game.Road;
@@ -21,8 +22,7 @@ import org.catanuniverse.core.game.Settlement;
 class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
-    private static final int RADIUS_CORNER_CIRCLE = 25;
-    private static final int AUTHORIZED_DISTANCE_FOR_CLICK_TO_SIDE = 10;
+    private static final int CLICK_DISTANCE = 10;
     // TODO: Add a static variable for harbor color
 
     private static final Color ROAD_COLOR = new Color(0x19DCCD);
@@ -35,13 +35,11 @@ class Hexagon extends Polygon {
     private int radius;
     private int rotation = 90;
     private final Hextile hextile;
-    private final Ellipse2D[] circles;
     private final Line2D[] sides;
 
     public Hexagon(Point center, int radius, Hextile hextile) {
         this.hextile = hextile;
         final double r3 = Math.sqrt(3);
-        this.circles = new Ellipse2D[Hexagon.SIDES];
         this.sides = new Line2D[Hexagon.SIDES];
         super.xpoints =
                 new int[] {
@@ -66,12 +64,6 @@ class Hexagon extends Polygon {
         this.radius = radius;
         this.npoints = SIDES;
         for (int i = 0; i < Hexagon.SIDES; i++) {
-            this.circles[i] = new Ellipse2D.Double(
-                super.xpoints[i],
-                super.ypoints[i],
-                Hexagon.RADIUS_CORNER_CIRCLE,
-                Hexagon.RADIUS_CORNER_CIRCLE
-            );
             this.sides[i] = new Line2D.Double(
                 this.xpoints[i],
                 this.ypoints[i],
@@ -124,18 +116,6 @@ class Hexagon extends Polygon {
     Point getCorner(int index) {
         index = index % super.npoints;
         return new Point(super.xpoints[index], super.ypoints[index]);
-        /*   return switch (index % Hexagon.SIDES) {
-            case 0 -> new Point(
-                    this.center.x - this.radius, this.center.y - (int) (this.radius / 2));
-            case 1 -> new Point(this.center.x, this.center.y - this.radius);
-            case 2 -> new Point(
-                    this.center.x + this.radius, this.center.y - (int) (this.radius / 2));
-            case 3 -> new Point(
-                    this.center.x + this.radius, this.center.y + (int) (this.radius / 2));
-            case 4 -> new Point(this.center.x, this.center.y + this.radius);
-            default -> new Point(
-                    this.center.x - this.radius, this.center.y + (int) (this.radius / 2));
-        };*/
     }
 
     Hextile getHextile() {
@@ -149,11 +129,6 @@ class Hexagon extends Polygon {
         int lineThickness = filled ? 0 : Hexagon.CLICKABLE_AREA_WIDTH;
         g.setColor(new Color(colorValue));
         g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-        System.out.println("HEXAGON DRAW FUNCTION");
-        System.out.println(this.center);
-        for (int i = 0; i < npoints; i++) {
-            System.out.printf("(%d,%d)", xpoints[i], ypoints[i]);
-        }
         if (filled) g.fillPolygon(xpoints, ypoints, npoints);
         else g.drawPolygon(xpoints, ypoints, npoints);
 
@@ -172,7 +147,7 @@ class Hexagon extends Polygon {
                 continue;
             }
             g.setColor(r.getOwner().getColor());
-            line = new Line2D.Float(this.getCorner((i - 1 + 6) % 6), this.getCorner(i));
+            line = new Line2D.Float(this.getCorner((i + 1 + 6) % 6), this.getCorner(i));
             g.draw(line);
         }
         g.setColor(c);
@@ -201,7 +176,7 @@ class Hexagon extends Polygon {
      */
     Integer getCornerFromPoint(Point point) {
         for (int i = 0; i<Hexagon.SIDES; i++) {
-            if (this.circles[i].contains(point.x, point.y)) {
+            if ((new Point2D.Double(this.xpoints[i], this.ypoints[i])).distance(point) <= Hexagon.CLICK_DISTANCE) {
                 return i;
             }
         }
@@ -209,12 +184,19 @@ class Hexagon extends Polygon {
     }
 
     Integer getSideFromPoint(Point point) {
+        Integer mindex = null;
+        Double minVal = null;
+        double dist;
         for (int i = 0; i < Hexagon.SIDES; i++) {
-            if (this.sides[i].ptLineDist(point) <= Hexagon.AUTHORIZED_DISTANCE_FOR_CLICK_TO_SIDE) {
-                return i;
+            dist = this.sides[i].ptLineDist(point);
+            if (dist <= Hexagon.CLICK_DISTANCE) {
+                if (mindex == null || minVal > dist) {
+                    mindex = i;
+                    minVal = dist;
+                }
             }
         }
-        return null;
+        return mindex;
     }
 
     private void drawSettlementCircle(Graphics2D g2d, Point point) {

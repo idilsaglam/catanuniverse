@@ -42,18 +42,6 @@ public class Board {
         return this.tiles[row][column];
     }
 
-    public <T extends Pin> void add(Hextile tile, int index, T s)
-        throws NoSuchSlotException, SlotAlreadyTakenException {
-        if (s instanceof Settlement) {
-            tile.addSettlement(index, (Settlement)s);
-            return;
-        }
-        if (s instanceof Road) {
-            tile.addRoad(index, (Road)s);
-        }
-        // TODO: Add other things than settlement
-    }
-
     /**
      * Return matrix of hextiles
      *
@@ -94,14 +82,19 @@ public class Board {
         final int half = this.tiles.length / 2;
         for (int i = 0; i < half; i++) {
             for (int j = 0; j < this.tiles[i].length; j++) {
-                this.tiles[i][j].addNeighbor(5, this.tiles[i + 1][j]);
-                this.tiles[i][j].addNeighbor(4, this.tiles[i + 1][j + 1]);
+                this.tiles[i][j].addNeighbor(4, this.tiles[i + 1][j]);
+                this.tiles[i][j].addNeighbor(3, this.tiles[i + 1][j + 1]);
             }
         }
         for (int i = this.tiles.length - 1; i > half; i--) {
             for (int j = 0; j < this.tiles[i].length; j++) {
-                this.tiles[i][j].addNeighbor(1, this.tiles[i - 1][j]);
-                this.tiles[i][j].addNeighbor(2, this.tiles[i - 1][j + 1]);
+                this.tiles[i][j].addNeighbor(0, this.tiles[i - 1][j]);
+                this.tiles[i][j].addNeighbor(1, this.tiles[i - 1][j + 1]);
+            }
+        }
+        for (Hextile[] tile : this.tiles) {
+            for (int j = 0; j < tile.length - 1; j++) {
+                tile[j].addNeighbor(2, tile[j + 1]);
             }
         }
     }
