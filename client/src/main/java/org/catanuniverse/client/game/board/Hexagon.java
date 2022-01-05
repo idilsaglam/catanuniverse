@@ -22,8 +22,7 @@ import org.catanuniverse.core.game.Settlement;
 class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
-    private static final int RADIUS_CORNER_CIRCLE = 25;
-    private static final int AUTHORIZED_DISTANCE_FOR_CLICK_TO_SIDE = 10;
+    private static final int CLICK_DISTANCE = 10;
     // TODO: Add a static variable for harbor color
 
     private static final Color ROAD_COLOR = new Color(0x19DCCD);
@@ -177,7 +176,7 @@ class Hexagon extends Polygon {
      */
     Integer getCornerFromPoint(Point point) {
         for (int i = 0; i<Hexagon.SIDES; i++) {
-            if ((new Point2D.Double(this.xpoints[i], this.ypoints[i])).distance(point) <= 100) {
+            if ((new Point2D.Double(this.xpoints[i], this.ypoints[i])).distance(point) <= Hexagon.CLICK_DISTANCE) {
                 return i;
             }
         }
@@ -190,7 +189,7 @@ class Hexagon extends Polygon {
         double dist;
         for (int i = 0; i < Hexagon.SIDES; i++) {
             dist = this.sides[i].ptLineDist(point);
-            if (dist <= 10) {
+            if (dist <= Hexagon.CLICK_DISTANCE) {
                 if (mindex == null || minVal > dist) {
                     mindex = i;
                     minVal = dist;
