@@ -9,6 +9,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JPanel;
 import org.catanuniverse.commons.GameSettings;
+import org.catanuniverse.core.exceptions.NoSuchSlotException;
+import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.game.Hextile;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Road;
@@ -42,7 +44,12 @@ public class BoardPane extends JPanel {
         });
         this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
             if (tile.getRoadSlot(roadIndex) != null) return false;
-            tile.addRoad(roadIndex, new Road(new Player("Test")));
+            try {
+                tile.addRoad(roadIndex, new Road(new Player("Test")));
+                return true;
+            } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                return false;
+            }
         });
         this.bottomStatusPane = new BottomStatusBar();
         this.initPanes(size);
