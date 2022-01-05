@@ -211,6 +211,7 @@ public abstract class GameSettings {
 
     public abstract boolean isOnline();
 
+    public abstract void completePlayers();
     /**
      * Verify if requested players are valid
      *
