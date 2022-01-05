@@ -5,12 +5,14 @@
 */
 package org.catanuniverse.client.game.board;
 
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Point;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.function.BiPredicate;
-import javax.swing.JPanel;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
@@ -30,7 +32,7 @@ class GameBoardPane extends JPanel {
 
     private BiPredicate<Hextile, Integer> onRoadAdded, onSettlementAdded;
 
-    public GameBoardPane(Dimension size) {
+    public GameBoardPane(Dimension size)  {
         this.size = size;
         try {
             this.board = new Board(GameBoardPane.SIZE);
@@ -42,6 +44,7 @@ class GameBoardPane extends JPanel {
         }
         this.setLayout(null);
         this.setHexagons(7, 50, 0);
+
     }
 
     void setOnRoadAdded(BiPredicate<Hextile, Integer> onRoadAdded) {
@@ -57,7 +60,7 @@ class GameBoardPane extends JPanel {
     }
 
     private void setHexagons(int s, int radius, int padding) {
-        Point origin = new Point(size.width / 2, 3 * size.height / 8);
+        Point origin = new Point(size.width / 3, 3 * size.height / 8);
         double ang30 = Math.toRadians(30);
         double xOff = Math.cos(ang30) * (radius + padding);
         double yOff = Math.sin(ang30) * (radius + padding);

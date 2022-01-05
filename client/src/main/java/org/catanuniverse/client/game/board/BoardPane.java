@@ -5,10 +5,10 @@
 */
 package org.catanuniverse.client.game.board;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.io.IOException;
-import javax.swing.JPanel;
+import javax.swing.*;
+
 import org.catanuniverse.commons.GameSettings;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
@@ -23,7 +23,7 @@ public class BoardPane extends JPanel {
     private final TopStatusBar topStatusPane;
     private final GameBoardPane gameBoardPane;
     private final BottomStatusBar bottomStatusPane;
-
+    private final BoardSidePane boardSidePane;
     /**
      * Creates a BoardPane with given size and configuration
      *
@@ -37,6 +37,7 @@ public class BoardPane extends JPanel {
         this.gameSettings = gameSettings;
         this.topStatusPane =
                 new TopStatusBar(this.gameSettings.getPlayers());
+        this.boardSidePane = new BoardSidePane();
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             System.out.printf("Game board pane on settlement added to %d\n", settlementIndex);
@@ -65,14 +66,26 @@ public class BoardPane extends JPanel {
     private void initPanes(Dimension size) {
         final Dimension sideSize = new Dimension(size.width, size.height / 4),
                 centerSize = new Dimension(size.width,  size.height / 2);
+
         this.topStatusPane.setSize(sideSize);
         this.topStatusPane.setPreferredSize(sideSize);
-        this.gameBoardPane.setSize(centerSize);
-        this.gameBoardPane.setPreferredSize(centerSize);
+        //this.gameBoardPane.setSize(centerSize);
+        //this.gameBoardPane.setPreferredSize(centerSize);
         this.bottomStatusPane.setSize(sideSize);
         this.bottomStatusPane.setPreferredSize(sideSize);
+        this.gameBoardPane.setSize(new Dimension(3* centerSize.width / 4, centerSize.height));
+        this.gameBoardPane.setMinimumSize(new Dimension(3* centerSize.width / 4, centerSize.height));
+        this.gameBoardPane.setPreferredSize(new Dimension(3* centerSize.width / 4, centerSize.height));
+
+        this.boardSidePane.setSize(new Dimension(centerSize.width /4, centerSize.height));
+
+        JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.gameBoardPane, this.boardSidePane);
+
+        centerPanel.setSize(centerSize);
+        centerPanel.setPreferredSize(centerSize);
+
         super.add(this.topStatusPane, BorderLayout.PAGE_START);
-        super.add(this.gameBoardPane, BorderLayout.CENTER);
+        super.add(centerPanel, BorderLayout.CENTER);
         super.add(this.bottomStatusPane, BorderLayout.PAGE_END);
     }
 

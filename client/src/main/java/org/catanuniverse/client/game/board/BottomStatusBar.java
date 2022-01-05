@@ -42,12 +42,6 @@ class BottomStatusBar extends JPanel {
     public JPanel getResourcesRow() throws IOException {
         JPanel result = new JPanel();
 
-        JLabel mineralLabel;
-        BufferedImage mineral = ImageIO.read(this.getClass().getResource("/mineral.png"));
-        Image dimg = mineral.getScaledInstance(60,60,Image.SCALE_SMOOTH);
-        mineralLabel = new JLabel(new ImageIcon(dimg));
-        result.add(mineralLabel);
-
         // create a label to display text
         l = new JLabel();
         // add text to label
@@ -55,7 +49,19 @@ class BottomStatusBar extends JPanel {
         // add label to panel
         result.add(l);
 
+        JLabel mineralLabel;
+        BufferedImage mineral = ImageIO.read(this.getClass().getResource("/mineral.png"));
+        Image dimg = mineral.getScaledInstance(60,60,Image.SCALE_SMOOTH);
+        mineralLabel = new JLabel(new ImageIcon(dimg));
+        result.add(mineralLabel);
 
+
+        // create a label to display text
+        l = new JLabel();
+        // add text to label
+        l.setText(""+sheepNumber);
+        // add label to panel
+        result.add(l);
 
         JLabel sheepLabel;
         BufferedImage sheep = ImageIO.read(this.getClass().getResource("/sheep.png"));
@@ -66,7 +72,7 @@ class BottomStatusBar extends JPanel {
         // create a label to display text
         l = new JLabel();
         // add text to label
-        l.setText(""+sheepNumber);
+        l.setText(""+argileNumber);
         // add label to panel
         result.add(l);
 
@@ -77,13 +83,13 @@ class BottomStatusBar extends JPanel {
         argileLabel = new JLabel(new ImageIcon(aimg));
         result.add(argileLabel);
 
+
         // create a label to display text
         l = new JLabel();
         // add text to label
-        l.setText(""+argileNumber);
+        l.setText(""+bleNumber);
         // add label to panel
         result.add(l);
-
 
         JLabel bleLabel;
         BufferedImage ble = ImageIO.read(this.getClass().getResource("/ble.png"));
@@ -91,10 +97,12 @@ class BottomStatusBar extends JPanel {
         bleLabel = new JLabel(new ImageIcon(bimg));
         result.add(bleLabel);
 
+
+
         // create a label to display text
         l = new JLabel();
         // add text to label
-        l.setText(""+bleNumber);
+        l.setText(""+woodNumber);
         // add label to panel
         result.add(l);
 
@@ -104,14 +112,6 @@ class BottomStatusBar extends JPanel {
         Image wimg = wood.getScaledInstance(60,60,Image.SCALE_SMOOTH);
         woodLabel = new JLabel(new ImageIcon(wimg));
         result.add(woodLabel);
-
-
-        // create a label to display text
-        l = new JLabel();
-        // add text to label
-        l.setText(""+woodNumber);
-        // add label to panel
-        result.add(l);
         return result;
     }
 
