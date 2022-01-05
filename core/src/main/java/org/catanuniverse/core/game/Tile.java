@@ -79,6 +79,22 @@ abstract class Tile {
     }
 
     /**
+     * Checks if the current tile and given neighbours are playable. A tile is not playable if its ground type and its neighbors ground type are all water.
+     * @param indexes The array of indexes
+     * @return True if playable false if not
+     * @throws NoSuchSlotException If there's an index which does not exists
+     */
+    private boolean playable(int[] indexes) throws NoSuchSlotException {
+        if (this.getGroundType() != GroundType.Water) return true;
+        for (int index : indexes) {
+            if (this.getNeighbor(index) != null && this.getNeighbor(index).getGroundType() != GroundType.Water) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns the road slot on the given index
      *
      * @param index The index of the road slot
@@ -131,20 +147,22 @@ abstract class Tile {
     public void addRoad(int index, Road road)
             throws SlotAlreadyTakenException, NoSuchSlotException {
         this.isSlotExists(index);
-        if (this.roadSlots[index] == null) {
-            // We can insert only if the slot is empty
-            this.roadSlots[index] = road;
-            int complementaryIndex = this.complementaryIndex(index);
+        if (this.playable(new int[]{index})) {
+            if (this.roadSlots[index] == null) {
+                // We can insert only if the slot is empty
+                this.roadSlots[index] = road;
+                int complementaryIndex = this.complementaryIndex(index);
             /*
                Road slots are the same as the neighbor slots
                when we add road, we need to add the complementary road for our neighbor too
             */
-            if (this.neighbors[index].roadSlots[complementaryIndex] == null) {
-                this.neighbors[index].roadSlots[complementaryIndex] = road;
-                return;
+                if (this.neighbors[index].roadSlots[complementaryIndex] == null) {
+                    this.neighbors[index].roadSlots[complementaryIndex] = road;
+                    return;
+                }
             }
+            throw new SlotAlreadyTakenException();
         }
-        throw new SlotAlreadyTakenException();
     }
 
     /**
@@ -158,23 +176,27 @@ abstract class Tile {
     protected void addSettlement(int index, Settlement settlement)
             throws SlotAlreadyTakenException, NoSuchSlotException {
         this.isSlotExists(index);
-        if (this.settlementSlots[index] == null) {
-            int compIndex = complementaryIndex(index);
-            // We can insert only if the slot is null
-            this.settlementSlots[index] = settlement;
-            if (this.neighbors[index] != null) {
+        if (this.playable(new int[]{index,  (index+this.neighbors.length-1)%this.neighbors.length})) {
+            if (this.settlementSlots[index] == null) {
+                int compIndex = complementaryIndex(index);
+                // We can insert only if the slot is null
+                this.settlementSlots[index] = settlement;
+                if (this.neighbors[index] != null) {
 
-                System.out.printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(), compIndex);
-                this.neighbors[index].settlementSlots[compIndex+1] = settlement;
+                    System.out
+                        .printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(),
+                            compIndex);
+                    this.neighbors[index].settlementSlots[compIndex + 1] = settlement;
+                }
+                index = (index + this.neighbors.length - 1) % this.neighbors.length;
+                compIndex = complementaryIndex(index);
+                if (this.neighbors[index] != null) {
+                    this.neighbors[index].settlementSlots[compIndex] = settlement;
+                }
+                return;
             }
-            index = (index+this.neighbors.length-1)%this.neighbors.length;
-            compIndex = complementaryIndex(index);
-            if (this.neighbors[index] != null) {
-                this.neighbors[index].settlementSlots[compIndex] = settlement;
-            }
-            return;
+            throw new SlotAlreadyTakenException();
         }
-        throw new SlotAlreadyTakenException();
     }
 
     /**
