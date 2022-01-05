@@ -134,18 +134,15 @@ abstract class Tile {
         if (this.roadSlots[index] == null) {
             // We can insert only if the slot is empty
             this.roadSlots[index] = road;
-            if (this.neighbors[index] == null) {
-                return;
-            }
+            int complementaryIndex = this.complementaryIndex(index);
             /*
                Road slots are the same as the neighbor slots
                when we add road, we need to add the complementary road for our neighbor too
             */
-            if (this.neighbors[index].roadSlots[this.complementaryIndex(index)] == null) {
-                this.neighbors[index].roadSlots[this.complementaryIndex(index)] = road;
+            if (this.neighbors[index].roadSlots[complementaryIndex] == null) {
+                this.neighbors[index].roadSlots[complementaryIndex] = road;
                 return;
             }
-            throw new SlotAlreadyTakenException();
         }
         throw new SlotAlreadyTakenException();
     }
@@ -162,8 +159,19 @@ abstract class Tile {
             throws SlotAlreadyTakenException, NoSuchSlotException {
         this.isSlotExists(index);
         if (this.settlementSlots[index] == null) {
+            int compIndex = complementaryIndex(index);
             // We can insert only if the slot is null
             this.settlementSlots[index] = settlement;
+            if (this.neighbors[index] != null) {
+
+                System.out.printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(), compIndex);
+                this.neighbors[index].settlementSlots[compIndex+1] = settlement;
+            }
+            index = (index+this.neighbors.length-1)%this.neighbors.length;
+            compIndex = complementaryIndex(index);
+            if (this.neighbors[index] != null) {
+                this.neighbors[index].settlementSlots[compIndex] = settlement;
+            }
             return;
         }
         throw new SlotAlreadyTakenException();
