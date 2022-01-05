@@ -16,7 +16,7 @@ public enum Achievements {
   /**
    * Get the buffered image related to the Achievement
    * @return The BufferedImage related to the achievement
-   * @throws IOException
+   * @throws IOException If the Image file does not exists
    */
   public Image getImage(int width, int height, int hints) throws IOException {
     System.out.printf("Current achievement %s\n", this.toString());
