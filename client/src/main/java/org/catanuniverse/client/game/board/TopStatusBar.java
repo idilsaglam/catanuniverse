@@ -35,8 +35,6 @@ class TopStatusBar extends JPanel {
 
         JPanel chars = new JPanel();
 
-        chars.setBackground(Color.pink);
-
         JLabel bleLabel;
         BufferedImage ble = ImageIO.read(this.getClass().getResource("/sword.png"));
         Image bimg = ble.getScaledInstance(60,60,Image.SCALE_SMOOTH);

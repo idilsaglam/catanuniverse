@@ -35,10 +35,7 @@ class BottomStatusBar extends JPanel {
 
 
         this.add(this.getResourcesRow());
-        JPanel latestpanel = new JPanel();
-        latestpanel.setBackground(Color.blue);
-       latestpanel.add(new Dice());
-        this.add(latestpanel);
+        this.add(new Dice());
 
     }
 

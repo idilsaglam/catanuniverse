@@ -28,9 +28,9 @@ class Dice extends JPanel {
         dieImage = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         dieImage2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
-        this.setSize(6370, 3160);
-        this.setPreferredSize(new Dimension(900, 450));
-        this.setBackground(Color.pink);
+        //this.setSize(300, 3160);
+        this.setPreferredSize(new Dimension(100, 600));
+
 
 
         dieLabel = new JLabel();
@@ -43,20 +43,20 @@ class Dice extends JPanel {
 
         this.setLayout(null);
 
-        this.add(getDieValueTF());
+        /*this.add(getDieValueTF());
         this.add(getDieValueTF2());
         this.add(dieLabel);
-        this.add(dieLabel2);
+        this.add(dieLabel2);*/
 
         dieImageLabel = new JLabel(new ImageIcon(dieImage));
-        dieImageLabel.setBounds(200,100, 100,100);
+        dieImageLabel.setBounds(600,100, 100,100);
         this.add(dieImageLabel);
 
         dieImageLabel2 = new JLabel(new ImageIcon(dieImage2));
-        dieImageLabel2.setBounds(100,100,100,100);
+        dieImageLabel2.setBounds(700,100,100,100);
         this.add(dieImageLabel2);
 
-        this.add(getRollBtn());
+        this.add(getRollBtn(),BorderLayout.AFTER_LAST_LINE);
         displayDie();
         displayDie2();
     }
@@ -66,15 +66,15 @@ class Dice extends JPanel {
 
         if (rollBtn == null) {
             rollBtn = new JButton();
-            rollBtn.setBounds(new Rectangle(31, 27, 114, 31));
+            rollBtn.setBounds(new Rectangle(600, 27, 114, 31));
             rollBtn.setFont(new Font("Verdana", Font.BOLD, 14));
             rollBtn.setForeground(new Color(153, 153, 0));
             rollBtn.setMnemonic(KeyEvent.VK_ENTER);
             rollBtn.setText("Roll Die!");
             rollBtn.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
-                    displayDie();
                     displayDie2();
+                    displayDie();
                     roll();
                 }
             });
@@ -103,7 +103,7 @@ class Dice extends JPanel {
     }
 
     void displayDie(){
-        dieValueTF.setText(String.valueOf(die1));
+        //dieValueTF.setText(String.valueOf(die1));
         Graphics g = dieImage.getGraphics();
         try {
             g.setColor(Color.WHITE);
@@ -147,7 +147,7 @@ class Dice extends JPanel {
     }
 
     void displayDie2(){
-        dieValueTF2.setText(String.valueOf(die2));
+        //dieValueTF2.setText(String.valueOf(die2));
         Graphics g = dieImage2.getGraphics();
         try {
             g.setColor(Color.WHITE);
