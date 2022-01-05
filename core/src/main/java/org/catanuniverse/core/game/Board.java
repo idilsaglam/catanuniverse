@@ -42,18 +42,6 @@ public class Board {
         return this.tiles[row][column];
     }
 
-    public <T extends Pin> void add(Hextile tile, int index, T s)
-        throws NoSuchSlotException, SlotAlreadyTakenException {
-        if (s instanceof Settlement) {
-            tile.addSettlement(index, (Settlement)s);
-            return;
-        }
-        if (s instanceof Road) {
-            tile.addRoad(index, (Road)s);
-        }
-        // TODO: Add other things than settlement
-    }
-
     /**
      * Return matrix of hextiles
      *

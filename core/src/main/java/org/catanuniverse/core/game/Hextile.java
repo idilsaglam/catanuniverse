@@ -6,6 +6,7 @@
 package org.catanuniverse.core.game;
 
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
+import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 
 public final class Hextile extends Tile {
 
@@ -60,7 +61,11 @@ public final class Hextile extends Tile {
 
     @Override
     public void addSettlement(int index, Settlement settlement) {
+        try {
+            super.addSettlement(index, settlement);
+        } catch (NoSuchSlotException| SlotAlreadyTakenException ignore) {
 
+        }
     }
 
 }
