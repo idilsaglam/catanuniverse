@@ -62,12 +62,9 @@ class GameBoardPane extends JPanel {
         double xOff = Math.cos(ang30) * (radius + padding);
         double yOff = Math.sin(ang30) * (radius + padding);
         int half = GameBoardPane.SIZE / 2;
-        int counter = 0;
         for (int row = 0; row < GameBoardPane.SIZE; row++) {
             int cols = s - Math.abs(row - half);
             for (int column = 0; column < cols; column++) {
-                int xLbl = row < half ? column - row : column - half;
-                int yLbl = row - half;
                 int x = (int) (origin.x + xOff * (column * 2 + 1 - cols));
                 int y = (int) (origin.y + yOff * (row - half) * 3);
                 HexagonTile tile = new HexagonTile(x, y, radius, this.board.get(row, column));
