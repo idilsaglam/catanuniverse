@@ -6,6 +6,7 @@
 package org.catanuniverse.client.game;
 
 import java.awt.Dimension;
+import java.io.IOException;
 import javax.swing.JSplitPane;
 import org.catanuniverse.client.game.board.BoardPane;
 import org.catanuniverse.client.game.chat.ChatPane;
@@ -22,7 +23,7 @@ public class GameBoard extends JSplitPane {
      * @param size The size of the game board panel
      * @param gameSettings The settings of the game
      */
-    public GameBoard(Dimension size, GameSettings gameSettings) {
+    public GameBoard(Dimension size, GameSettings gameSettings) throws IOException {
         super();
         if (gameSettings.isOnline()) {
             this.board =
