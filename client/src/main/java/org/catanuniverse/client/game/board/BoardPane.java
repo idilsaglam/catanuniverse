@@ -36,7 +36,7 @@ public class BoardPane extends JPanel {
                 centerSize = new Dimension(size.width, 3 * size.height / 4);
         this.gameSettings = gameSettings;
         this.topStatusPane =
-                new TopStatusBar();
+                new TopStatusBar(this.gameSettings.getPlayers());
         this.boardSidePane = new BoardSidePane();
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
