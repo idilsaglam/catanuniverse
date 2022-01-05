@@ -8,6 +8,7 @@ package org.catanuniverse.client;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.io.IOException;
 import javax.swing.JFrame;
 import org.catanuniverse.client.configuration.ConfigurationPane;
 import org.catanuniverse.client.game.GameBoard;
@@ -23,6 +24,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         this.init();
         this.configurationPane = new ConfigurationPane(this::setGameSettings);
+
         this.build();
         super.setVisible(true);
     }
@@ -77,11 +79,15 @@ public class MainFrame extends JFrame {
         System.out.println("Configuration updated");
         // TODO: Start the game in a background thread
         this.maximise();
-        this.loadGameBoard();
+        try {
+            this.loadGameBoard();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /** Load the game board after the configuration */
-    private void loadGameBoard() {
+    private void loadGameBoard() throws IOException {
         // TODO: Pass game settings to the board bane
         GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings);
         super.setContentPane(gameBoard);
