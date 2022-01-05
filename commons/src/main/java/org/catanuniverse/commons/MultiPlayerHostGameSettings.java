@@ -52,6 +52,11 @@ public class MultiPlayerHostGameSettings extends GameSettings {
     }
 
     @Override
+    public void completePlayers() {
+
+    }
+
+    @Override
     public String toString() {
         return String.format(
                 "MultiPlayerHostGameSettings\nPort number: %d\n%s",

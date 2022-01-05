@@ -59,6 +59,11 @@ public class MultiPlayerGuestGameSettings extends GameSettings {
     }
 
     @Override
+    public void completePlayers() {
+
+    }
+
+    @Override
     public int getNumberOfRequestedPlayers() {
         return 1;
     }
