@@ -21,21 +21,28 @@ class BottomStatusBar extends JPanel {
         this.currentPlayer = currentPlayer;
         this.resourceCards = new ArrayList<ResourceCard>();
         // TODO: Update grid layout
-        this.setLayout(new GridLayout(1,2));
-        this.playerCard = new PlayerCard(currentPlayer, playerIndex+1);
-        this.add(this.playerCard);
-        this.add(this.getResourcesRow());
+        GridBagConstraints gbc= new GridBagConstraints();
+        this.setLayout(new GridBagLayout());
+        this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,90,90);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        this.playerCard.setBackground(Color.ORANGE);
+        this.add(this.playerCard, gbc);
+        gbc.gridx = 1;
+        this.add(this.getResourcesRow(), gbc);
     }
 
     public JPanel getResourcesRow() throws IOException {
         JPanel result = new JPanel();
-        result.setLayout(new GridLayout(0, 3));
+        result.setLayout(new GridLayout(1, 0));
         ResourceCard resourceCard;
         for (Resource r: Resource.values()) {
             resourceCard = new ResourceCard(r);
             this.resourceCards.add(resourceCard);
             result.add(resourceCard);
         }
+        result.setBackground(Color.GREEN);
         return result;
     }
 
@@ -67,8 +74,8 @@ class BottomStatusBar extends JPanel {
             this.countLabel = new JLabel(""+BottomStatusBar.this.currentPlayer.getResource(resource));
             this.imageLabel = new JLabel();
             this.imageLabel.setIcon(new ImageIcon(resource.getImage()));
-            this.add(countLabel);
             this.add(imageLabel);
+            this.add(countLabel);
         }
 
         private void updateResource() {

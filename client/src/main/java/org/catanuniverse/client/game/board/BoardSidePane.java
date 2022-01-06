@@ -30,12 +30,7 @@ class BoardSidePane extends JPanel {
         this.consumer = consumer;
     }
 
-    @Override
-    public void setSize(Dimension size) {
-        super.setSize(size);
-        super.setMinimumSize(size);
-        super.setPreferredSize(size);
-    }
+
 
     public int updateRandomLabel() {
         Random r = new Random();

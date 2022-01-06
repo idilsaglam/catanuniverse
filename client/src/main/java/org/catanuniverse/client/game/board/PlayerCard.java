@@ -19,42 +19,50 @@ import org.catanuniverse.core.game.Achievements;
 import org.catanuniverse.core.game.Player;
 
 class PlayerCard extends JPanel {
-
   private final Player player;
   private final JLabel avatarLabel;
   private final JLabel username;
-private final PlayerAchievementsContainer achievementsContainer;
+  private final int widthPlayer, heightPlayer;
+  private final PlayerAchievementsContainer achievementsContainer;
 
-  PlayerCard(Player player, int index) throws IOException {
+  PlayerCard(Player player, int index, int imageW, int imageH) throws IOException {
+    this.heightPlayer = imageH;
+    this.widthPlayer = imageW;
     System.out.printf("PlayerCard constructor called with index %d\n", index);
     this.player = player;
-    this.setBackground(Color.PINK);
     this.avatarLabel = new JLabel();
     this.username = new JLabel();
     this.achievementsContainer = new PlayerAchievementsContainer();
 
 
-    this.setLayout(new GridLayout(1, 2));
+    GridBagConstraints gbc= new GridBagConstraints();
+    this.setLayout(new GridBagLayout());
     this.setPlayer(player, index);
     JPanel avatarPanel = new JPanel();
-    GridBagConstraints gbc= new GridBagConstraints();
     avatarPanel.setLayout(new GridBagLayout());
     gbc.gridx = 0;
     gbc.gridy = 0;
     avatarPanel.add(avatarLabel, gbc);
+    gbc.gridx = 0;
     gbc.gridy = 1;
     avatarPanel.add(username, gbc);
 
-    this.add(avatarPanel);
-    this.add(achievementsContainer);
-
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    this.add(avatarPanel, gbc);
+    gbc.gridx = 1;
+    gbc.gridy = 0;
+    this.add(achievementsContainer, gbc);
+  }
+  PlayerCard(Player player, int index) throws IOException {
+    this(player, index, 100, 100);
   }
 
   public void setPlayer(Player p, int i) throws IOException {
     String avatarURL = String.format("/avatar%d.png", i);
     System.out.printf("Avatar URL %s\n", avatarURL);
     BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
-    Image scaledImage = bufferedAvatarImage.getScaledInstance(190,190,Image.SCALE_SMOOTH);
+    Image scaledImage = bufferedAvatarImage.getScaledInstance(this.widthPlayer,this.heightPlayer,Image.SCALE_SMOOTH);
     avatarLabel.setIcon(new ImageIcon(scaledImage));
     username.setText(p.getUsername());
     this.achievementsContainer.updateAchievements();

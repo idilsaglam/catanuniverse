@@ -120,15 +120,16 @@ public class BoardPane extends JPanel {
 
     /** Initialise panes and add them to the current JPanel */
     private void initPanes(Dimension size) {
-        final Dimension sideSize = new Dimension(size.width, size.height / 4),
-                centerSize = new Dimension(size.width,  size.height / 2);
+        final Dimension topSize = new Dimension(size.width, size.height / 8),
+                bottomSize = new Dimension(size.width, 3 *size.height / 16),
+                centerSize = new Dimension(size.width,  11* size.height / 16);
 
-        this.topStatusPane.setSize(sideSize);
-        this.topStatusPane.setPreferredSize(sideSize);
+        this.topStatusPane.setSize(topSize);
+        this.topStatusPane.setPreferredSize(topSize);
         //this.gameBoardPane.setSize(centerSize);
         //this.gameBoardPane.setPreferredSize(centerSize);
-        this.bottomStatusPane.setSize(sideSize);
-        this.bottomStatusPane.setPreferredSize(sideSize);
+        this.bottomStatusPane.setSize(bottomSize);
+        this.bottomStatusPane.setPreferredSize(bottomSize);
         this.gameBoardPane.setSize(new Dimension( 5*centerSize.width / 8, centerSize.height));
         this.gameBoardPane.setMinimumSize(new Dimension( 5*centerSize.width / 8, centerSize.height));
         this.gameBoardPane.setPreferredSize(new Dimension(5*centerSize.width / 8, centerSize.height));
