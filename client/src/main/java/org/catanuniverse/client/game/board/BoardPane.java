@@ -38,7 +38,7 @@ public class BoardPane extends JPanel {
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.boardSidePane = new BoardSidePane((Integer diceValue) -> {
 
-            if(diceValue != null && diceValue== 7){this.voleur(); return true;}
+            if(diceValue != null && diceValue== 7){this.thief(); return true;}
 
             System.out.printf("DICE VALUE %d\n", diceValue);
             return this.gameBoardPane.diceRolled(diceValue);
@@ -153,7 +153,8 @@ public class BoardPane extends JPanel {
 
     }
 
-    public void voleur(){
+
+    public void thief(){
         this.setBackground(Color.RED);
         this.add(new Label("Il y a une voleur!!!"),BorderLayout.AFTER_LAST_LINE);
         int nbCardsForThief;
