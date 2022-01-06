@@ -83,7 +83,7 @@ abstract class Tile {
      * @return The content of the harbor slot
      * @throws NoSuchSlotException If there's not slot matching with the given index
      */
-    protected Harbor getHarbor(int index) throws NoSuchSlotException {
+    public Harbor getHarbor(int index) throws NoSuchSlotException {
         this.isSlotExists(index);
         return this.harbors[index];
     }
@@ -214,7 +214,7 @@ abstract class Tile {
      * @param index The index of the settlement slot
      * @throws NoSuchSlotException There's no slot with the given index
      */
-    public  void upgradeSettlement(int index) throws NoSuchSlotException {
+    public void upgradeSettlement(int index) throws NoSuchSlotException {
         if (this.settlementSlots[index] != null && !(this.settlementSlots[index] instanceof City)) {
             City settlement = new City(this.settlementSlots[index].getOwner());
             int compIndex = complementaryIndex(index);
@@ -233,6 +233,19 @@ abstract class Tile {
                 this.neighbors[index].settlementSlots[compIndex] = settlement;
             }
         }
+    }
+
+    /**
+     * Get the index of the nearest neighbor which is not water
+     * @return The index of nearest neighbor which is not water
+     */
+    public Integer getNearestNeighbor() {
+        for (int i = 0; i<this.neighbors.length; i++) {
+            if (this.neighbors[i] != null && this.neighbors[i].getGroundType() != GroundType.Water) {
+                return i;
+            }
+        }
+        return null;
     }
 
     /**
@@ -270,16 +283,18 @@ abstract class Tile {
      * @param index The index of the slot
      * @param harbor The harbor object to add
      * @throws NoSuchSlotException If there's no slot matching with the given index
-     * @throws SlotAlreadyTakenException If the slot is not empty
      */
     protected void addHarbor(int index, Harbor harbor)
-            throws NoSuchSlotException, SlotAlreadyTakenException {
+            throws NoSuchSlotException {
         this.isSlotExists(index);
-        if (this.neighbors[index] == null && this.harbors[index] == null) {
+        if ((this.getGroundType() == GroundType.Water || this.neighbors[index].getGroundType() == GroundType.Water) && (this.neighbors[index] != null && this.harbors[index] == null)) {
             this.harbors[index] = harbor;
-            return;
+            this.neighbors[index].harbors[complementaryIndex(index)] = harbor;
         }
-        throw new SlotAlreadyTakenException();
+    }
+
+    public void addHarbor(Harbor h) throws NoSuchSlotException {
+        this.addHarbor(this.getNearestNeighbor(), h);
     }
 
     /**
@@ -373,4 +388,20 @@ abstract class Tile {
     }
 
     public abstract void sendResources();
+
+    public boolean hasHarbor() {
+        for (Harbor h: this.harbors) {
+            if (h == null) continue;
+            return true;
+        }
+        return false;
+    }
+
+    public Integer getHarborIndex(){
+        for (int i = 0; i<this.harbors.length; i++) {
+            if (this.harbors[i] == null) continue;
+            return i;
+        }
+        return null;
+    }
 }
