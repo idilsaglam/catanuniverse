@@ -23,7 +23,7 @@ class BottomStatusBar extends JPanel {
         // TODO: Update grid layout
         GridBagConstraints gbc= new GridBagConstraints();
         this.setLayout(new GridBagLayout());
-        this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,90,90);
+        this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.5;

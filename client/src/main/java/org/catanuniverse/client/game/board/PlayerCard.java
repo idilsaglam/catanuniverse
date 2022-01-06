@@ -55,7 +55,7 @@ class PlayerCard extends JPanel {
     this.add(achievementsContainer, gbc);
   }
   PlayerCard(Player player, int index) throws IOException {
-    this(player, index, 100, 100);
+    this(player, index, 64, 64);
   }
 
   public void setPlayer(Player p, int i) throws IOException {

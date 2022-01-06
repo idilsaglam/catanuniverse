@@ -29,6 +29,6 @@ public enum Resource {
     }
 
     public Image getImage() throws IOException {
-        return this.getImage(60, 60, Image.SCALE_SMOOTH);
+        return this.getImage(32, 32, Image.SCALE_SMOOTH);
     }
 }
