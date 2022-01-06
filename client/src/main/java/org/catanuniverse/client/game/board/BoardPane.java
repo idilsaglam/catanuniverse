@@ -41,14 +41,7 @@ public class BoardPane extends JPanel {
                 new TopStatusBar(this.gameSettings.getPlayers());
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.boardSidePane = new BoardSidePane((Integer diceValue) -> {
-            if (this.diceValue != null && diceValue == null) {
-                this.next();
-                this.showNextButton(false);
-                return false;
-            }
             System.out.printf("DICE VALUE %d\n", diceValue);
-            this.diceValue = diceValue;
-            this.showNextButton(true);
             return this.gameBoardPane.diceRolled(diceValue);
         },
             (Integer cardNumber)->{
