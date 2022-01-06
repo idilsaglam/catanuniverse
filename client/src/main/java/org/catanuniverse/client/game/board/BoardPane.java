@@ -44,6 +44,18 @@ public class BoardPane extends JPanel {
             return this.gameBoardPane.diceRolled(diceValue);
         },
             (Integer cardNumber)->{
+                if(cardNumber == 0){
+                    gameSettings.getCurrentPlayer().updateResource(Resource.Corn,2);
+                }
+                if (cardNumber == 1){
+                    gameSettings.getCurrentPlayer().addVictoryPoint(2);
+                }
+                if(cardNumber == 2){
+                    gameSettings.getCurrentPlayer().addVictoryPoint(1);
+                }
+                if(cardNumber == 3){
+                    gameSettings.getCurrentPlayer().updateResource(Resource.Mineral,1);
+                }
                 System.out.println(cardNumber);
             });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {

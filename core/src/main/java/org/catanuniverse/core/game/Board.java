@@ -116,7 +116,7 @@ public class Board {
     }
 
     /**
-     * Send related resources to players who has settlements or cities on this tile
+     * Send related resources to players who have settlements or cities on this tile
      * @param diceResult The number of tile
      */
     public void sendResourcesToPlayers(Integer diceResult) {
