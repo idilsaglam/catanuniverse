@@ -97,4 +97,66 @@ public class Player {
     public boolean isAI() {
         return this.ai;
     }
+
+    /**
+     * @return true if user can build a road false if not.
+     */
+    public boolean canBuildRoad(){
+        return (this.resources.get(Resource.Wood) >= 1 && this.resources.get(Resource.Clay) >=1);
+    }
+
+    /**
+     * @return true if user can build a settlement false if not.
+     */
+    public boolean canBuildSettlement(){
+        return (canBuildRoad() && this.resources.get(Resource.Corn) >= 1 && this.resources.get(Resource.Wool)>=1);
+    }
+
+    /**
+     * @return true if user can build a city false if not.
+     */
+    public boolean canBuildCity(){
+        return (this.resources.get(Resource.Corn) >=2 && this.resources.get(Resource.Mineral) >=3);
+    }
+
+    /**
+     * @return true if user can buy a developpment card false if not.
+     */
+    public boolean canBuyDeveloppementCard(){
+        return this.resources.get(Resource.Mineral)>=1 && this.resources.get(Resource.Wool)>=1 && this.resources.get(Resource.Corn) >=1;
+    }
+
+    /**
+     * Function builds a road by decreasing necessary resources.
+     */
+    public void buildRoad(){
+        if(canBuildRoad()){
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
+            this.resources.put(Resource.Clay,this.resources.get(Resource.Clay)-1);
+        }
+    }
+
+    /**
+     * Function builds a settlement by decreasing necessary resources.
+     */
+    public void buildSettlement(){
+        if(canBuildSettlement()){
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-1);
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
+        }
+    }
+
+    /**
+     * Function buys a developpment card by decreasing necessary resources.
+     */
+    public void buyDeveloppementCard(){
+        if(canBuyDeveloppementCard()){
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Corn)-1);
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
+
+        }
+    }
 }
