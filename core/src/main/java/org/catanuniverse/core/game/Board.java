@@ -106,8 +106,8 @@ public class Board {
      */
     public boolean isTileExists(Integer diceResult) {
         for (Hextile[] tile : this.tiles) {
-            for (int j = 0; j < this.tiles[j].length; j++) {
-                if (tile[j].getId() == diceResult) {
+            for (Hextile hextile : tile) {
+                if (hextile.getId() == diceResult) {
                     return true;
                 }
             }
