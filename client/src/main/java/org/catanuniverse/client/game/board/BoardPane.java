@@ -50,7 +50,10 @@ public class BoardPane extends JPanel {
             this.diceValue = diceValue;
             this.showNextButton(true);
             return this.gameBoardPane.diceRolled(diceValue);
-        });
+        },
+            (Integer cardNumber)->{
+                System.out.println(cardNumber);
+            });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             if (this.gameSettings.getCurrentPlayer().isAI()) {
                 return false;

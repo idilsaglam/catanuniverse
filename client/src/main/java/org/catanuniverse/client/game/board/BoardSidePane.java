@@ -13,10 +13,10 @@ import java.sql.SQLOutput;
 import java.util.Random;
 
 class BoardSidePane extends JPanel {
-
+    private Consumer<Integer> consumer;
     private final JLabel label;
     private final Dice dice;
-    public BoardSidePane(Predicate<Integer> onDiceRolled) throws IOException {
+    public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Integer> consumer) throws IOException {
         this.label = new JLabel("");
         CardPanel cardPanel = new CardPanel();
         this.add(cardPanel,BorderLayout.CENTER);
@@ -24,6 +24,7 @@ class BoardSidePane extends JPanel {
         this.add(this.label);
         this.dice = new Dice(onDiceRolled);
         this.add(this.dice);
+        this.consumer = consumer;
     }
 
     @Override
@@ -35,7 +36,7 @@ class BoardSidePane extends JPanel {
 
     public int updateRandomLabel() {
         Random r = new Random();
-        return (r.nextInt(3));
+        return (r.nextInt(4));
     }
 
     public void setNextButton(boolean show) {
@@ -63,7 +64,9 @@ class BoardSidePane extends JPanel {
             JLabel label;
             BufferedImage card = null;
             try {
-                card = ImageIO.read(this.getClass().getResource("/cart"+BoardSidePane.this.updateRandomLabel()+".png"));
+                int val = BoardSidePane.this.updateRandomLabel();
+                card = ImageIO.read(this.getClass().getResource("/cart"+val+".png"));
+                BoardSidePane.this.consumer.accept(val);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
