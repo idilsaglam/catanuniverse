@@ -12,6 +12,7 @@ import javax.swing.*;
 import org.catanuniverse.commons.GameSettings;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
+import org.catanuniverse.core.game.City;
 import org.catanuniverse.core.game.Hextile;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Road;
@@ -41,7 +42,17 @@ public class BoardPane extends JPanel {
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             System.out.printf("Game board pane on settlement added to %d\n", settlementIndex);
-            if (tile.getSettlementSlot(settlementIndex) != null) return false;
+            if (tile.getSettlementSlot(settlementIndex) != null) {
+                if (tile.getSettlementSlot(settlementIndex) instanceof City) {
+                    return false;
+                }
+                try {
+                    tile.upgradeSettlement(settlementIndex);
+                    return true;
+                } catch (NoSuchSlotException e) {
+                    return false;
+                }
+            }
             tile.addSettlement(settlementIndex, new Settlement(new Player("Test")));
             this.revalidate();
             this.repaint();
