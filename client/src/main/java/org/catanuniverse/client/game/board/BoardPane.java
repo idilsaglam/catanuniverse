@@ -84,11 +84,11 @@ public class BoardPane extends JPanel {
         //this.gameBoardPane.setPreferredSize(centerSize);
         this.bottomStatusPane.setSize(sideSize);
         this.bottomStatusPane.setPreferredSize(sideSize);
-        this.gameBoardPane.setSize(new Dimension(3* centerSize.width / 4, centerSize.height));
-        this.gameBoardPane.setMinimumSize(new Dimension(3* centerSize.width / 4, centerSize.height));
-        this.gameBoardPane.setPreferredSize(new Dimension(3* centerSize.width / 4, centerSize.height));
+        this.gameBoardPane.setSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
+        this.gameBoardPane.setMinimumSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
+        this.gameBoardPane.setPreferredSize(new Dimension(3*centerSize.width / 8, centerSize.height));
 
-        this.boardSidePane.setSize(new Dimension(centerSize.width /4, centerSize.height));
+        this.boardSidePane.setSize(new Dimension(5*centerSize.width /8, centerSize.height));
 
         JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.gameBoardPane, this.boardSidePane);
 
