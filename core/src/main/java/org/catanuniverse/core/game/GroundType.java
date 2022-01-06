@@ -5,6 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
+import java.awt.*;
 import java.util.Random;
 
 public enum GroundType {
@@ -21,6 +22,16 @@ public enum GroundType {
 
     GroundType(Resource resource) {
         this.resource = resource;
+    }
+
+    public static GroundType fromResource(Resource r) {
+        return switch (r) {
+            case Clay -> Hill;
+            case Corn -> Farm;
+            case Wood -> Forest;
+            case Wool -> Meadow;
+            case Mineral -> Mountain;
+        };
     }
 
     /**
