@@ -188,4 +188,8 @@ public class Player {
     public void updateResource(Resource r, int i) {
         this.resources.put(r, this.resources.get(r) + i);
     }
+
+    public int getResource(Resource resource) {
+        return this.resources.get(resource);
+    }
 }
