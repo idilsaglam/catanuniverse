@@ -43,7 +43,7 @@ class GameBoardPane extends JPanel {
             throw new RuntimeException("Error happened while creating the board pane");
         }
         this.setLayout(null);
-        this.setHexagons(7, 25, 0);
+        this.setHexagons(7, 35, 0);
 
     }
 
