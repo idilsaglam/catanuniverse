@@ -8,6 +8,7 @@ package org.catanuniverse.core.game;
 
 import java.awt.Image;
 import java.io.IOException;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 public enum Resource {
@@ -29,7 +30,19 @@ public enum Resource {
         return ImageIO.read(this.getClass().getResource(imagePath)).getScaledInstance(width, height, scale);
     }
 
+
     public Image getImage() throws IOException {
         return this.getImage(60, 60, Image.SCALE_SMOOTH);
+    }
+
+    /**
+     * Get a random resource or null
+     * @return A random resource or null
+     */
+    public static Resource random() {
+        Random r = new Random();
+        int i = r.nextInt(Resource.values().length + 1);
+        if (i < Resource.values().length) return Resource.values()[i];
+        return null;
     }
 }
