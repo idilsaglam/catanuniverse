@@ -1,6 +1,7 @@
 package org.catanuniverse.client.game.board;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +15,7 @@ import java.util.Random;
 class BoardSidePane extends JPanel {
 
     private final JLabel label;
-    public BoardSidePane(Consumer<Integer> onDiceRolled) throws IOException {
+    public BoardSidePane(Predicate<Integer> onDiceRolled) throws IOException {
         this.label = new JLabel("");
         CardPanel cardPanel = new CardPanel();
         this.add(cardPanel,BorderLayout.CENTER);

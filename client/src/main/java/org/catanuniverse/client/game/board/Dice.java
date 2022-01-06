@@ -1,6 +1,7 @@
 package org.catanuniverse.client.game.board;
 
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -23,8 +24,8 @@ class Dice extends JPanel {
     private BufferedImage image2;
     private JLabel imageLabel;
     private  JLabel imageLabel2;
-    private final Consumer<Integer> onDiceRolled;
-    public Dice(Consumer<Integer> onDiceRolled) {
+    private final Predicate<Integer> onDiceRolled;
+    public Dice(Predicate<Integer> onDiceRolled) {
         this.onDiceRolled = onDiceRolled;
         image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
@@ -194,7 +195,10 @@ class Dice extends JPanel {
         dice1 = rand.nextInt(6) + 1;
         dice2 = rand.nextInt(6) + 1;
         if (this.onDiceRolled != null) {
-            this.onDiceRolled.accept(dice1+dice2);
+            if (this.onDiceRolled.test(dice1+dice2)) {
+                return;
+            }
+            roll();
         }
     }
 

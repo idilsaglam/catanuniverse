@@ -38,10 +38,11 @@ public class BoardPane extends JPanel {
         this.gameSettings = gameSettings;
         this.topStatusPane =
                 new TopStatusBar(this.gameSettings.getPlayers());
-        this.boardSidePane = new BoardSidePane((Integer diceResult) -> {
-            System.out.printf("Dice result %d\n", diceResult);
-        });
         this.gameBoardPane = new GameBoardPane(centerSize);
+        this.boardSidePane = new BoardSidePane((Integer diceResult) -> {
+            //TODO: Handle dice result 7
+            return this.gameBoardPane.diceRolled(diceResult);
+        });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             if (this.gameSettings.getCurrentPlayer().isAI()) {
                 return false;

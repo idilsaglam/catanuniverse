@@ -93,4 +93,12 @@ class GameBoardPane extends JPanel {
         }
         return this.onSettlementAdded.test(tile, settlementSlot);
     }
+
+    boolean diceRolled(Integer diceResult) {
+        if (this.board.isTileExists(diceResult)) {
+            this.board.sendResourcesToPlayers(diceResult);
+            return true;
+        }
+        return false;
+    }
 }
