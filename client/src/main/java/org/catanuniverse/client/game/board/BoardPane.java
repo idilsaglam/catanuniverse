@@ -25,6 +25,7 @@ public class BoardPane extends JPanel {
     private final GameBoardPane gameBoardPane;
     private final BottomStatusBar bottomStatusPane;
     private final BoardSidePane boardSidePane;
+    private Integer diceValue;
     /**
      * Creates a BoardPane with given size and configuration
      *
@@ -39,9 +40,16 @@ public class BoardPane extends JPanel {
         this.topStatusPane =
                 new TopStatusBar(this.gameSettings.getPlayers());
         this.gameBoardPane = new GameBoardPane(centerSize);
-        this.boardSidePane = new BoardSidePane((Integer diceResult) -> {
-            //TODO: Handle dice result 7
-            return this.gameBoardPane.diceRolled(diceResult);
+        this.boardSidePane = new BoardSidePane((Integer diceValue) -> {
+            if (this.diceValue != null && diceValue == null) {
+                this.next();
+                this.showNextButton(false);
+                return false;
+            }
+            System.out.printf("DICE VALUE %d\n", diceValue);
+            this.diceValue = diceValue;
+            this.showNextButton(true);
+            return this.gameBoardPane.diceRolled(diceValue);
         });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             if (this.gameSettings.getCurrentPlayer().isAI()) {
@@ -59,7 +67,7 @@ public class BoardPane extends JPanel {
                         this.revalidate();
                         this.repaint();
                         this.gameSettings.getCurrentPlayer().buildCity();
-                        this.gameSettings.next();
+                        this.next();
                         return true;
                     } catch (NoSuchSlotException e) {
                         return false;
@@ -69,7 +77,7 @@ public class BoardPane extends JPanel {
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildSettlement();
-                this.gameSettings.next();
+                this.next();
                 return true;
             }
             return false;
@@ -87,7 +95,7 @@ public class BoardPane extends JPanel {
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildRoad();
-                this.gameSettings.next();
+                this.next();
                 return true;
                 } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
@@ -137,10 +145,16 @@ public class BoardPane extends JPanel {
         super.setMinimumSize(size);
     }
 
+    private void showNextButton(boolean show) {
+        this.boardSidePane.setNextButton(show);
+    }
+
     private void next() {
+        this.diceValue = null;
         this.gameSettings.next();
         this.bottomStatusPane.revalidate();
         this.bottomStatusPane.repaint();
+        this.showNextButton(false);
 
     }
 }

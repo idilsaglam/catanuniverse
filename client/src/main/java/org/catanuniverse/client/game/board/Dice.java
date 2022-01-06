@@ -14,12 +14,7 @@ class Dice extends JPanel {
     private int dice1 = 1;
     private int dice2 = 1;
     private JButton rollBtn = null;
-    private JTextField valueTF = null;
-    private JTextField valueTF2 = null;
-    private JLabel label = null;
-    private JLabel label2 = null;
-    private int top = 50, left = 100;
-
+    private static final String BUTTON_TEXT = "Roll dice!";
     private BufferedImage image;
     private BufferedImage image2;
     private JLabel imageLabel;
@@ -33,21 +28,7 @@ class Dice extends JPanel {
         this.setSize(300, 3160);
         this.setPreferredSize(new Dimension(400, 600));
 
-
-        label = new JLabel();
-        label.setBounds(new Rectangle(147, 28, 67, 34));
-        label.setText("Die Value:");
-
-        label2 = new JLabel();
-        label2.setBounds(new Rectangle(300, 28, 67, 34));
-        label2.setText("Die Value 2:");
-
         this.setLayout(null);
-
-        /*this.add(getDieValueTF());
-        this.add(getDieValueTF2());
-        this.add(dieLabel);
-        this.add(dieLabel2);*/
 
         imageLabel = new JLabel(new ImageIcon(image));
         imageLabel.setBounds(200,100, 100,100);
@@ -71,7 +52,7 @@ class Dice extends JPanel {
             rollBtn.setFont(new Font("Verdana", Font.BOLD, 14));
             rollBtn.setForeground(new Color(153, 153, 0));
             rollBtn.setMnemonic(KeyEvent.VK_ENTER);
-            rollBtn.setText("Roll Die!");
+            rollBtn.setText(Dice.BUTTON_TEXT);
             rollBtn.addActionListener(new java.awt.event.ActionListener() {
                 public void actionPerformed(java.awt.event.ActionEvent e) {
                     displayDie2();
@@ -83,25 +64,6 @@ class Dice extends JPanel {
         return rollBtn;
     }
 
-    private JTextField getValueTF() {
-
-        if (valueTF == null) {
-            valueTF = new JTextField();
-            valueTF.setBounds(new Rectangle(217, 32, 26, 26));
-            //dieValueTF.setHorizontalAlignment(JTextField.CENTER);
-        }
-        return valueTF;
-    }
-
-    private JTextField getValueTF2() {
-
-        if (valueTF2 == null) {
-            valueTF2 = new JTextField();
-            valueTF2.setBounds(new Rectangle(500, 32, 26, 26));
-            valueTF.setHorizontalAlignment(JTextField.CENTER);
-        }
-        return valueTF2;
-    }
 
     void displayDie(){
         //dieValueTF.setText(String.valueOf(die1));
@@ -192,15 +154,25 @@ class Dice extends JPanel {
     }
 
     void roll() {
-        dice1 = rand.nextInt(6) + 1;
-        dice2 = rand.nextInt(6) + 1;
-        if (this.onDiceRolled != null) {
-            if (this.onDiceRolled.test(dice1+dice2)) {
-                return;
+        if (this.rollBtn.getText().equals(Dice.BUTTON_TEXT)) {
+            System.out.println("WILL ROLL DICE");
+            dice1 = rand.nextInt(6) + 1;
+            dice2 = rand.nextInt(6) + 1;
+            if (this.onDiceRolled != null) {
+                if (this.onDiceRolled.test(dice1 + dice2)) {
+                    return;
+                }
+                roll();
             }
-            roll();
+            return;
         }
+        this.onDiceRolled.test(null);
     }
 
 
+    public void setNextButton(boolean show) {
+        this.rollBtn.setText(show ? "NEXT": Dice.BUTTON_TEXT);
+        this.rollBtn.revalidate();
+        this.rollBtn.repaint();
+    }
 }

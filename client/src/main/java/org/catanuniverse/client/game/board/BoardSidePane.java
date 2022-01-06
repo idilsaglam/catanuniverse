@@ -15,13 +15,15 @@ import java.util.Random;
 class BoardSidePane extends JPanel {
 
     private final JLabel label;
+    private final Dice dice;
     public BoardSidePane(Predicate<Integer> onDiceRolled) throws IOException {
         this.label = new JLabel("");
         CardPanel cardPanel = new CardPanel();
         this.add(cardPanel,BorderLayout.CENTER);
         this.addMouseListener(cardPanel);
         this.add(this.label);
-        this.add(new Dice(onDiceRolled));
+        this.dice = new Dice(onDiceRolled);
+        this.add(this.dice);
     }
 
     @Override
@@ -34,6 +36,10 @@ class BoardSidePane extends JPanel {
     public int updateRandomLabel() {
         Random r = new Random();
         return (r.nextInt(3));
+    }
+
+    public void setNextButton(boolean show) {
+        this.dice.setNextButton(show);
     }
 
     private class CardPanel extends JPanel implements MouseListener {
