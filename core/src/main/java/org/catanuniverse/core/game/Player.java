@@ -18,6 +18,7 @@ public class Player {
     public final int uid;
     private final boolean ai;
     private static final int DEFAULT_RESOURCE_VALUE = 100;
+    private int nbSettlement,nbRoad;
     /**
      * Create a player with the given username&
      *
@@ -38,6 +39,8 @@ public class Player {
             this.resources.put(r, Player.DEFAULT_RESOURCE_VALUE);
         }
         this.ai = isAI;
+        this.nbRoad = 2;
+        this.nbSettlement = 2;
     }
 
     public Player(String username) {
@@ -102,14 +105,14 @@ public class Player {
      * @return true if user can build a road false if not.
      */
     public boolean canBuildRoad(){
-        return (this.resources.get(Resource.Wood) >= 1 && this.resources.get(Resource.Clay) >=1);
+        return this.nbRoad>0||(this.resources.get(Resource.Wood) >= 1 && this.resources.get(Resource.Clay) >=1);
     }
 
     /**
      * @return true if user can build a settlement false if not.
      */
     public boolean canBuildSettlement(){
-        return (canBuildRoad() && this.resources.get(Resource.Corn) >= 1 && this.resources.get(Resource.Wool)>=1);
+        return this.nbRoad>0||(canBuildRoad() && this.resources.get(Resource.Corn) >= 1 && this.resources.get(Resource.Wool)>=1);
     }
 
     /**
@@ -131,6 +134,10 @@ public class Player {
      */
     public void buildRoad(){
         if(canBuildRoad()){
+            if(nbRoad > 0){
+                this.nbRoad--;
+                return;
+            }
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
             this.resources.put(Resource.Clay,this.resources.get(Resource.Clay)-1);
         }
@@ -141,6 +148,10 @@ public class Player {
      */
     public void buildSettlement(){
         if(canBuildSettlement()){
+            if(nbRoad > 0){
+                this.nbRoad--;
+                return;
+            }
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
