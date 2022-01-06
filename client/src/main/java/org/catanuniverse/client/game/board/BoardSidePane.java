@@ -21,6 +21,7 @@ class BoardSidePane extends JPanel {
         this.setLayout(new GridBagLayout());
         CardPanel cardPanel = new CardPanel();
         gbc.gridx = 0;
+        gbc.gridwidth = 1;
         gbc.gridy = 0;
         this.add(cardPanel,gbc);
         this.addMouseListener(cardPanel);
