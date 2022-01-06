@@ -36,8 +36,7 @@ class Dice extends JPanel {
         imageLabel2 = new JLabel(new ImageIcon(image2));
         imageLabel2.setBounds(100,100,100,100);
         this.add(imageLabel2);
-
-        this.add(getRollBtn(),BorderLayout.EAST);
+        this.add(getRollBtn());
         displayDie();
         displayDie2();
     }
@@ -47,7 +46,7 @@ class Dice extends JPanel {
 
         if (rollBtn == null) {
             rollBtn = new JButton();
-            rollBtn.setBounds(new Rectangle(31, 27, 114, 31));
+            rollBtn.setBounds(new Rectangle(305, 120, 114, 31));
             rollBtn.setFont(new Font("Verdana", Font.BOLD, 14));
             rollBtn.setForeground(new Color(153, 153, 0));
             rollBtn.setMnemonic(KeyEvent.VK_ENTER);
