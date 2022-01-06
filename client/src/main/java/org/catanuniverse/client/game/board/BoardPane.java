@@ -68,7 +68,7 @@ public class BoardPane extends JPanel {
                         this.gameSettings.getCurrentPlayer().buildCity();
                         this.next();
                         return true;
-                    } catch (NoSuchSlotException e) {
+                    } catch (NoSuchSlotException | IOException e) {
                         return false;
                     }
                 }
@@ -76,7 +76,11 @@ public class BoardPane extends JPanel {
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildSettlement();
-                this.next();
+                try {
+                    this.next();
+                } catch (IOException e) {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -96,13 +100,13 @@ public class BoardPane extends JPanel {
                 this.gameSettings.getCurrentPlayer().buildRoad();
                 this.next();
                 return true;
-                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                } catch (SlotAlreadyTakenException | NoSuchSlotException | IOException ignore) {
                     return false;
                 }
             }
             return false;
         });
-        this.bottomStatusPane = new BottomStatusBar(this.gameSettings.getCurrentPlayer());
+        this.bottomStatusPane = new BottomStatusBar(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex());
         this.initPanes(size);
     }
 
@@ -117,11 +121,11 @@ public class BoardPane extends JPanel {
         //this.gameBoardPane.setPreferredSize(centerSize);
         this.bottomStatusPane.setSize(sideSize);
         this.bottomStatusPane.setPreferredSize(sideSize);
-        this.gameBoardPane.setSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
-        this.gameBoardPane.setMinimumSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
-        this.gameBoardPane.setPreferredSize(new Dimension(3*centerSize.width / 8, centerSize.height));
+        this.gameBoardPane.setSize(new Dimension( 6*centerSize.width / 8, centerSize.height));
+        this.gameBoardPane.setMinimumSize(new Dimension( 6*centerSize.width / 8, centerSize.height));
+        this.gameBoardPane.setPreferredSize(new Dimension(6*centerSize.width / 8, centerSize.height));
 
-        this.boardSidePane.setSize(new Dimension(5*centerSize.width /8, centerSize.height));
+        this.boardSidePane.setSize(new Dimension(2*centerSize.width /8, centerSize.height));
 
         JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.gameBoardPane, this.boardSidePane);
 
@@ -148,11 +152,14 @@ public class BoardPane extends JPanel {
         this.boardSidePane.setNextButton(show);
     }
 
-    private void next() {
+    private void next() throws IOException {
         this.diceValue = null;
+        System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.gameSettings.next();
-        this.bottomStatusPane.revalidate();
-        this.bottomStatusPane.repaint();
+        System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
+        this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
+        //this.bottomStatusPane.revalidate();
+        //this.bottomStatusPane.repaint();
         this.showNextButton(false);
 
     }
