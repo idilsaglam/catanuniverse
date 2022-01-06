@@ -16,13 +16,17 @@ class BoardSidePane extends JPanel {
     private Consumer<Integer> consumer;
     private final Dice dice;
     public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Integer> consumer) throws IOException {
-        this.setBackground(Color.RED);
-        this.setLayout(new GridLayout(2,1));
+        this.setBackground(Color.YELLOW);
+        GridBagConstraints gbc = new GridBagConstraints();
+        this.setLayout(new GridBagLayout());
         CardPanel cardPanel = new CardPanel();
-        this.add(cardPanel,BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        this.add(cardPanel,gbc);
         this.addMouseListener(cardPanel);
         this.dice = new Dice(onDiceRolled);
-        this.add(this.dice);
+        gbc.gridy = 1;
+        this.add(this.dice,gbc);
         this.consumer = consumer;
     }
 
@@ -59,7 +63,6 @@ class BoardSidePane extends JPanel {
                 this.revalidate();
                 this.repaint();
             }
-            JPanel panel = new JPanel();
             JLabel label;
             BufferedImage card = null;
             try {

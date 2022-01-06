@@ -21,6 +21,7 @@ class Dice extends JPanel {
     private  JLabel imageLabel2;
     private final Predicate<Integer> onDiceRolled;
     public Dice(Predicate<Integer> onDiceRolled) {
+        this.setBackground(Color.red);
         this.onDiceRolled = onDiceRolled;
         image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
