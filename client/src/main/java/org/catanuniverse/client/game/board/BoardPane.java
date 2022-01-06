@@ -41,6 +41,9 @@ public class BoardPane extends JPanel {
                 new TopStatusBar(this.gameSettings.getPlayers());
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.boardSidePane = new BoardSidePane((Integer diceValue) -> {
+
+            if(diceValue != null && diceValue== 7){this.voleur(); return true;}
+
             System.out.printf("DICE VALUE %d\n", diceValue);
             return this.gameBoardPane.diceRolled(diceValue);
         },
@@ -151,6 +154,15 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane.revalidate();
         this.bottomStatusPane.repaint();
         this.showNextButton(false);
+
+    }
+
+    public void voleur(){
+        System.out.println("lala");
+            this.setBackground(Color.MAGENTA);
+        this.add(new Label("VOLEURRR"));
+            this.revalidate();
+            this.repaint();
 
     }
 }
