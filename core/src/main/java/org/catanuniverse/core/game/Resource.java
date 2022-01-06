@@ -18,13 +18,15 @@ public enum Resource {
     Mineral;
 
     public Image getImage(int width, int height, int scale) throws IOException {
-        return ImageIO.read(this.getClass().getResource(String.format("/%s.png",switch (this) {
+        String imagePath = String.format("/%s.png",switch (this) {
             case Wood -> "wood";
-            case Corn -> "corn";
+            case Corn -> "ble";
             case Clay -> "argile";
             case Mineral -> "mineral";
             case Wool -> "sheep";
-        }))).getScaledInstance(width, height, scale);
+        });
+        System.out.printf("Resource get image function image path %s\n", imagePath);
+        return ImageIO.read(this.getClass().getResource(imagePath)).getScaledInstance(width, height, scale);
     }
 
     public Image getImage() throws IOException {
