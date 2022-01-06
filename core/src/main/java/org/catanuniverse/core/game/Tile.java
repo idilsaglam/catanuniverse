@@ -200,6 +200,32 @@ abstract class Tile {
     }
 
     /**
+     * Upgrades the settlement in the given slot to a City
+     * @param index The index of the settlement slot
+     * @throws NoSuchSlotException There's no slot with the given index
+     */
+    public  void upgradeSettlement(int index) throws NoSuchSlotException {
+        if (this.settlementSlots[index] != null && !(this.settlementSlots[index] instanceof City)) {
+            City settlement = new City(this.settlementSlots[index].getOwner());
+            int compIndex = complementaryIndex(index);
+            // We can insert only if the slot is null
+            this.settlementSlots[index] = settlement;
+            if (this.neighbors[index] != null) {
+
+                System.out
+                    .printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(),
+                        compIndex);
+                this.neighbors[index].settlementSlots[(compIndex + 1)%this.neighbors.length] = settlement;
+            }
+            index = (index + this.neighbors.length - 1) % this.neighbors.length;
+            compIndex = complementaryIndex(index);
+            if (this.neighbors[index] != null) {
+                this.neighbors[index].settlementSlots[compIndex] = settlement;
+            }
+        }
+    }
+
+    /**
      * Function add a new neighbor on the given position
      *
      * @param index The index of the neighbor slot to add the the neighbor
