@@ -98,4 +98,34 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Checks if a tile with given number exists or not
+     * @param diceResult The number to check
+     * @return True if a tile with given number exists or false
+     */
+    public boolean isTileExists(Integer diceResult) {
+        for (Hextile[] tile : this.tiles) {
+            for (int j = 0; j < this.tiles[j].length; j++) {
+                if (tile[j].getId() == diceResult) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Send related resources to players who has settlements or cities on this tile
+     * @param diceResult The number of tile
+     */
+    public void sendResourcesToPlayers(Integer diceResult) {
+        for (Hextile[] row : this.tiles) {
+            for (Hextile innerTile: row) {
+                if (innerTile.getId() == diceResult && innerTile.playable) {
+                    innerTile.sendResources();
+                }
+            }
+        }
+    }
 }
