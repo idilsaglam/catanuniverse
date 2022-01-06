@@ -154,19 +154,21 @@ class Dice extends JPanel {
     }
 
     void roll() {
-        if (this.rollBtn.getText().equals(Dice.BUTTON_TEXT)) {
             System.out.println("WILL ROLL DICE");
             dice1 = rand.nextInt(6) + 1;
             dice2 = rand.nextInt(6) + 1;
+            this.displayDie();
+            this.displayDie2();
+            this.imageLabel2.revalidate();
+            this.imageLabel2.repaint();
+            this.imageLabel.revalidate();
+            this.imageLabel.repaint();
             if (this.onDiceRolled != null) {
                 if (this.onDiceRolled.test(dice1 + dice2)) {
                     return;
                 }
                 roll();
             }
-            return;
-        }
-        this.onDiceRolled.test(null);
     }
 
 
