@@ -56,6 +56,7 @@ public class Board {
         boolean desertExists = false;
         for (int i = 0; i < this.tiles.length; i++) {
             for (int j = 0; j < this.tiles[i].length; j++) {
+
                 if ((i == 0)
                         || (i == this.tiles.length - 1)
                         || (j == 0)
@@ -72,6 +73,7 @@ public class Board {
                 }
                 Random r = new Random();
                 this.tiles[i][j] = new Hextile(r.nextInt(12) + 1, groundType);
+
             }
         }
     }
@@ -96,6 +98,13 @@ public class Board {
             for (int j = 0; j < tile.length - 1; j++) {
                 tile[j].addNeighbor(2, tile[j + 1]);
             }
+        }
+        for (int i = 0; i<this.tiles.length; i++) {
+            if (i == 0 || i == this.tiles.length -1) {
+                this.tiles[i][0].addHarbor(Harbor.random());
+                this.tiles[i][2].addHarbor(Harbor.random());
+            }
+            this.tiles[i][(i%2 == 0) ? 0 : this.tiles[i].length-1].addHarbor(Harbor.random());
         }
     }
 
