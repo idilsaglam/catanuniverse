@@ -27,7 +27,7 @@ class PlayerCard extends JPanel {
     String avatarURL = String.format("/avatar%d.png", index);
     System.out.printf("Avatar URL %s\n", avatarURL);
     BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
-    Image scaledImage = bufferedAvatarImage.getScaledInstance(250,250,Image.SCALE_SMOOTH);
+    Image scaledImage = bufferedAvatarImage.getScaledInstance(70,70,Image.SCALE_SMOOTH);
     avatarLabel = new JLabel(new ImageIcon(scaledImage));
     JLabel username = new JLabel();
     username.setText(player.getUsername());
