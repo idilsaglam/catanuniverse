@@ -42,7 +42,11 @@ public class BoardPane extends JPanel {
         this.boardSidePane = new BoardSidePane((Integer diceResult) -> {
             //TODO: Handle dice result 7
             return this.gameBoardPane.diceRolled(diceResult);
-        });
+        },
+                (Integer cardNumber)->{
+                    System.out.println(cardNumber);
+                });
+
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             if (this.gameSettings.getCurrentPlayer().isAI()) {
                 return false;
