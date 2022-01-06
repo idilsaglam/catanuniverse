@@ -5,21 +5,14 @@
 */
 package org.catanuniverse.client.game.board;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Polygon;
-import java.awt.Stroke;
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import org.catanuniverse.core.game.City;
-import org.catanuniverse.core.game.GroundType;
-import org.catanuniverse.core.game.Hextile;
-import org.catanuniverse.core.game.Road;
-import org.catanuniverse.core.game.Settlement;
+import java.awt.geom.Rectangle2D;
+
+import org.catanuniverse.core.exceptions.NoSuchSlotException;
+import org.catanuniverse.core.game.*;
 
 class Hexagon extends Polygon {
 
@@ -124,6 +117,31 @@ class Hexagon extends Polygon {
         return this.hextile;
     }
 
+    private Point getStringCoordinates(Rectangle2D rectangle) {
+        double w = rectangle.getWidth();
+        double h = rectangle.getHeight();
+
+        return switch (this.hextile.getHarborIndex()) {
+            case 0, 1 -> new Point(
+                    (int) Math.ceil(this.center.x - w / 2),
+                    (int) Math.ceil(this.center.y + h)
+            );
+            case 2 -> new Point(
+                    (int) Math.ceil(this.center.x - w),
+                    (int) Math.ceil(this.center.y + h / 2)
+            );
+            case 3, 4 -> new Point(
+                    (int) Math.ceil(this.center.x - w / 2),
+                    (int) Math.ceil(this.center.y)
+            );
+            case 5 -> new Point(
+                    (int) Math.ceil(this.center.x ),
+                    (int) Math.ceil(this.center.y + h / 2)
+            );
+            default -> null;
+        };
+    }
+
     void draw(Graphics2D g, int colorValue, boolean filled) {
         // Store before changing.
         Stroke tmpS = g.getStroke();
@@ -131,12 +149,46 @@ class Hexagon extends Polygon {
         int lineThickness = filled ? 0 : Hexagon.CLICKABLE_AREA_WIDTH;
         g.setColor(new Color(colorValue));
         g.setStroke(new BasicStroke(lineThickness, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER));
-        if (filled) g.fillPolygon(xpoints, ypoints, npoints);
+        if (filled) {
+            g.fillPolygon(xpoints, ypoints, npoints);
+            if (this.hextile.getGroundType() == GroundType.Water && this.hextile.hasHarbor()) {
+                try {
+                    Harbor h = this.hextile.getHarbor(this.hextile.getHarborIndex());
+                    Resource r = h.getResource();
+                    Color c = (r == null) ? Color.BLACK : new Color(GroundType.fromResource(r).getColor());
+                    String harborCoeff = String.format("%d:1", h.getCoeff());
+                    g.setColor(Color.BLACK);
+                    Point p = this.getStringCoordinates(g.getFont().getStringBounds(harborCoeff, g.getFontRenderContext()));
+                    g.drawString(harborCoeff, p.x, p.y);
+                    g.setColor(c);
+                    g.fillPolygon(this.getTriangle(this.hextile.getHarborIndex()));
+                } catch (NoSuchSlotException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
         else g.drawPolygon(xpoints, ypoints, npoints);
 
         // Set values to previous when done.
         g.setColor(tmpC);
         g.setStroke(tmpS);
+    }
+
+    private Polygon getTriangle(int side) {
+        return new Polygon(
+                new int[] {
+                 xpoints[side],
+                 this.center.x,
+                 xpoints[(side+1)%Hexagon.SIDES]
+                },
+                new int[]{
+                    ypoints[side],
+                    this.center.y,
+                    ypoints[(side+1)%Hexagon.SIDES]
+                },
+                3
+        );
     }
 
     void drawRoads(Graphics2D g) {
