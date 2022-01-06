@@ -21,7 +21,6 @@ public class BoardPane extends JPanel {
     private final GameBoardPane gameBoardPane;
     private final BottomStatusBar bottomStatusPane;
     private final BoardSidePane boardSidePane;
-    private Integer diceValue;
     /**
      * Creates a BoardPane with given size and configuration
      *
@@ -68,6 +67,9 @@ public class BoardPane extends JPanel {
                     if (tile.getSettlementSlot(settlementIndex) instanceof City) {
                         return false;
                     }
+                    if (tile.getSettlementSlot(settlementIndex).getOwner() == null || !tile.getSettlementSlot(settlementIndex).getOwner().equals(this.gameSettings.getCurrentPlayer())) {
+                        return false;
+                    }
                     if (!this.gameSettings.getCurrentPlayer().canBuildCity()) return false;
                     try {
                         tile.upgradeSettlement(settlementIndex);
@@ -80,6 +82,8 @@ public class BoardPane extends JPanel {
                         return false;
                     }
                 }
+                // FIXME: Build settlement apply point to next player
+                System.out.println("");
                 tile.addSettlement(settlementIndex, new Settlement(this.gameSettings.getCurrentPlayer()));
                 this.revalidate();
                 this.repaint();
@@ -94,6 +98,7 @@ public class BoardPane extends JPanel {
             return false;
         });
         this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
+            // FIXME: Click on two road passes next player
             if (gameSettings.getCurrentPlayer().isAI()) {
                 return false;
             }
@@ -166,7 +171,6 @@ public class BoardPane extends JPanel {
     }
 
     private void next() throws IOException {
-        this.diceValue = null;
         System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.gameSettings.next();
         System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
