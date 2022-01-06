@@ -11,6 +11,8 @@ import org.catanuniverse.core.utils.Helpers;
 
 public class Player {
     private static int COUNTER = 0;
+    private static final int DEFAULT_RESOURCE_VALUE = 100;
+
     private int victoryPoint;
     private String username;
     private Color color;
@@ -18,7 +20,6 @@ public class Player {
     private final HashMap<Resource, Integer> resources;
     public final int uid;
     private final boolean ai;
-    private static final int DEFAULT_RESOURCE_VALUE = 100;
     private int nbSettlement,nbRoad;
     /**
      * Create a player with the given username&
@@ -157,15 +158,14 @@ public class Player {
      */
     public void buildSettlement(){
         if(canBuildSettlement()){
-            if(nbRoad > 0){
-                this.nbRoad--;
-                return;
+            this.addVictoryPoint(1);
+            if(nbSettlement > 0){
+                this.nbSettlement--;
             }
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
-            this.addVictoryPoint(1);
         }
     }
 
