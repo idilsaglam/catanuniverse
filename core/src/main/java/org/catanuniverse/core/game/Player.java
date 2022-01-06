@@ -149,6 +149,15 @@ public class Player {
     }
 
     /**
+     * Function builds a city by decreasing necessary resources.
+     */
+    public void buildCity(){
+        if(canBuildCity()){
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-3);
+            this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-2);
+        }
+    }
+    /**
      * Function buys a developpment card by decreasing necessary resources.
      */
     public void buyDeveloppementCard(){
