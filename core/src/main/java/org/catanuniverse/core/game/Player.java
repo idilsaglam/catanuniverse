@@ -187,7 +187,7 @@ public class Player {
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Corn)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
-
+            this.achievements.put(Achievements.CARD,this.achievements.get(Achievements.CARD)+1);
         }
     }
 
@@ -226,6 +226,7 @@ public class Player {
 
     public void addVictoryPoint(int n){
         this.victoryPoint = this.victoryPoint+n;
+        this.achievements.put(Achievements.TROPHY,this.achievements.get(Achievements.TROPHY)+1);
     }
 
 }
