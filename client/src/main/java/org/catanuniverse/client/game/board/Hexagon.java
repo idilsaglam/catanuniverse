@@ -7,6 +7,7 @@ package org.catanuniverse.client.game.board;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Polygon;
@@ -14,6 +15,7 @@ import java.awt.Stroke;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import org.catanuniverse.core.game.City;
 import org.catanuniverse.core.game.GroundType;
 import org.catanuniverse.core.game.Hextile;
 import org.catanuniverse.core.game.Road;
@@ -164,6 +166,10 @@ class Hexagon extends Polygon {
                 continue;
             }
             g.setColor(settlement.getOwner().getColor());
+            if (settlement instanceof City) {
+                this.drawCityTriangle(g2d, this.getCorner(i));
+                continue;
+            }
             this.drawSettlementCircle(g2d, this.getCorner(i));
         }
         g.setColor(c);
@@ -207,6 +213,24 @@ class Hexagon extends Polygon {
                         Hexagon.SETTLEMENT_CIRCLE_RADIUS,
                         Hexagon.SETTLEMENT_CIRCLE_RADIUS);
         g2d.fill(circle);
+    }
+
+    private void drawCityTriangle(Graphics2D g2d, Point center) {
+        double r3 = Math.sqrt(3);
+        Polygon polygon = new Polygon(
+            new int[]{
+                (int)Math.ceil(center.x - (Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2 * r3)),
+                center.x,
+                (int)Math.ceil(center.x + (Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2 * r3)),
+            },
+            new int[]{
+                (int)Math.ceil(center.y + Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2),
+                center.y - Hexagon.SETTLEMENT_CIRCLE_RADIUS,
+                (int)Math.ceil(center.y + Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2),
+            },
+            3
+        );
+        g2d.fill(polygon);
     }
 
     private double findAngle(double fraction) {
