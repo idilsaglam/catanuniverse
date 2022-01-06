@@ -21,6 +21,7 @@ abstract class Tile {
     protected final Road[] roadSlots;
     protected final Harbor[] harbors;
     protected final Settlement[] settlementSlots;
+    protected boolean playable;
 
     /**
      * Create a new instance of Tile object
@@ -43,6 +44,7 @@ abstract class Tile {
         this.roadSlots = new Road[nbSides];
         // Settlement slots are corners, counted from the top on the clockwise
         this.settlementSlots = new Settlement[nbSides];
+        this.playable = this.getGroundType().produces() != null;
     }
 
     /**
@@ -52,6 +54,14 @@ abstract class Tile {
      */
     protected Resource produce() {
         return this.resource;
+    }
+
+    /**
+     * Update the playable status of tile
+     * @param playable The value of playable attribute
+     */
+    public void setPlayable(boolean playable) {
+        this.playable = playable;
     }
 
     /**
@@ -361,4 +371,6 @@ abstract class Tile {
             throw new NoSuchSlotException();
         }
     }
+
+    public abstract void sendResources();
 }
