@@ -15,12 +15,13 @@ public class Player {
     private Color color;
     private final HashMap<Achievements, Integer> achievements;
     public final int uid;
+    private final boolean ai;
     /**
      * Create a player with the given username
      *
      * @param username The username of the player to create
      */
-    public Player(String username) {
+    public Player(String username, boolean isAI) {
         this.username = username;
         this.color = Helpers.randomColor();
         this.achievements = new HashMap<>();
@@ -29,11 +30,16 @@ public class Player {
         for (Achievements a: Achievements.values()) {
             this.achievements.put(a, 0);
         }
+        this.ai = isAI;
+    }
+
+    public Player(String username) {
+        this(username, false);
     }
 
     /** Create a player instance with an empty username */
     public Player() {
-        this(String.format("Auto %d", (int) (Math.random() * 10)));
+        this(String.format("Auto %d", (int) (Math.random() * 10)), false);
     }
 
     /**
