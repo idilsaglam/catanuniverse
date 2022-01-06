@@ -12,11 +12,7 @@ import javax.swing.*;
 import org.catanuniverse.commons.GameSettings;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
-import org.catanuniverse.core.game.City;
-import org.catanuniverse.core.game.Hextile;
-import org.catanuniverse.core.game.Player;
-import org.catanuniverse.core.game.Road;
-import org.catanuniverse.core.game.Settlement;
+import org.catanuniverse.core.game.*;
 
 public class BoardPane extends JPanel {
 
@@ -42,12 +38,24 @@ public class BoardPane extends JPanel {
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.boardSidePane = new BoardSidePane((Integer diceValue) -> {
 
-            if(diceValue != null && diceValue== 7){this.voleur(); return true;}
+            if(diceValue != null && diceValue== 7){this.thief(); return true;}
 
             System.out.printf("DICE VALUE %d\n", diceValue);
             return this.gameBoardPane.diceRolled(diceValue);
         },
             (Integer cardNumber)->{
+                if(cardNumber == 0){
+                    gameSettings.getCurrentPlayer().updateResource(Resource.Corn,2);
+                }
+                if (cardNumber == 1){
+                    gameSettings.getCurrentPlayer().addVictoryPoint(2);
+                }
+                if(cardNumber == 2){
+                    gameSettings.getCurrentPlayer().addVictoryPoint(1);
+                }
+                if(cardNumber == 3){
+                    gameSettings.getCurrentPlayer().updateResource(Resource.Mineral,1);
+                }
                 System.out.println(cardNumber);
             });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
@@ -164,12 +172,35 @@ public class BoardPane extends JPanel {
 
     }
 
-    public void voleur(){
-        System.out.println("lala");
-            this.setBackground(Color.MAGENTA);
-        this.add(new Label("VOLEURRR"));
-            this.revalidate();
-            this.repaint();
 
+    public void thief(){
+        this.setBackground(Color.RED);
+        this.add(new Label("Il y a une voleur!!!"),BorderLayout.AFTER_LAST_LINE);
+        int nbCardsForThief;
+        for(int i=0; i<gameSettings.getPlayers().length; i++){
+            if (gameSettings.getPlayers()[i].getRessourceNumber() <= 7) {
+                continue;
+            }
+            nbCardsForThief = gameSettings.getPlayers()[i].getRessourceNumber()/2;
+            for (Resource r: Resource.values()) {
+                if(nbCardsForThief == 0){
+                    continue;
+                }
+                if(this.gameSettings.getCurrentPlayer().getResource(r) > nbCardsForThief){
+                    this.gameSettings.getCurrentPlayer().updateResource(r, nbCardsForThief * -1);
+                    nbCardsForThief = 0;
+                    continue;
+                }
+                if(this.gameSettings.getCurrentPlayer().getResource(r) <= nbCardsForThief){
+                    nbCardsForThief -= this.gameSettings.getCurrentPlayer().getResource(r);
+                    this.gameSettings.getCurrentPlayer().updateResource(r, this.gameSettings.getCurrentPlayer().getResource(r) * -1);
+                }
+            }
+
+        }
+
+        this.revalidate();
+        this.repaint();
     }
+
 }

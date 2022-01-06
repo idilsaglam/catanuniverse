@@ -11,6 +11,7 @@ import org.catanuniverse.core.utils.Helpers;
 
 public class Player {
     private static int COUNTER = 0;
+    private int victoryPoint;
     private String username;
     private Color color;
     private final HashMap<Achievements, Integer> achievements;
@@ -50,6 +51,14 @@ public class Player {
     /** Create a player instance with an empty username */
     public Player() {
         this(String.format("Auto %d", (int) (Math.random() * 10)), false);
+    }
+
+    public int getVictoryPoint() {
+        return victoryPoint;
+    }
+
+    public void setVictoryPoint(int victoryPoint) {
+        this.victoryPoint = victoryPoint;
     }
 
     /**
@@ -156,6 +165,7 @@ public class Player {
             this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
+            this.addVictoryPoint(1);
         }
     }
 
@@ -166,6 +176,7 @@ public class Player {
         if(canBuildCity()){
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-3);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-2);
+            this.addVictoryPoint(2);
         }
     }
     /**
@@ -192,4 +203,29 @@ public class Player {
     public int getResource(Resource resource) {
         return this.resources.get(resource);
     }
+
+    /**
+     * Function that returns ressource number of current player
+     * @return ressource number of current number
+     */
+    public int getRessourceNumber(){
+        int sum=0;
+        for (int i : resources.values()) {
+            sum+=i;
+        }
+        return sum;
+    }
+
+    /**
+     * Getter for resources.
+     * @return
+     */
+    public HashMap<Resource, Integer> getResources(){
+        return this.resources;
+    }
+
+    public void addVictoryPoint(int n){
+        this.victoryPoint = this.victoryPoint+n;
+    }
+
 }
