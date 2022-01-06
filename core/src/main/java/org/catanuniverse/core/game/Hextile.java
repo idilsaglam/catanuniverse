@@ -68,4 +68,18 @@ public final class Hextile extends Tile {
         }
     }
 
+    @Override
+    public void sendResources() {
+        Resource r = this.getGroundType().produces();
+        if (r == null) return;
+        for (Settlement s: this.settlementSlots) {
+            if (s == null) continue;
+            if (s instanceof City) {
+                ((City)s).sendResource(r);
+                return;
+            }
+            s.sendResource(r);
+        }
+    }
+
 }

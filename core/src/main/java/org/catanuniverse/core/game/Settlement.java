@@ -25,4 +25,11 @@ public class Settlement extends Pin {
     public Settlement(Player owner) {
         super(owner);
     }
+
+    /**
+     * Send resource to the
+     */
+    public void sendResource(Resource r) {
+        this.owner.updateResource(r, 1);
+    }
 }

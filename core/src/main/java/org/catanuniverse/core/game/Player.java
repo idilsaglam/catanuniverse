@@ -169,7 +169,7 @@ public class Player {
         }
     }
     /**
-     * Function buys a developpment card by decreasing necessary resources.
+     * Function buys a development card by decreasing necessary resources.
      */
     public void buyDeveloppementCard(){
         if(canBuyDeveloppementCard()){
@@ -178,5 +178,14 @@ public class Player {
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
 
         }
+    }
+
+    /**
+     * Update a resource with given value
+     * @param r The resource to update
+     * @param i The value to change the resource
+     */
+    public void updateResource(Resource r, int i) {
+        this.resources.put(r, this.resources.get(r) + i);
     }
 }
