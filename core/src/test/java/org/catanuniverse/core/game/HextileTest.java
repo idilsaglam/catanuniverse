@@ -27,7 +27,7 @@ public class HextileTest {
         neighbor = new Hextile(rnd.nextInt(10), GroundType.Farm);
         neighbor1 = new Hextile(rnd.nextInt(10), GroundType.Forest);
         neighbor2 = new Hextile(rnd.nextInt(10), GroundType.Hill);
-        harbor = new Harbor();
+        harbor = new Harbor(3);
     }
 
     @ParameterizedTest
