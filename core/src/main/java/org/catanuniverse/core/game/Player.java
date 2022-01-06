@@ -192,4 +192,27 @@ public class Player {
     public int getResource(Resource resource) {
         return this.resources.get(resource);
     }
+
+    /**
+     * Function that returns ressource number of current player
+     * @return ressource number of current number
+     */
+    public int getRessourceNumber(){
+        int sum=0;
+        for (int i : resources.values()) {
+            sum+=i;
+        }
+        return sum;
+    }
+
+    /**
+     * Getter for resources.
+     * @return
+     */
+    public HashMap<Resource, Integer> getResources(){
+        return this.resources;
+    }
+
+
+
 }

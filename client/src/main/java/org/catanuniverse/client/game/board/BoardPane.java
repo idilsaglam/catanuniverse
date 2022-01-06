@@ -12,11 +12,7 @@ import javax.swing.*;
 import org.catanuniverse.commons.GameSettings;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
-import org.catanuniverse.core.game.City;
-import org.catanuniverse.core.game.Hextile;
-import org.catanuniverse.core.game.Player;
-import org.catanuniverse.core.game.Road;
-import org.catanuniverse.core.game.Settlement;
+import org.catanuniverse.core.game.*;
 
 public class BoardPane extends JPanel {
 
@@ -158,11 +154,33 @@ public class BoardPane extends JPanel {
     }
 
     public void voleur(){
-        System.out.println("lala");
-            this.setBackground(Color.MAGENTA);
-        this.add(new Label("VOLEURRR"));
-            this.revalidate();
-            this.repaint();
+        this.setBackground(Color.RED);
+        this.add(new Label("Il y a une voleur!!!"),BorderLayout.AFTER_LAST_LINE);
+        int nbCardsForThief;
+        for(int i=0; i<gameSettings.getPlayers().length; i++){
+            if (gameSettings.getPlayers()[i].getRessourceNumber() <= 7) {
+                continue;
+            }
+            nbCardsForThief = gameSettings.getPlayers()[i].getRessourceNumber()/2;
+            for (Resource r: Resource.values()) {
+                if(nbCardsForThief == 0){
+                    continue;
+                }
+                if(this.gameSettings.getCurrentPlayer().getResource(r) > nbCardsForThief){
+                    this.gameSettings.getCurrentPlayer().updateResource(r, nbCardsForThief * -1);
+                    nbCardsForThief = 0;
+                    continue;
+                }
+                if(this.gameSettings.getCurrentPlayer().getResource(r) <= nbCardsForThief){
+                    nbCardsForThief -= this.gameSettings.getCurrentPlayer().getResource(r);
+                    this.gameSettings.getCurrentPlayer().updateResource(r, this.gameSettings.getCurrentPlayer().getResource(r) * -1);
+                }
+            }
 
+        }
+
+        this.revalidate();
+        this.repaint();
     }
+
 }
