@@ -14,10 +14,12 @@ public class Player {
     private String username;
     private Color color;
     private final HashMap<Achievements, Integer> achievements;
+    private final HashMap<Resource, Integer> resources;
     public final int uid;
     private final boolean ai;
+    private static final int DEFAULT_RESOURCE_VALUE = 100;
     /**
-     * Create a player with the given username
+     * Create a player with the given username&
      *
      * @param username The username of the player to create
      */
@@ -25,10 +27,15 @@ public class Player {
         this.username = username;
         this.color = Helpers.randomColor();
         this.achievements = new HashMap<>();
+        this.resources = new HashMap<>();
+
         this.uid = Player.COUNTER++;
         System.out.println("PLAYER UID " + this.uid);
         for (Achievements a: Achievements.values()) {
             this.achievements.put(a, 0);
+        }
+        for (Resource r: Resource.values()) {
+            this.resources.put(r, Player.DEFAULT_RESOURCE_VALUE);
         }
         this.ai = isAI;
     }
@@ -87,4 +94,7 @@ public class Player {
         this.achievements.put(achievement, this.achievements.get(achievement)+value);
     }
 
+    public boolean isAI() {
+        return this.ai;
+    }
 }
