@@ -25,7 +25,6 @@ public enum Resource {
             case Mineral -> "mineral";
             case Wool -> "sheep";
         });
-        System.out.printf("Resource get image function image path %s\n", imagePath);
         return ImageIO.read(this.getClass().getResource(imagePath)).getScaledInstance(width, height, scale);
     }
 

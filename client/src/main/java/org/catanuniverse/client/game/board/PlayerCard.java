@@ -7,6 +7,9 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -18,20 +21,21 @@ import org.catanuniverse.core.game.Player;
 class PlayerCard extends JPanel {
 
   private final Player player;
+  private final JLabel avatarLabel;
+  private final JLabel username;
+private final PlayerAchievementsContainer achievementsContainer;
 
   PlayerCard(Player player, int index) throws IOException {
+    System.out.printf("PlayerCard constructor called with index %d\n", index);
     this.player = player;
     this.setBackground(Color.PINK);
-    JLabel avatarLabel;
-    PlayerAchievementsContainer achievementsContainer = new PlayerAchievementsContainer();
-    String avatarURL = String.format("/avatar%d.png", index);
-    System.out.printf("Avatar URL %s\n", avatarURL);
-    BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
-    Image scaledImage = bufferedAvatarImage.getScaledInstance(190,190,Image.SCALE_SMOOTH);
-    avatarLabel = new JLabel(new ImageIcon(scaledImage));
-    JLabel username = new JLabel();
-    username.setText(player.getUsername());
+    this.avatarLabel = new JLabel();
+    this.username = new JLabel();
+    this.achievementsContainer = new PlayerAchievementsContainer();
+
+
     this.setLayout(new GridLayout(1, 2));
+    this.setPlayer(player, index);
     JPanel avatarPanel = new JPanel();
     GridBagConstraints gbc= new GridBagConstraints();
     avatarPanel.setLayout(new GridBagLayout());
@@ -46,29 +50,40 @@ class PlayerCard extends JPanel {
 
   }
 
+  public void setPlayer(Player p, int i) throws IOException {
+    String avatarURL = String.format("/avatar%d.png", i);
+    System.out.printf("Avatar URL %s\n", avatarURL);
+    BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
+    Image scaledImage = bufferedAvatarImage.getScaledInstance(190,190,Image.SCALE_SMOOTH);
+    avatarLabel.setIcon(new ImageIcon(scaledImage));
+    username.setText(p.getUsername());
+    this.achievementsContainer.updateAchievements();
+    this.achievementsContainer.revalidate();
+    this.achievementsContainer.repaint();
+  }
+
   private class PlayerAchievementsContainer extends JPanel {
 
+    private final Map<Achievements, JLabel> achievementsJLabelMap = new HashMap<>(), achievementsJLabelImageMap = new HashMap<>();
     PlayerAchievementsContainer() throws IOException {
       GridBagConstraints gbc = new GridBagConstraints();
       gbc.gridx = 0;
       gbc.gridy = 0;
       this.setLayout(new GridBagLayout());
-      for (int i = 0; i< Achievements.values().length; i++) {
-        Achievements a = Achievements.values()[i];
-        gbc.gridy = i / 2;
-        gbc.weightx = 2;
-        if (i == Achievements.values().length - 1 ) {
-          gbc.gridwidth = 2;
-          gbc.gridx = 1;
-          this.add(new JLabel(new ImageIcon(a.getImage())), gbc);
-          gbc.gridx = 2;
-          this.add(new JLabel(""+PlayerCard.this.player.getAchievement(a)), gbc);
-          continue;
-        }
-        gbc.gridx = (gbc.gridx+1)%4;
-        this.add(new JLabel(new ImageIcon(a.getImage())), gbc);
-        gbc.gridx++;
-        this.add(new JLabel(""+PlayerCard.this.player.getAchievement(a)), gbc);
+      for (Achievements a: Achievements.values()) {
+        this.achievementsJLabelMap.put(a, new JLabel());
+        this.achievementsJLabelImageMap.put(a, new JLabel(new ImageIcon(a.getImage())));
+      }
+      this.updateAchievements();
+      for (Achievements a: Achievements.values()) {
+        this.add(this.achievementsJLabelImageMap.get(a));
+        this.add(this.achievementsJLabelMap.get(a));
+      }
+    }
+
+    public void updateAchievements() {
+      for (Achievements a: Achievements.values()) {
+        this.achievementsJLabelMap.get(a).setText(""+PlayerCard.this.player.getAchievement(a));
       }
     }
   }

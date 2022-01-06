@@ -259,4 +259,12 @@ public abstract class GameSettings {
                 && ((this.numberOfAI == 0 && this.difficulty == null)
                         || (this.numberOfAI > 0 && this.difficulty != null)));
     }
+
+    /**
+     * Get the current player index
+     * @return The index of the current player
+     */
+    public int getCurrentPlayerIndex() {
+        return this.currentPlayerIndex;
+    }
 }
