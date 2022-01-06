@@ -1,7 +1,6 @@
 package org.catanuniverse.client.game.board;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -10,8 +9,8 @@ import java.util.Random;
 class Dice extends JPanel {
     private static final long serialVersionUID = 1L;
     static Random rand = new Random();  //  @jve:decl-index=0:
-    private int die1 = 1;
-    private int die2 = 1;
+    private int dice1 = 1;
+    private int dice2 = 1;
     private JButton rollBtn = null;
     private JTextField dieValueTF = null;
     private JTextField dieValueTF2 = null;
@@ -109,7 +108,7 @@ class Dice extends JPanel {
             g.fillRect(0,0, 100,100);
             g.setColor(Color.BLACK);
             g.drawRect(0,0, 100,100);
-            switch (die1) {
+            switch (dice1) {
                 case 1:
                     g.fillOval(50,50, 10,10);
                     break;
@@ -153,7 +152,7 @@ class Dice extends JPanel {
             g.fillRect(0,0, 100,100);
             g.setColor(Color.BLACK);
             g.drawRect(0,0, 100,100);
-            switch (die2) {
+            switch (dice2) {
                 case 1:
                     g.fillOval(50,50, 10,10);
                     break;
@@ -190,8 +189,8 @@ class Dice extends JPanel {
     }
 
     void roll() {
-        die1 = rand.nextInt(6) + 1;
-        die2 = rand.nextInt(6) + 1;
+        dice1 = rand.nextInt(6) + 1;
+        dice2 = rand.nextInt(6) + 1;
     }
 
 

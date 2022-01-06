@@ -9,10 +9,12 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.io.IOException;
-import javax.swing.JFrame;
+import javax.swing.*;
+
 import org.catanuniverse.client.configuration.ConfigurationPane;
 import org.catanuniverse.client.game.GameBoard;
 import org.catanuniverse.commons.GameSettings;
+import org.catanuniverse.commons.LocalGameSettings;
 
 public class MainFrame extends JFrame {
 
@@ -87,11 +89,23 @@ public class MainFrame extends JFrame {
 
     /** Load the game board after the configuration */
     private void loadGameBoard() throws IOException {
-        // TODO: Pass game settings to the board bane
-        GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings);
-        super.setContentPane(gameBoard);
-        super.revalidate();
-        super.repaint();
+        if(this.gameSettings instanceof LocalGameSettings) {
+            GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings);
+            super.setContentPane(gameBoard);
+            super.revalidate();
+            super.repaint();
+            return;
+        }
+        // Create a dialog
+        JDialog d = new JDialog(this, "Dialog box");
+        // Create a label
+        JLabel l = new JLabel("This is a dialog box.");
+        // Add the label to the dialog box
+        d.add(l);
+        // Set the size of the dialog box
+        d.setSize(200, 100);
+        // Set the visibility of the dialog box
+        d.setVisible(true);
     }
 
     /**

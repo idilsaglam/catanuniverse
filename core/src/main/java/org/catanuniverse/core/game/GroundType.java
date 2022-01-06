@@ -35,12 +35,12 @@ public enum GroundType {
     public int getColor() {
         return switch (this) {
             case Water -> 0x5D9BC2;
-            case Forest -> 0xFEC437;
-            case Hill -> 0xB3C92F;
-            case Meadow -> 0x19DCCD;
+            case Forest -> 0x4B7922;
+            case Hill -> 0x19DCCD;
+            case Meadow -> 0xB3C92F;
             case Farm -> 0xCD7730;
             case Mountain -> 0xF2D2A9;
-            case Desert -> 0x4B7922;
+            case Desert -> 0x7F621B;
         };
     }
     // Black color code 0x000000
