@@ -1,5 +1,6 @@
 package org.catanuniverse.client.game.board;
 
+import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +14,13 @@ import java.util.Random;
 class BoardSidePane extends JPanel {
 
     private final JLabel label;
-
-    public BoardSidePane() throws IOException {
+    public BoardSidePane(Consumer<Integer> onDiceRolled) throws IOException {
         this.label = new JLabel("");
         CardPanel cardPanel = new CardPanel();
         this.add(cardPanel,BorderLayout.CENTER);
         this.addMouseListener(cardPanel);
         this.add(this.label);
-        this.add(new Dice());
+        this.add(new Dice(onDiceRolled));
     }
 
     @Override

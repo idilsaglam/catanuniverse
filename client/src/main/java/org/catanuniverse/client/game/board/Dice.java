@@ -1,5 +1,6 @@
 package org.catanuniverse.client.game.board;
 
+import java.util.function.Consumer;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -22,8 +23,9 @@ class Dice extends JPanel {
     private BufferedImage image2;
     private JLabel imageLabel;
     private  JLabel imageLabel2;
-    public Dice() {
-
+    private final Consumer<Integer> onDiceRolled;
+    public Dice(Consumer<Integer> onDiceRolled) {
+        this.onDiceRolled = onDiceRolled;
         image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
@@ -191,6 +193,9 @@ class Dice extends JPanel {
     void roll() {
         dice1 = rand.nextInt(6) + 1;
         dice2 = rand.nextInt(6) + 1;
+        if (this.onDiceRolled != null) {
+            this.onDiceRolled.accept(dice1+dice2);
+        }
     }
 
 

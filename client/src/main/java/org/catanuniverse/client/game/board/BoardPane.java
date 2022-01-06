@@ -38,36 +38,61 @@ public class BoardPane extends JPanel {
         this.gameSettings = gameSettings;
         this.topStatusPane =
                 new TopStatusBar(this.gameSettings.getPlayers());
-        this.boardSidePane = new BoardSidePane();
+        this.boardSidePane = new BoardSidePane((Integer diceResult) -> {
+            System.out.printf("Dice result %d\n", diceResult);
+        });
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
-            System.out.printf("Game board pane on settlement added to %d\n", settlementIndex);
-            if (tile.getSettlementSlot(settlementIndex) != null) {
-                if (tile.getSettlementSlot(settlementIndex) instanceof City) {
-                    return false;
-                }
-                try {
-                    tile.upgradeSettlement(settlementIndex);
-                    return true;
-                } catch (NoSuchSlotException e) {
-                    return false;
-                }
-            }
-            tile.addSettlement(settlementIndex, new Settlement(new Player("Test")));
-            this.revalidate();
-            this.repaint();
-            return true;
-        });
-        this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
-            if (tile.getRoadSlot(roadIndex) != null) return false;
-            try {
-                tile.addRoad(roadIndex, new Road(new Player("Test")));
-                this.revalidate();
-                this.repaint();
-                return true;
-            } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+            if (this.gameSettings.getCurrentPlayer().isAI()) {
                 return false;
             }
+            if (this.gameSettings.getCurrentPlayer().canBuildSettlement()) {
+                System.out.printf("Game board pane on settlement added to %d\n", settlementIndex);
+                if (tile.getSettlementSlot(settlementIndex) != null) {
+                    if (tile.getSettlementSlot(settlementIndex) instanceof City) {
+                        return false;
+                    }
+                    if (!this.gameSettings.getCurrentPlayer().canBuildCity()) return false;
+                    try {
+                        tile.upgradeSettlement(settlementIndex);
+                        this.revalidate();
+                        this.repaint();
+                        this.gameSettings.getCurrentPlayer().buildCity();
+                        this.gameSettings.next();
+                        return true;
+                    } catch (NoSuchSlotException e) {
+                        return false;
+                    }
+                }
+                tile.addSettlement(settlementIndex, new Settlement(this.gameSettings.getCurrentPlayer()));
+                this.revalidate();
+                this.repaint();
+                this.gameSettings.getCurrentPlayer().buildSettlement();
+                this.gameSettings.next();
+                return true;
+            }
+            return false;
+        });
+        this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
+            if (gameSettings.getCurrentPlayer().isAI()) {
+                return false;
+            }
+            if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
+
+            if (tile.getRoadSlot(roadIndex) != null) return false;
+
+            try {
+                tile.addRoad(roadIndex, new Road(this.gameSettings.getCurrentPlayer()));
+                this.revalidate();
+                this.repaint();
+                this.gameSettings.getCurrentPlayer().buildRoad();
+                this.gameSettings.next();
+                return true;
+                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                    return false;
+                }
+            }
+            return false;
         });
         this.bottomStatusPane = new BottomStatusBar();
         this.initPanes(size);
@@ -109,5 +134,12 @@ public class BoardPane extends JPanel {
         super.setPreferredSize(size);
         super.setSize(size);
         super.setMinimumSize(size);
+    }
+
+    private void next() {
+        this.gameSettings.next();
+        this.bottomStatusPane.revalidate();
+        this.bottomStatusPane.repaint();
+
     }
 }

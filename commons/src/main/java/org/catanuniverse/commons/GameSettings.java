@@ -14,6 +14,7 @@ public abstract class GameSettings {
     protected int numberOfAI;
     protected Difficulty difficulty;
     protected Player[] players;
+    protected int currentPlayerIndex = 0;
 
     public GameSettings() {
         this.capacity = -1;
@@ -43,6 +44,14 @@ public abstract class GameSettings {
 
     public GameSettings(int capacity, int numberOfAI) {
         this(capacity, numberOfAI, numberOfAI == 0 ? null : Difficulty.EASY);
+    }
+
+    public void next() {
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1)%this.players.length;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.players[currentPlayerIndex];
     }
 
     /**
