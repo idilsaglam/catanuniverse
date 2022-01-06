@@ -25,7 +25,7 @@ class BoardSidePane extends JPanel {
         this.add(cardPanel,gbc);
         this.addMouseListener(cardPanel);
         this.dice = new Dice(onDiceRolled);
-        gbc.gridy = 1;
+        gbc.gridx = 1;
         this.add(this.dice,gbc);
         this.consumer = consumer;
     }
