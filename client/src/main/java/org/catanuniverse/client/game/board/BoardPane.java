@@ -76,7 +76,7 @@ public class BoardPane extends JPanel {
                         this.gameSettings.getCurrentPlayer().buildCity();
                         this.next();
                         return true;
-                    } catch (NoSuchSlotException e) {
+                    } catch (NoSuchSlotException | IOException e) {
                         return false;
                     }
                 }
@@ -84,7 +84,11 @@ public class BoardPane extends JPanel {
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildSettlement();
-                this.next();
+                try {
+                    this.next();
+                } catch (IOException e) {
+                    return false;
+                }
                 return true;
             }
             return false;
@@ -104,32 +108,37 @@ public class BoardPane extends JPanel {
                 this.gameSettings.getCurrentPlayer().buildRoad();
                 this.next();
                 return true;
-                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                } catch (SlotAlreadyTakenException | NoSuchSlotException | IOException ignore) {
                     return false;
                 }
             }
             return false;
         });
-        this.bottomStatusPane = new BottomStatusBar(this.gameSettings.getCurrentPlayer());
+        this.bottomStatusPane = new BottomStatusBar(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex());
         this.initPanes(size);
     }
 
     /** Initialise panes and add them to the current JPanel */
     private void initPanes(Dimension size) {
-        final Dimension sideSize = new Dimension(size.width, size.height / 4),
-                centerSize = new Dimension(size.width,  size.height / 2);
+        final Dimension topSize = new Dimension(size.width, size.height / 8),
+                bottomSize = new Dimension(size.width, size.height / 8),
+                centerSize = new Dimension(size.width,  10* size.height / 16);
 
-        this.topStatusPane.setSize(sideSize);
-        this.topStatusPane.setPreferredSize(sideSize);
+        this.topStatusPane.setSize(topSize);
+        this.topStatusPane.setPreferredSize(topSize);
         //this.gameBoardPane.setSize(centerSize);
         //this.gameBoardPane.setPreferredSize(centerSize);
-        this.bottomStatusPane.setSize(sideSize);
-        this.bottomStatusPane.setPreferredSize(sideSize);
-        this.gameBoardPane.setSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
-        this.gameBoardPane.setMinimumSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
-        this.gameBoardPane.setPreferredSize(new Dimension(3*centerSize.width / 8, centerSize.height));
+        this.bottomStatusPane.setSize(bottomSize);
+        this.bottomStatusPane.setPreferredSize(bottomSize);
 
-        this.boardSidePane.setSize(new Dimension(5*centerSize.width /8, centerSize.height));
+        this.gameBoardPane.setMinimumSize(new Dimension( 2*centerSize.width / 8, centerSize.height));
+        this.boardSidePane.setMaximumSize(new Dimension(6*centerSize.width /8, centerSize.height));
+
+        this.gameBoardPane.setMaximumSize(new Dimension( 3*centerSize.width / 8, centerSize.height));
+        this.boardSidePane.setMinimumSize(new Dimension(5*centerSize.width /8, centerSize.height));
+
+        this.gameBoardPane.setPreferredSize(new Dimension(2*centerSize.width / 8, centerSize.height));
+        this.boardSidePane.setPreferredSize(new Dimension(6*centerSize.width / 8, centerSize.height));
 
         JSplitPane centerPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, this.gameBoardPane, this.boardSidePane);
 
@@ -156,11 +165,14 @@ public class BoardPane extends JPanel {
         this.boardSidePane.setNextButton(show);
     }
 
-    private void next() {
+    private void next() throws IOException {
         this.diceValue = null;
+        System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.gameSettings.next();
-        this.bottomStatusPane.revalidate();
-        this.bottomStatusPane.repaint();
+        System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
+        this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
+        //this.bottomStatusPane.revalidate();
+        //this.bottomStatusPane.repaint();
         this.showNextButton(false);
 
     }

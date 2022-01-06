@@ -26,13 +26,12 @@ public enum Resource {
             case Mineral -> "mineral";
             case Wool -> "sheep";
         });
-        System.out.printf("Resource get image function image path %s\n", imagePath);
         return ImageIO.read(this.getClass().getResource(imagePath)).getScaledInstance(width, height, scale);
     }
 
 
     public Image getImage() throws IOException {
-        return this.getImage(60, 60, Image.SCALE_SMOOTH);
+        return this.getImage(32, 32, Image.SCALE_SMOOTH);
     }
 
     /**

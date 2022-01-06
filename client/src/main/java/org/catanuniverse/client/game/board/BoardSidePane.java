@@ -14,25 +14,24 @@ import java.util.Random;
 
 class BoardSidePane extends JPanel {
     private Consumer<Integer> consumer;
-    private final JLabel label;
     private final Dice dice;
     public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Integer> consumer) throws IOException {
-        this.label = new JLabel("");
+        this.setBackground(Color.YELLOW);
+        GridBagConstraints gbc = new GridBagConstraints();
+        this.setLayout(new GridBagLayout());
         CardPanel cardPanel = new CardPanel();
-        this.add(cardPanel,BorderLayout.CENTER);
+        gbc.gridx = 0;
+        gbc.gridwidth = 1;
+        gbc.gridy = 0;
+        this.add(cardPanel,gbc);
         this.addMouseListener(cardPanel);
-        this.add(this.label);
         this.dice = new Dice(onDiceRolled);
-        this.add(this.dice);
+        gbc.gridx = 1;
+        this.add(this.dice,gbc);
         this.consumer = consumer;
     }
 
-    @Override
-    public void setSize(Dimension size) {
-        super.setSize(size);
-        super.setMinimumSize(size);
-        super.setPreferredSize(size);
-    }
+
 
     public int updateRandomLabel() {
         Random r = new Random();
@@ -60,7 +59,6 @@ class BoardSidePane extends JPanel {
                 this.revalidate();
                 this.repaint();
             }
-            JPanel panel = new JPanel();
             JLabel label;
             BufferedImage card = null;
             try {

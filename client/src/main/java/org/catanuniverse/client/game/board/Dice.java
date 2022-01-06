@@ -21,12 +21,12 @@ class Dice extends JPanel {
     private  JLabel imageLabel2;
     private final Predicate<Integer> onDiceRolled;
     public Dice(Predicate<Integer> onDiceRolled) {
+        this.setBackground(Color.red);
         this.onDiceRolled = onDiceRolled;
         image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
-        this.setSize(300, 3160);
-        this.setPreferredSize(new Dimension(400, 600));
+        this.setPreferredSize(new Dimension(400, 250));
 
         this.setLayout(null);
 
@@ -37,8 +37,7 @@ class Dice extends JPanel {
         imageLabel2 = new JLabel(new ImageIcon(image2));
         imageLabel2.setBounds(100,100,100,100);
         this.add(imageLabel2);
-
-        this.add(getRollBtn(),BorderLayout.EAST);
+        this.add(getRollBtn());
         displayDie();
         displayDie2();
     }
@@ -48,7 +47,7 @@ class Dice extends JPanel {
 
         if (rollBtn == null) {
             rollBtn = new JButton();
-            rollBtn.setBounds(new Rectangle(31, 27, 114, 31));
+            rollBtn.setBounds(new Rectangle(305, 120, 114, 31));
             rollBtn.setFont(new Font("Verdana", Font.BOLD, 14));
             rollBtn.setForeground(new Color(153, 153, 0));
             rollBtn.setMnemonic(KeyEvent.VK_ENTER);

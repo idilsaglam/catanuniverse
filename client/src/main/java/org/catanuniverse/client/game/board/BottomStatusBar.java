@@ -6,41 +6,49 @@
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Resource;
 
 class BottomStatusBar extends JPanel {
-    // label to display text
     static JLabel l;
     private Player currentPlayer;
     private java.util.List<ResourceCard> resourceCards;
-    public BottomStatusBar(Player currentPlayer) throws IOException {
+    private PlayerCard playerCard;
+    public BottomStatusBar(Player currentPlayer, int playerIndex) throws IOException {
         this.currentPlayer = currentPlayer;
         this.resourceCards = new ArrayList<ResourceCard>();
         // TODO: Update grid layout
-        this.setLayout(new GridLayout());
-        this.add(this.getResourcesRow());
+        GridBagConstraints gbc= new GridBagConstraints();
+        this.setLayout(new GridBagLayout());
+        this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 0.5;
+        this.playerCard.setBackground(Color.ORANGE);
+        this.add(this.playerCard, gbc);
+        gbc.gridx = 1;
+        this.add(this.getResourcesRow(), gbc);
     }
 
     public JPanel getResourcesRow() throws IOException {
         JPanel result = new JPanel();
-        result.setLayout(new GridLayout(0, 2));
+        result.setLayout(new GridLayout(1, 0));
         ResourceCard resourceCard;
         for (Resource r: Resource.values()) {
             resourceCard = new ResourceCard(r);
             this.resourceCards.add(resourceCard);
-            this.add(resourceCard);
+            result.add(resourceCard);
         }
+        result.setBackground(Color.GREEN);
         return result;
     }
 
     public void updateResources() {
         this.resourceCards.forEach((ResourceCard card) -> {
+            card.updateResource();
             card.revalidate();
             card.repaint();
         });
@@ -50,17 +58,28 @@ class BottomStatusBar extends JPanel {
      * Update the current player with a new one
      * @param currentPlayer The new current player
      */
-    public void setCurrentPlayer(Player currentPlayer) {
+    public void setCurrentPlayer(Player currentPlayer, int currentPlayerIndex) throws IOException {
         this.currentPlayer = currentPlayer;
-
+        this.playerCard.setPlayer(currentPlayer, currentPlayerIndex);
+        this.playerCard.revalidate();
+        this.playerCard.repaint();
     }
 
+
     private class ResourceCard extends JPanel {
+        private final Resource resource;
+        private final JLabel imageLabel, countLabel;
         ResourceCard(Resource resource) throws IOException {
-            JLabel label = new JLabel(""+BottomStatusBar.this.currentPlayer.getResource(resource));
-            JLabel imageLabel = new JLabel(new ImageIcon(resource.getImage()));
-            this.add(label);
+            this.resource = resource;
+            this.countLabel = new JLabel(""+BottomStatusBar.this.currentPlayer.getResource(resource));
+            this.imageLabel = new JLabel();
+            this.imageLabel.setIcon(new ImageIcon(resource.getImage()));
             this.add(imageLabel);
+            this.add(countLabel);
+        }
+
+        private void updateResource() {
+            this.countLabel.setText(""+BottomStatusBar.this.currentPlayer.getResource(resource));
         }
     }
 
