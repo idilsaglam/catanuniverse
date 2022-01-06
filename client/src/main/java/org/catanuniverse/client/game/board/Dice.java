@@ -12,32 +12,32 @@ class Dice extends JPanel {
     private int dice1 = 1;
     private int dice2 = 1;
     private JButton rollBtn = null;
-    private JTextField dieValueTF = null;
-    private JTextField dieValueTF2 = null;
-    private JLabel dieLabel = null;
-    private JLabel dieLabel2 = null;
+    private JTextField valueTF = null;
+    private JTextField valueTF2 = null;
+    private JLabel label = null;
+    private JLabel label2 = null;
     private int top = 50, left = 100;
 
-    private BufferedImage dieImage;
-    private BufferedImage dieImage2;
-    private JLabel dieImageLabel;
-    private  JLabel dieImageLabel2;
+    private BufferedImage image;
+    private BufferedImage image2;
+    private JLabel imageLabel;
+    private  JLabel imageLabel2;
     public Dice() {
 
-        dieImage = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
-        dieImage2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
+        image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+        image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
         this.setSize(300, 3160);
         this.setPreferredSize(new Dimension(400, 600));
 
 
-        dieLabel = new JLabel();
-        dieLabel.setBounds(new Rectangle(147, 28, 67, 34));
-        dieLabel.setText("Die Value:");
+        label = new JLabel();
+        label.setBounds(new Rectangle(147, 28, 67, 34));
+        label.setText("Die Value:");
 
-        dieLabel2 = new JLabel();
-        dieLabel2.setBounds(new Rectangle(300, 28, 67, 34));
-        dieLabel2.setText("Die Value 2:");
+        label2 = new JLabel();
+        label2.setBounds(new Rectangle(300, 28, 67, 34));
+        label2.setText("Die Value 2:");
 
         this.setLayout(null);
 
@@ -46,13 +46,13 @@ class Dice extends JPanel {
         this.add(dieLabel);
         this.add(dieLabel2);*/
 
-        dieImageLabel = new JLabel(new ImageIcon(dieImage));
-        dieImageLabel.setBounds(200,100, 100,100);
-        this.add(dieImageLabel);
+        imageLabel = new JLabel(new ImageIcon(image));
+        imageLabel.setBounds(200,100, 100,100);
+        this.add(imageLabel);
 
-        dieImageLabel2 = new JLabel(new ImageIcon(dieImage2));
-        dieImageLabel2.setBounds(100,100,100,100);
-        this.add(dieImageLabel2);
+        imageLabel2 = new JLabel(new ImageIcon(image2));
+        imageLabel2.setBounds(100,100,100,100);
+        this.add(imageLabel2);
 
         this.add(getRollBtn(),BorderLayout.EAST);
         displayDie();
@@ -80,29 +80,29 @@ class Dice extends JPanel {
         return rollBtn;
     }
 
-    private JTextField getDieValueTF() {
+    private JTextField getValueTF() {
 
-        if (dieValueTF == null) {
-            dieValueTF = new JTextField();
-            dieValueTF.setBounds(new Rectangle(217, 32, 26, 26));
+        if (valueTF == null) {
+            valueTF = new JTextField();
+            valueTF.setBounds(new Rectangle(217, 32, 26, 26));
             //dieValueTF.setHorizontalAlignment(JTextField.CENTER);
         }
-        return dieValueTF;
+        return valueTF;
     }
 
-    private JTextField getDieValueTF2() {
+    private JTextField getValueTF2() {
 
-        if (dieValueTF2 == null) {
-            dieValueTF2 = new JTextField();
-            dieValueTF2.setBounds(new Rectangle(500, 32, 26, 26));
-            dieValueTF.setHorizontalAlignment(JTextField.CENTER);
+        if (valueTF2 == null) {
+            valueTF2 = new JTextField();
+            valueTF2.setBounds(new Rectangle(500, 32, 26, 26));
+            valueTF.setHorizontalAlignment(JTextField.CENTER);
         }
-        return dieValueTF2;
+        return valueTF2;
     }
 
     void displayDie(){
         //dieValueTF.setText(String.valueOf(die1));
-        Graphics g = dieImage.getGraphics();
+        Graphics g = image.getGraphics();
         try {
             g.setColor(Color.WHITE);
             g.fillRect(0,0, 100,100);
@@ -137,7 +137,7 @@ class Dice extends JPanel {
                     g.fillOval(80,80, 10,10);
                     break;
             }
-            dieImageLabel.repaint();
+            imageLabel.repaint();
         } finally {
             g.dispose();
         }
@@ -146,7 +146,7 @@ class Dice extends JPanel {
 
     void displayDie2(){
         //dieValueTF2.setText(String.valueOf(die2));
-        Graphics g = dieImage2.getGraphics();
+        Graphics g = image2.getGraphics();
         try {
             g.setColor(Color.WHITE);
             g.fillRect(0,0, 100,100);
@@ -181,7 +181,7 @@ class Dice extends JPanel {
                     g.fillOval(80,80, 10,10);
                     break;
             }
-            dieImageLabel2.repaint();
+            imageLabel2.repaint();
         } finally {
             g.dispose();
         }
