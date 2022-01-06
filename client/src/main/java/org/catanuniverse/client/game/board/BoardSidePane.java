@@ -18,6 +18,7 @@ class BoardSidePane extends JPanel {
     private final Dice dice;
     public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Integer> consumer) throws IOException {
         this.setBackground(Color.ORANGE);
+        this.setLayout(new GridLayout(2,1));
         this.label = new JLabel("");
         CardPanel cardPanel = new CardPanel();
         this.add(cardPanel,BorderLayout.CENTER);

@@ -25,8 +25,7 @@ class Dice extends JPanel {
         image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
-        this.setSize(300, 3160);
-        this.setPreferredSize(new Dimension(400, 600));
+        this.setPreferredSize(new Dimension(400, 250));
 
         this.setLayout(null);
 
