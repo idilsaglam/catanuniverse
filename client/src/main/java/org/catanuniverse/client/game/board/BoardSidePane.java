@@ -14,16 +14,13 @@ import java.util.Random;
 
 class BoardSidePane extends JPanel {
     private Consumer<Integer> consumer;
-    private final JLabel label;
     private final Dice dice;
     public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Integer> consumer) throws IOException {
-        this.setBackground(Color.ORANGE);
+        this.setBackground(Color.RED);
         this.setLayout(new GridLayout(2,1));
-        this.label = new JLabel("");
         CardPanel cardPanel = new CardPanel();
         this.add(cardPanel,BorderLayout.CENTER);
         this.addMouseListener(cardPanel);
-        this.add(this.label);
         this.dice = new Dice(onDiceRolled);
         this.add(this.dice);
         this.consumer = consumer;
