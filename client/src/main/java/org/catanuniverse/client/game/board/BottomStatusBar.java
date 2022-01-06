@@ -35,7 +35,6 @@ class BottomStatusBar extends JPanel {
 
 
         this.add(this.getResourcesRow());
-        this.add(new Dice());
 
     }
 

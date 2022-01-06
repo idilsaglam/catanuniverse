@@ -28,17 +28,16 @@ class Dice extends JPanel {
         dieImage = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
         dieImage2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
-        //this.setSize(300, 3160);
-        this.setPreferredSize(new Dimension(100, 600));
-
+        this.setSize(300, 3160);
+        this.setPreferredSize(new Dimension(400, 600));
 
 
         dieLabel = new JLabel();
-        dieLabel.setBounds(new Rectangle(100, 10, 67, 34));
+        dieLabel.setBounds(new Rectangle(147, 28, 67, 34));
         dieLabel.setText("Die Value:");
 
         dieLabel2 = new JLabel();
-        dieLabel2.setBounds(new Rectangle(150, 10, 67, 34));
+        dieLabel2.setBounds(new Rectangle(300, 28, 67, 34));
         dieLabel2.setText("Die Value 2:");
 
         this.setLayout(null);
@@ -49,14 +48,14 @@ class Dice extends JPanel {
         this.add(dieLabel2);*/
 
         dieImageLabel = new JLabel(new ImageIcon(dieImage));
-        dieImageLabel.setBounds(100,100, 100,100);
+        dieImageLabel.setBounds(200,100, 100,100);
         this.add(dieImageLabel);
 
         dieImageLabel2 = new JLabel(new ImageIcon(dieImage2));
-        dieImageLabel2.setBounds(300,100,100,100);
+        dieImageLabel2.setBounds(100,100,100,100);
         this.add(dieImageLabel2);
 
-        this.add(getRollBtn(),BorderLayout.AFTER_LAST_LINE);
+        this.add(getRollBtn(),BorderLayout.EAST);
         displayDie();
         displayDie2();
     }
@@ -66,7 +65,7 @@ class Dice extends JPanel {
 
         if (rollBtn == null) {
             rollBtn = new JButton();
-            rollBtn.setBounds(new Rectangle(600, 27, 114, 31));
+            rollBtn.setBounds(new Rectangle(31, 27, 114, 31));
             rollBtn.setFont(new Font("Verdana", Font.BOLD, 14));
             rollBtn.setForeground(new Color(153, 153, 0));
             rollBtn.setMnemonic(KeyEvent.VK_ENTER);
@@ -86,7 +85,7 @@ class Dice extends JPanel {
 
         if (dieValueTF == null) {
             dieValueTF = new JTextField();
-            dieValueTF.setBounds(new Rectangle(50, 10, 26, 26));
+            dieValueTF.setBounds(new Rectangle(217, 32, 26, 26));
             //dieValueTF.setHorizontalAlignment(JTextField.CENTER);
         }
         return dieValueTF;
@@ -96,7 +95,7 @@ class Dice extends JPanel {
 
         if (dieValueTF2 == null) {
             dieValueTF2 = new JTextField();
-            dieValueTF2.setBounds(new Rectangle(150, 10, 26, 26));
+            dieValueTF2.setBounds(new Rectangle(500, 32, 26, 26));
             dieValueTF.setHorizontalAlignment(JTextField.CENTER);
         }
         return dieValueTF2;

@@ -20,6 +20,7 @@ class BoardSidePane extends JPanel {
         this.add(cardPanel,BorderLayout.CENTER);
         this.addMouseListener(cardPanel);
         this.add(this.label);
+        this.add(new Dice());
     }
 
     @Override
