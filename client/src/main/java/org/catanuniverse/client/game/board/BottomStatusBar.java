@@ -78,22 +78,89 @@ class BottomStatusBar extends JPanel {
         JPanel panel = new JPanel();
         final JLabel label = new JLabel();
         label.setHorizontalAlignment(JLabel.CENTER);
-        SpinnerModel model = new SpinnerNumberModel(
+
+        SpinnerModel cornModel = new SpinnerNumberModel(
             2, //valeur initiale
             0, //valeur minimum
             20, //valeur maximum
             1 //pas
         );
 
-        JSpinner sp = new JSpinner(model);
+        SpinnerModel hillModel = new SpinnerNumberModel(
+            2, //valeur initiale
+            0, //valeur minimum
+            20, //valeur maximum
+            1 //pas
+        );
+
+        SpinnerModel farmModel = new SpinnerNumberModel(
+            2, //valeur initiale
+            0, //valeur minimum
+            20, //valeur maximum
+            1 //pas
+        );
+
+        SpinnerModel meadowModel = new SpinnerNumberModel(
+            2, //valeur initiale
+            0, //valeur minimum
+            20, //valeur maximum
+            1 //pas
+        );
+
+        SpinnerModel mountainModel = new SpinnerNumberModel(
+            2, //valeur initiale
+            0, //valeur minimum
+            20, //valeur maximum
+            1 //pas
+        );
+
+
+        JSpinner cornSpinner = new JSpinner(cornModel);
+        JSpinner hillSpinner = new JSpinner(hillModel);
+        JSpinner farmSpinner = new JSpinner(farmModel);
+        JSpinner mountainSpinner = new JSpinner(mountainModel);
+        JSpinner meadowSpinner = new JSpinner(meadowModel);
+
+
         panel.add(label);
-        panel.add(sp);
+        panel.add(cornSpinner);
+        panel.add(hillSpinner);
+        panel.add(farmSpinner);
+        panel.add(mountainSpinner);
+        panel.add(meadowSpinner);
+
         panel.setLayout(new GridLayout(2, 1));
-        sp.addChangeListener(new ChangeListener() {
+
+        cornSpinner.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                label.setText("Valeur : " + ((JSpinner)e.getSource()).getValue());
+                label.setText("Valeur de Corn : " + ((JSpinner)e.getSource()).getValue());
             }
         });
+
+        hillSpinner.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                label.setText("Valeur de Hill : " + ((JSpinner)e.getSource()).getValue());
+            }
+        });
+
+        farmSpinner.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                label.setText("Valeur de Farm : " + ((JSpinner)e.getSource()).getValue());
+            }
+        });
+
+        mountainSpinner.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                label.setText("Valeur de mountain : " + ((JSpinner)e.getSource()).getValue());
+            }
+        });
+
+        meadowSpinner.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                label.setText("Valeur de Meadow : " + ((JSpinner)e.getSource()).getValue());
+            }
+        });
+
 
         return panel;
     }
