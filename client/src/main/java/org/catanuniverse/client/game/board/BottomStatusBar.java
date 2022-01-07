@@ -40,6 +40,56 @@ class BottomStatusBar extends JPanel {
         this.add(cartDeck);
         this.add(nextPlayerButton());
         this.onNextButtonClicked = e;
+        this.add(porteRadioButtons());
+    }
+
+    public JPanel porteRadioButtons(){
+
+        JPanel panel = new JPanel();
+
+        JRadioButton jRadioButtonCorn = new JRadioButton();
+        JRadioButton jRadioButtonHill = new JRadioButton();
+        JRadioButton jRadioButtonFarm = new JRadioButton();
+        JRadioButton jRadioButtonMeadow = new JRadioButton();
+        JRadioButton jRadioButtonMountain = new JRadioButton();
+        JRadioButton jRadioButtonHarbor = new JRadioButton();
+
+        JButton jButton = new JButton();
+        jButton.setText("Harbor");
+        ButtonGroup g1 = new ButtonGroup();
+
+
+        jRadioButtonCorn.setText("Corn");
+        jRadioButtonFarm.setText("Farm");
+        jRadioButtonHill.setText("Hill");
+        jRadioButtonMeadow.setText("Meadow");
+        jRadioButtonMountain.setText("Mountain");
+
+
+        this.add(jRadioButtonCorn);
+        this.add(jRadioButtonFarm);
+        this.add(jRadioButtonHill);
+        this.add(jRadioButtonMeadow);
+        this.add(jRadioButtonMountain);
+
+        this.add(jButton);
+
+
+        g1.add(jRadioButtonCorn);
+        g1.add(jRadioButtonHill);
+        g1.add(jRadioButtonMeadow);
+        g1.add(jRadioButtonMountain);
+        g1.add(jRadioButtonFarm);
+
+        panel.add(jRadioButtonCorn);
+        panel.add(jRadioButtonHill);
+        panel.add(jRadioButtonMeadow);
+        panel.add(jRadioButtonMountain);
+        panel.add(jRadioButtonFarm);
+        panel.add(jButton);
+        panel.setLayout(new GridLayout(0, 1));
+        panel.setBackground(Color.red);
+        return panel;
 
     }
 
