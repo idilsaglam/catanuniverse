@@ -30,4 +30,13 @@ class TopStatusBar extends JPanel {
         }
     }
 
+    /**
+     * Updates player cards
+     */
+    public void updatePlayerCard() {
+        for (PlayerCard playerCard: this.playerCards) {
+            playerCard.updateAchievements();
+        }
+    }
+
 }
