@@ -208,11 +208,16 @@ public class BoardPane extends JPanel {
             }
 
             if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
-
+                Road r = new Road(this.gameSettings.getCurrentPlayer());
                 if (tile.getRoadSlot(roadIndex) != null) return false;
-                if (!tile.canAddRoad(roadIndex)) return false;
                 try {
-                    tile.addRoad(roadIndex, new Road(this.gameSettings.getCurrentPlayer()));
+                    if (!tile.canAddRoad(roadIndex,r)) return false;
+                } catch (NoSuchSlotException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+                try {
+                    tile.addRoad(roadIndex, r);
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildRoad();
