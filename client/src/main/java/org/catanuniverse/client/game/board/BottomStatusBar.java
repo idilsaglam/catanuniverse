@@ -9,13 +9,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.catanuniverse.core.game.Card;
+import org.catanuniverse.core.game.Harbor;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Resource;
 import org.catanuniverse.core.utils.EmptyCallback;
@@ -27,24 +31,39 @@ class BottomStatusBar extends JPanel {
     private PlayerCard playerCard;
     private CartDeck cartDeck;
     private EmptyCallback onNextButtonClicked;
-    public BottomStatusBar(Player currentPlayer, int playerIndex,EmptyCallback onNextButtonPressed, Consumer<Card> onCardUsed) throws IOException {
+    private final Supplier<List<Harbor>> getCurrentPlayerHarbors;
+    private Exchange exchangePanel;
+    private java.util.List<Harbor> harbors;
+    public BottomStatusBar(
+            Player currentPlayer,
+            int playerIndex,
+            EmptyCallback onNextButtonPressed,
+            Consumer<Card> onCardUsed,
+            Supplier<java.util.List<Harbor>> harborSupplier
+    ) throws IOException {
+        this.harbors = harborSupplier.get();
+        this.getCurrentPlayerHarbors = harborSupplier;
         this.currentPlayer = currentPlayer;
         this.cartDeck = new CartDeck(this.currentPlayer, onCardUsed);
         this.resourceCards = new ArrayList<ResourceCard>();
-        GridBagConstraints gbc= new GridBagConstraints();
+        GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
         this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.25;
-        this.add(new Exchange((HashMap<Resource, Integer> resourcesToExchange, Resource resourceToReceive) -> {
-            // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
-        },
+        this.exchangePanel = new Exchange((
+                HashMap<Resource, Integer> resourcesToExchange,
+                AbstractMap.Entry<Resource,Integer> resourceToReceive) -> {
+                    // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
+                },
                 // TODO: HARBOR LAZIM
                 this.currentPlayer.getResources(),
+                this.harbors,
                 3
-        ), gbc);
+        );
+        this.add(this.exchangePanel, gbc);
         gbc.gridx = 1;
         this.add(this.playerCard, gbc);
         gbc.gridx = 2;
@@ -56,7 +75,6 @@ class BottomStatusBar extends JPanel {
         gbc.gridx=5;
 
         this.onNextButtonClicked = onNextButtonPressed;
-
     }
 
 
@@ -97,6 +115,14 @@ class BottomStatusBar extends JPanel {
             card.revalidate();
             card.repaint();
         });
+    }
+
+    /**
+     * Updates the harbors with the given harbor list supplier
+     */
+    public void updateHarbors() {
+        this.harbors = this.getCurrentPlayerHarbors.get();
+        this.exchangePanel.updateHarbors(this.harbors);
     }
 
     /**
