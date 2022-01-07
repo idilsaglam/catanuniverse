@@ -11,7 +11,7 @@ import org.catanuniverse.core.utils.Helpers;
 
 public class Player {
     private static int COUNTER = 0;
-    private static final int DEFAULT_RESOURCE_VALUE = 100;
+    private static final int DEFAULT_RESOURCE_VALUE = 0;
 
     private int victoryPoint;
     private String username;
