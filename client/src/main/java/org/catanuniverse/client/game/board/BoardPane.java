@@ -321,19 +321,22 @@ public class BoardPane extends JPanel {
             if (gameSettings.getPlayers()[i].getRessourceNumber() <= 7) {
                 continue;
             }
-            nbCardsForThief = gameSettings.getPlayers()[i].getRessourceNumber()/2;
+            Player player = this.gameSettings.getPlayers()[i];
+            // Robber does not impact resources of the current player
+            if (player.uid == this.gameSettings.getCurrentPlayer().uid) continue;
+            nbCardsForThief = player.getRessourceNumber()/2;
             for (Resource r: Resource.values()) {
                 if(nbCardsForThief == 0){
                     break;
                 }
-                if(this.gameSettings.getCurrentPlayer().getResource(r) > nbCardsForThief){
-                    this.gameSettings.getCurrentPlayer().updateResource(r, nbCardsForThief * -1);
+                if(player.getResource(r) > nbCardsForThief){
+                    player.updateResource(r, nbCardsForThief * -1);
                     nbCardsForThief = 0;
                     continue;
                 }
-                if(this.gameSettings.getCurrentPlayer().getResource(r) <= nbCardsForThief){
-                    nbCardsForThief -= this.gameSettings.getCurrentPlayer().getResource(r);
-                    this.gameSettings.getCurrentPlayer().updateResource(r, this.gameSettings.getCurrentPlayer().getResource(r) * -1);
+                if(player.getResource(r) <= nbCardsForThief){
+                    nbCardsForThief -= player.getResource(r);
+                    player.updateResource(r, player.getResource(r) * -1);
                 }
             }
         }
