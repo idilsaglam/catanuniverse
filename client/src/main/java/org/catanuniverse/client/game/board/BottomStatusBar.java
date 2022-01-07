@@ -70,6 +70,12 @@ class BottomStatusBar extends JPanel {
     private class ResourceCard extends JPanel {
         private final Resource resource;
         private final JLabel imageLabel, countLabel;
+
+        /**
+         * Creates a resource card for given resource type
+         * @param resource The type of resource
+         * @throws IOException when t
+         */
         ResourceCard(Resource resource) throws IOException {
             this.resource = resource;
             this.countLabel = new JLabel(""+BottomStatusBar.this.currentPlayer.getResource(resource));
@@ -79,6 +85,9 @@ class BottomStatusBar extends JPanel {
             this.add(countLabel);
         }
 
+        /**
+         * Updates the resources
+         */
         private void updateResource() {
             this.countLabel.setText(""+BottomStatusBar.this.currentPlayer.getResource(resource));
             this.countLabel.revalidate();
