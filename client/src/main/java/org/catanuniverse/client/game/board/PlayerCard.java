@@ -53,6 +53,8 @@ class PlayerCard extends JPanel {
     gbc.gridx = 1;
     gbc.gridy = 0;
     this.add(achievementsContainer, gbc);
+    this.setBorder(BorderFactory.createMatteBorder(
+            0, 25, 0, 0, player.getColor()));
   }
   PlayerCard(Player player, int index) throws IOException {
     this(player, index, 64, 64);
