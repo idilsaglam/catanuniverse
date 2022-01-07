@@ -64,6 +64,15 @@ abstract class Tile {
         this.playable = playable;
     }
 
+
+    /**
+     * Gets if the current tile is playable or not
+     * @return True if the current tile is playable false if not
+     */
+    public boolean getPlayable() {
+        return this.playable;
+    }
+
     /**
      * Returns the neighbor of the Tile on the given position
      *
