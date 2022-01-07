@@ -23,6 +23,7 @@ public class BoardPane extends JPanel {
     private final BoardSidePane boardSidePane;
     private final JLabel robberLabel;
     private final Color defaultBackground;
+    private Integer diceValue;
     /**
      * Creates a BoardPane with given size and configuration
      *
@@ -51,11 +52,25 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane = new BottomStatusBar(
             this.gameSettings.getCurrentPlayer(),
             this.gameSettings.getCurrentPlayerIndex(),
-            this::next
+            () -> {
+                if (this.gameSettings.isRobberActivated()) return;
+                if (
+                    (this.gameSettings.getRoundNumber() == 0) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 1 || this.gameSettings.getCurrentPlayer().getNbRoad() != 1) ||
+                    (this.gameSettings.getRoundNumber() == 1) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 0 || this.gameSettings.getCurrentPlayer().getNbRoad() != 0)
+                ) {
+                    // First two rounds, each user should build a road and a settlement
+                    return;
+                }
+                if (
+                    this.gameSettings.getRoundNumber() > 1 && this.diceValue == null
+                ) return;
+
+                this.next();
+            }
         );
         this.initPanes(size);
         this.desactivateRobber();
-
+        this.boardSidePane.disableDice();
     }
 
     /**
@@ -63,6 +78,7 @@ public class BoardPane extends JPanel {
      * @return True if card can be drawn, false if not
      */
     private Boolean canDrawCard() {
+        if (this.gameSettings.getRoundNumber() <= 1) return false;
         if (this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard() && !this.gameSettings.isRobberActivated()) {
             // A card can be drawn if the current player has enough resources to draw the card and the robber is not activated
             this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
@@ -76,6 +92,7 @@ public class BoardPane extends JPanel {
      * @param diceValue The value of the dice
      */
     private boolean onDiceRolled(Integer diceValue) {
+        this.diceValue = diceValue;
         if(diceValue != null && diceValue== 7){this.activateRobber(); return true;}
 
         System.out.printf("DICE VALUE %d\n", diceValue);
@@ -127,6 +144,10 @@ public class BoardPane extends JPanel {
      */
     private boolean onSettlementAdded(Hextile tile, Integer settlementIndex) {
         if (this.gameSettings.isRobberActivated()) return false;
+        if (
+            (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbSettlement() != 2) |
+                (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbSettlement() != 1)
+        ) return false;
         if (this.gameSettings.getCurrentPlayer().isAI()) {
             return false;
         }
@@ -177,10 +198,15 @@ public class BoardPane extends JPanel {
      */
     private boolean onRoadAdded(Hextile tile, Integer roadIndex)  {
             if (this.gameSettings.isRobberActivated()) return false;
-            if (gameSettings.getCurrentPlayer().isAI()) {
+        if (
+            (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbRoad() != 2) |
+                (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbRoad() != 1)) return false;
+
+        if (gameSettings.getCurrentPlayer().isAI()) {
                 // TODO: Make AI play
                 return false;
             }
+
             if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
 
                 if (tile.getRoadSlot(roadIndex) != null) return false;
@@ -247,14 +273,15 @@ public class BoardPane extends JPanel {
      * @throws IOException
      */
     private void next() throws IOException {
-        System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.gameSettings.next();
-        System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
         this.topStatusPane.updatePlayerCard();
         //this.bottomStatusPane.revalidate();
         //this.bottomStatusPane.repaint();
-        this.boardSidePane.resetDice();
+        if (this.gameSettings.getRoundNumber() > 1) {
+            this.diceValue = null;
+            this.boardSidePane.resetDice();
+        }
         this.boardSidePane.revalidate();
         this.boardSidePane.repaint();
     }
