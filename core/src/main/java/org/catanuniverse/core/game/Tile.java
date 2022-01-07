@@ -94,7 +94,7 @@ abstract class Tile {
      * @return True if playable false if not
      * @throws NoSuchSlotException If there's an index which does not exists
      */
-    private boolean playable(int[] indexes) throws NoSuchSlotException {
+    boolean playable(int[] indexes) throws NoSuchSlotException {
         if (this.getGroundType() != GroundType.Water) return true;
         for (int index : indexes) {
             if (this.getNeighbor(index) != null && this.getNeighbor(index).getGroundType() != GroundType.Water) {
@@ -183,31 +183,8 @@ abstract class Tile {
      * @throws SlotAlreadyTakenException If there's already a settlement on the given slot
      * @throws NoSuchSlotException If there's no slots matching the given index
      */
-    protected void addSettlement(int index, Settlement settlement)
-            throws SlotAlreadyTakenException, NoSuchSlotException {
-        this.isSlotExists(index);
-        if (this.playable(new int[]{index,  (index+this.neighbors.length-1)%this.neighbors.length})) {
-            if (this.settlementSlots[index] == null) {
-                int compIndex = complementaryIndex(index);
-                // We can insert only if the slot is null
-                this.settlementSlots[index] = settlement;
-                if (this.neighbors[index] != null) {
-
-                    System.out
-                        .printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(),
-                            compIndex);
-                    this.neighbors[index].settlementSlots[(compIndex + 1)%this.neighbors.length] = settlement;
-                }
-                index = (index + this.neighbors.length - 1) % this.neighbors.length;
-                compIndex = complementaryIndex(index);
-                if (this.neighbors[index] != null) {
-                    this.neighbors[index].settlementSlots[compIndex] = settlement;
-                }
-                return;
-            }
-            throw new SlotAlreadyTakenException();
-        }
-    }
+    protected abstract void addSettlement(int index, Settlement settlement)
+            throws SlotAlreadyTakenException, NoSuchSlotException;
 
     /**
      * Upgrades the settlement in the given slot to a City
@@ -381,7 +358,7 @@ abstract class Tile {
      * @param index The index of the slot
      * @throws NoSuchSlotException If there's no slot matching with the given index
      */
-    private void isSlotExists(int index) throws NoSuchSlotException {
+    void isSlotExists(int index) throws NoSuchSlotException {
         if (index < 0 || index >= this.neighbors.length) {
             throw new NoSuchSlotException();
         }
@@ -400,6 +377,13 @@ abstract class Tile {
         }
         return false;
     }
+
+    /**
+     * Checks if a settlement can added to the given index of the given tile
+     * @param index The index of the settlement slot
+     * @return True if a settlement can be added to the given slot false if not
+     */
+    public abstract boolean canAddSettlement(int index) throws NoSuchSlotException;
 
     /**
      * Get the harbor index from the current Tile

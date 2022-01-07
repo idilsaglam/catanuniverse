@@ -60,11 +60,30 @@ public final class Hextile extends Tile {
     }
 
     @Override
-    public void addSettlement(int index, Settlement settlement) {
-        try {
-            super.addSettlement(index, settlement);
-        } catch (NoSuchSlotException| SlotAlreadyTakenException ignore) {
+    public void addSettlement(int index, Settlement settlement) throws SlotAlreadyTakenException, NoSuchSlotException {
+        {
+            this.isSlotExists(index);
+            if (this.playable(new int[]{index, (index + this.neighbors.length - 1) % this.neighbors.length})) {
+                if (this.settlementSlots[index] == null) {
+                    int compIndex = complementaryIndex(index);
+                    // We can insert only if the slot is null
+                    this.settlementSlots[index] = settlement;
+                    if (this.neighbors[index] != null) {
 
+                        System.out
+                                .printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(),
+                                        compIndex);
+                        this.neighbors[index].settlementSlots[(compIndex + 1) % this.neighbors.length] = settlement;
+                    }
+                    index = (index + this.neighbors.length - 1) % this.neighbors.length;
+                    compIndex = complementaryIndex(index);
+                    if (this.neighbors[index] != null) {
+                        this.neighbors[index].settlementSlots[compIndex] = settlement;
+                    }
+                    return;
+                }
+                throw new SlotAlreadyTakenException();
+            }
         }
     }
 
@@ -74,12 +93,13 @@ public final class Hextile extends Tile {
         if (r == null) return;
         for (Settlement s: this.settlementSlots) {
             if (s == null) continue;
-            if (s instanceof City) {
-                ((City)s).sendResource(r);
-                return;
-            }
             s.sendResource(r);
         }
+    }
+
+    @Override
+    public boolean canAddSettlement(int index) throws NoSuchSlotException {
+        return this.playable(new int[]{index, (index + this.neighbors.length - 1) % this.neighbors.length});
     }
 
 }
