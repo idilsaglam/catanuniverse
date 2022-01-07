@@ -273,6 +273,6 @@ public class Player {
      * Update the total resource achievement
      */
     public void updateTotalResources() {
-        this.achievements.put(Achievements.WOOD, this.totalResources());
+        this.achievements.put(Achievements.RECARD, this.totalResources());
     }
 }

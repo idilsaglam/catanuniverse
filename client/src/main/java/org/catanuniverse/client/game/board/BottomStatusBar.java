@@ -6,11 +6,14 @@
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import javax.swing.*;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Resource;
+import org.catanuniverse.core.utils.EmptyCallback;
 
 class BottomStatusBar extends JPanel {
     static JLabel l;
@@ -18,7 +21,8 @@ class BottomStatusBar extends JPanel {
     private java.util.List<ResourceCard> resourceCards;
     private PlayerCard playerCard;
     private CartDeck cartDeck;
-    public BottomStatusBar(Player currentPlayer, int playerIndex) throws IOException {
+    private EmptyCallback onNextButtonClicked;
+    public BottomStatusBar(Player currentPlayer, int playerIndex,EmptyCallback e) throws IOException {
         this.currentPlayer = currentPlayer;
         this.cartDeck = new CartDeck(this.currentPlayer);
         this.resourceCards = new ArrayList<ResourceCard>();
@@ -34,6 +38,25 @@ class BottomStatusBar extends JPanel {
         gbc.gridx = 1;
         this.add(this.getResourcesRow(), gbc);
         this.add(cartDeck);
+        this.add(nextPlayerButton());
+        this.onNextButtonClicked = e;
+
+    }
+
+    public JButton nextPlayerButton(){
+        JButton button = new JButton();
+        button.setText("Next player");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    onNextButtonClicked.call();
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+        return button;
     }
 
     public JPanel getResourcesRow() throws IOException {
