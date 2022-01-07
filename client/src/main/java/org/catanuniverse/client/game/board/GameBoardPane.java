@@ -94,6 +94,11 @@ class GameBoardPane extends JPanel {
         return this.onSettlementAdded.test(tile, settlementSlot);
     }
 
+    /**
+     * Handles dice roll action
+     * @param diceResult The total number on dice
+     * @return true if tile exists, false if not
+     */
     boolean diceRolled(Integer diceResult) {
         if (this.board.isTileExists(diceResult)) {
             this.board.sendResourcesToPlayers(diceResult);
