@@ -60,7 +60,7 @@ public class Player {
 
     /** Create a player instance with an empty username */
     public Player() {
-        this(String.format("Auto %d", (int) (Math.random() * 10)), false);
+        this(String.format("Auto %d", (int) (Math.random() * 10)), true);
     }
 
     public int getVictoryPoint() {

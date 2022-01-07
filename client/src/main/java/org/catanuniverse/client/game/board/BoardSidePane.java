@@ -44,6 +44,9 @@ class BoardSidePane extends JPanel {
 
     }
 
+    public void roll(){
+        this.dice.roll();
+    }
 
     public void disableDice() {
         this.dice.setDisabled();

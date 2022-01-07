@@ -7,6 +7,7 @@ package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Random;
 import javax.swing.*;
 
 import org.catanuniverse.commons.GameSettings;
@@ -193,6 +194,51 @@ public class BoardPane extends JPanel {
         return false;
     }
 
+    private void playAI() throws IOException {
+        Random r = new Random();
+
+        if(this.gameSettings.getRoundNumber() != 0 || this.gameSettings.getRoundNumber()!=1 ){
+            boardSidePane.roll();
+        }
+
+        if( !this.gameSettings.getCurrentPlayer().canBuildSettlement() &&
+            !this.gameSettings.getCurrentPlayer().canBuildCity() &&
+            !this.gameSettings.getCurrentPlayer().canBuildRoad() &&
+            !this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()
+        ){
+            next();
+            return;
+        }
+
+        if(this.gameSettings.getCurrentPlayer().canBuildCity()){
+            boolean res = r.nextBoolean();
+            if(res){
+             this.gameSettings.getCurrentPlayer().buildCity();
+            }
+        }
+
+        if(this.gameSettings.getCurrentPlayer().canBuildRoad()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameSettings.getCurrentPlayer().canBuildRoad();
+            }
+        }
+        if(this.gameSettings.getCurrentPlayer().canBuildSettlement()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameSettings.getCurrentPlayer().buildSettlement();
+            }
+        }
+        if(this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+            }
+        }
+
+    }
+
+
     /**
      * Method handles onRoadAdded event
      * @param tile The tile on which the road is added
@@ -206,7 +252,7 @@ public class BoardPane extends JPanel {
                 (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbRoad() != 1)) return false;
 
         if (gameSettings.getCurrentPlayer().isAI()) {
-                // TODO: Make AI play
+                playAI();
                 return false;
             }
 
@@ -224,6 +270,7 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildRoad();
+                    updateStatusBars();
                     return true;
                 } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
@@ -282,6 +329,13 @@ public class BoardPane extends JPanel {
      */
     private void next() throws IOException {
         this.gameSettings.next();
+        System.out.println(gameSettings.getCurrentPlayer().getUsername());
+        System.out.println(gameSettings.getCurrentPlayer().isAI());
+        if (gameSettings.getCurrentPlayer().isAI()) {
+            playAI();
+            this.next();
+            return;
+        }
         this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
         this.topStatusPane.updatePlayerCard();
         //this.bottomStatusPane.revalidate();
