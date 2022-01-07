@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Consumer;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import org.catanuniverse.core.game.Card;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Resource;
@@ -28,16 +30,16 @@ class BottomStatusBar extends JPanel {
         this.currentPlayer = currentPlayer;
         this.cartDeck = new CartDeck(this.currentPlayer, onCardUsed);
         this.resourceCards = new ArrayList<ResourceCard>();
-        // TODO: Update grid layout
         GridBagConstraints gbc= new GridBagConstraints();
         this.setLayout(new GridBagLayout());
         this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new GridLayout());
+        formPanel.add(porteCheckBox());
+        formPanel.add(porteRadioButtons());
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.weightx = 0.5;
-        JPanel formPanel = new JPanel();
-        formPanel.add(porteCheckBox(),gbc);
-        formPanel.add(porteRadioButtons(),gbc);
+        gbc.weightx = 0.25;
         this.add(formPanel, gbc);
         gbc.gridx = 1;
         this.add(this.playerCard, gbc);
@@ -53,7 +55,7 @@ class BottomStatusBar extends JPanel {
 
     }
 
-    public JPanel porteCheckBox(){
+    public JPanel porteCheckBox1(){
         JPanel f = new JPanel();
         JCheckBox checkBoxCorn = new JCheckBox("Corn");
         JCheckBox checkBoxHill = new JCheckBox("Hill");
@@ -70,6 +72,32 @@ class BottomStatusBar extends JPanel {
         f.setLayout(new GridLayout(0, 1));
         return f;
     }
+
+
+    public JPanel porteCheckBox(){
+        JPanel panel = new JPanel();
+        final JLabel label = new JLabel();
+        label.setHorizontalAlignment(JLabel.CENTER);
+        SpinnerModel model = new SpinnerNumberModel(
+            2, //valeur initiale
+            0, //valeur minimum
+            20, //valeur maximum
+            1 //pas
+        );
+
+        JSpinner sp = new JSpinner(model);
+        panel.add(label);
+        panel.add(sp);
+        panel.setLayout(new GridLayout(2, 1));
+        sp.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                label.setText("Valeur : " + ((JSpinner)e.getSource()).getValue());
+            }
+        });
+
+        return panel;
+    }
+
     public JPanel porteRadioButtons(){
 
         JPanel panel = new JPanel();
