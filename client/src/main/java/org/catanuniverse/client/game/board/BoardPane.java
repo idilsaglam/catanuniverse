@@ -48,11 +48,6 @@ public class BoardPane extends JPanel {
         },
             (Card usedCard) -> {
                 usedCard.use(this.gameSettings.getCurrentPlayer());
-                try {
-                    this.next();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
             },
             (Card stockedCard) -> {
                 stockedCard.stock(this.gameSettings.getCurrentPlayer());
@@ -83,9 +78,8 @@ public class BoardPane extends JPanel {
                         this.revalidate();
                         this.repaint();
                         this.gameSettings.getCurrentPlayer().buildCity();
-                        this.next();
                         return true;
-                    } catch (NoSuchSlotException | IOException e) {
+                    } catch (NoSuchSlotException ignore) {
                         return false;
                     }
                 }
@@ -97,11 +91,6 @@ public class BoardPane extends JPanel {
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildSettlement();
-                try {
-                    this.next();
-                } catch (IOException e) {
-                    return false;
-                }
                 return true;
             }
             return false;
@@ -120,9 +109,8 @@ public class BoardPane extends JPanel {
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildRoad();
-                this.next();
                 return true;
-                } catch (SlotAlreadyTakenException | NoSuchSlotException | IOException ignore) {
+                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
                 }
             }
