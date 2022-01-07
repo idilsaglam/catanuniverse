@@ -53,8 +53,7 @@ class PlayerCard extends JPanel {
     gbc.gridx = 1;
     gbc.gridy = 0;
     this.add(achievementsContainer, gbc);
-    this.setBorder(BorderFactory.createMatteBorder(
-            0, 25, 0, 0, player.getColor()));
+
   }
   PlayerCard(Player player, int index) throws IOException {
     this(player, index, 64, 64);
@@ -67,7 +66,9 @@ class PlayerCard extends JPanel {
     BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
     Image scaledImage = bufferedAvatarImage.getScaledInstance(this.widthPlayer,this.heightPlayer,Image.SCALE_SMOOTH);
     avatarLabel.setIcon(new ImageIcon(scaledImage));
-    username.setText(p.getUsername());
+    username.setText(this.player.getUsername());
+    this.setBorder(BorderFactory.createMatteBorder(
+            0, 25, 0, 0, player.getColor()));
     this.achievementsContainer.updateAchievements();
     this.achievementsContainer.revalidate();
     this.achievementsContainer.repaint();
