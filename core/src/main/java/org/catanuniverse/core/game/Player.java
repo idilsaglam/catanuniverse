@@ -289,4 +289,14 @@ public class Player {
     public void updateTotalResources() {
         this.achievements.put(Achievements.RECARD, this.totalResources());
     }
+
+    /**
+     * Runs an exchange operation
+     * @param resourcesToGive An array of resource types to give for the exchange
+     * @param resourceToReceive The resource type will be received after exchange
+     * @param exhangeRate The rate of the exchange
+     */
+    public void exchange(HashMap<Resource, Integer> resourcesTable, Resource resourceToReceive, int exchangeRate) {
+        // TODO: COMPLETE
+    }
 }

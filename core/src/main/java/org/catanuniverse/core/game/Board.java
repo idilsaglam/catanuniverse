@@ -5,6 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -32,11 +33,17 @@ public class Board {
         this.initNeighbors();
     }
 
-    public Harbor canExchange(Player player){
+    /**
+     * Method returns harbor if player can exchange their resources
+     * @param player The player to check
+     * @return Harbor owned by the given player
+     */
+    public java.util.List<Harbor> canExchange(Player  player){
         // resouces && settlement
         Hextile tile;
         Harbor harbor;
         Resource harborResource;
+        java.util.List<Harbor> harbors = new ArrayList<>();
         for (int row = 0; row < this.tiles.length; row++) {
             for (int column = 0; column<this.tiles[row].length; column++) {
                 if (
@@ -58,12 +65,12 @@ public class Board {
                             harborResource = harbor.getResource();
                             if (harborResource == null) {
                                 if (player.getAchievement(Achievements.RECARD) >= harbor.getCoeff()) {
-                                    return harbor;
+                                    harbors.add(harbor);
+                                    continue;
                                 }
-                            } else {
-                                if (player.getResource(harborResource) >= harbor.getCoeff()) {
-                                    return harbor;
-                                }
+                            }
+                            if (player.getResource(harborResource) >= harbor.getCoeff()) {
+                                harbors.add(harbor);
                             }
                         } catch (NoSuchSlotException ignore) {
                         }
@@ -72,7 +79,7 @@ public class Board {
                 }
             }
         }
-        return null;
+        return harbors;
     }
 
     /**
