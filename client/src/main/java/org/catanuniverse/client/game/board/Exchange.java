@@ -6,6 +6,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -15,9 +16,10 @@ import org.catanuniverse.core.game.Harbor;
 import org.catanuniverse.core.game.Resource;
 
 public class Exchange extends JTabbedPane {
+  private static final int DEFAULT_COEFFICIENT = 3;
 
   private final BiConsumer<HashMap<Resource, Integer>, AbstractMap.Entry<Resource, Integer>> callback;
-  private final HashMap<Resource, Integer> inputResources;
+  private HashMap<Resource, Integer> inputResources;
   private final int coeff;
   private java.util.List<Harbor> harbors;
   /**
@@ -32,25 +34,46 @@ public class Exchange extends JTabbedPane {
           HashMap<Resource, Integer> inputResources,
           List<Harbor> harbors, int coeff) {
     this.callback = callback;
-    this.harbors = harbors;
-    this.inputResources = inputResources;
+    this.update(inputResources, harbors);
     this.coeff = coeff;
 
-    this.addTab("Exchange", new ExchangePane(this.inputResources, this.coeff));
     // TODO: Create other panes for harbors
   }
 
-/*  private void addNewPane(Harbor harbor) {
+  private void removeAllTabs() {
+    for (int i = 0; i<this.getTabCount(); i++) {
+      this.removeTabAt(i);
+    }
+  }
+
+    public void update(HashMap<Resource, Integer> inputResources, java.util.List<Harbor> harbors) {
+    this.removeAllTabs();
+    this.inputResources = inputResources;
+    this.harbors = harbors;
+    this.addTab("Exchange", new ExchangePane(this.inputResources, this.coeff));
+    this.harbors.forEach(this::addNewPane);
+  }
+
+  private void addNewPane(Harbor harbor) {
+    Supplier<HashMap<Resource, Integer>> genereateResources = () -> {
+      if (harbor.getResource() == null) {
+        return this.inputResources;
+      }
+      HashMap<Resource, Integer> result = new HashMap<>();
+      result.put(harbor.getResource(), this.inputResources.get(harbor.getResource()));
+      return result;
+    };
     this.addTab(
             String.format(
                     "%d:1 %s",
                     harbor.getCoeff(),
                     harbor.getResource() == null ? "?" : harbor.getResource()),
             new ExchangePane(
-
+               genereateResources.get(),
+                harbor.getCoeff()
             )
             );
-  }*/
+  }
 
 
 
