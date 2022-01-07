@@ -16,13 +16,14 @@ public abstract class GameSettings {
     protected Player[] players;
     protected int currentPlayerIndex = 0;
     protected boolean robberActivated;
-
+    private int nextCounter;
     public GameSettings() {
         this.capacity = -1;
         this.numberOfAI = -1;
         this.difficulty = null;
         this.players = new Player[0];
         this.robberActivated = false;
+        this.nextCounter = 0;
     }
 
     public GameSettings(int capacity, int numberOfAI, Difficulty difficulty) {
@@ -38,6 +39,8 @@ public abstract class GameSettings {
         this.difficulty = difficulty;
         this.numberOfAI = numberOfAI;
         this.players = new Player[this.capacity];
+        this.robberActivated = false;
+        this.nextCounter = 0;
     }
 
     public GameSettings(int capacity) {
@@ -49,7 +52,12 @@ public abstract class GameSettings {
     }
 
     public void next() {
+        this.nextCounter++;
         this.currentPlayerIndex = (this.currentPlayerIndex + 1)%this.players.length;
+    }
+
+    public int getRoundNumber() {
+        return this.nextCounter/this.capacity;
     }
 
     public Player getCurrentPlayer() {
