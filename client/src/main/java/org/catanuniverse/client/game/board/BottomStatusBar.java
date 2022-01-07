@@ -136,14 +136,13 @@ class BottomStatusBar extends JPanel {
 
     public JPanel getResourcesRow() throws IOException {
         JPanel result = new JPanel();
-        result.setLayout(new GridLayout(1, 0));
+        result.setLayout(new GridLayout(2, 0));
         ResourceCard resourceCard;
         for (Resource r: Resource.values()) {
             resourceCard = new ResourceCard(r);
             this.resourceCards.add(resourceCard);
             result.add(resourceCard);
         }
-        result.setBackground(Color.GREEN);
         return result;
     }
 
