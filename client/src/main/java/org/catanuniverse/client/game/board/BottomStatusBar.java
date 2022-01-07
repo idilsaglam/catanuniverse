@@ -8,7 +8,9 @@ package org.catanuniverse.client.game.board;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Console;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,10 +122,17 @@ class BottomStatusBar extends JPanel {
     /**
      * Updates the harbors with the given harbor list supplier
      */
-    public void updateHarbors() {
+    public void updateExchange() {
+        System.out.println("Update exchange method called");
+        System.out.println("Current player username " + this.currentPlayer.getUsername());
+        System.out.println("Number of harbors " + this.harbors.size());
         this.harbors = this.getCurrentPlayerHarbors.get();
-        this.exchangePanel.updateHarbors(this.harbors);
+        System.out.println("Number of harbors after update " + this.harbors);
+        this.exchangePanel.update(this.currentPlayer.getResources(), this.harbors);
+        this.exchangePanel.revalidate();
+        this.exchangePanel.repaint();
     }
+
 
     /**
      * Update the current player with a new one
