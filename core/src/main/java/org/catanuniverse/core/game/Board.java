@@ -231,10 +231,23 @@ public class Board {
         }
     }
 
+    /**
+     * Make build a road to the first eligible slot the given player
+     * @param currentPlayer The player to build the road
+     */
     public void buildRoad(Player currentPlayer) {
-        for (int i = 0; i<this.tiles.length; i++) {
-            for (j = 0; j<this.tiles[i].length; j++) {
-
+        Road roadToAdd = new Road(currentPlayer);
+        for (Hextile[] tile : this.tiles) {
+            for (Hextile hextile : tile) {
+                Integer roadSlot = hextile.getFirstEligibleRoadSlot(roadToAdd);
+                if (roadSlot == null) continue;
+                try {
+                    hextile.addRoad(roadSlot, roadToAdd);
+                } catch (SlotAlreadyTakenException | NoSuchSlotException e) {
+                    e.printStackTrace();
+                    continue;
+                }
+                return;
             }
         }
     }
