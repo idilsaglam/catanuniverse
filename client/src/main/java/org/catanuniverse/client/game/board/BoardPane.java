@@ -43,7 +43,8 @@ public class BoardPane extends JPanel {
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.boardSidePane = new BoardSidePane(this::onDiceRolled,
             this::onCardUsed,
-            this::onCardStocked
+            this::onCardStocked,
+            this::canDrawCard
             );
         this.gameBoardPane.setOnRobberMoved(this::onRobberMoved);
         this.gameBoardPane.setOnSettlementAdded(this::onSettlementAdded);
@@ -54,6 +55,19 @@ public class BoardPane extends JPanel {
             this::next
         );
         this.initPanes(size);
+    }
+
+    /**
+     * Verify if a card can be drawn or not
+     * @return True if card can be drawn, false if not
+     */
+    private Boolean canDrawCard() {
+        if (this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard() && !this.gameSettings.isRobberActivated()) {
+            // A card can be drawn if the current player has enough resources to draw the card and the robber is not activated
+            this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+            return true;
+        }
+        return false;
     }
 
     /**
