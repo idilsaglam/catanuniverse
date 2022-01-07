@@ -321,7 +321,7 @@ public class BoardPane extends JPanel {
             nbCardsForThief = gameSettings.getPlayers()[i].getRessourceNumber()/2;
             for (Resource r: Resource.values()) {
                 if(nbCardsForThief == 0){
-                    continue;
+                    break;
                 }
                 if(this.gameSettings.getCurrentPlayer().getResource(r) > nbCardsForThief){
                     this.gameSettings.getCurrentPlayer().updateResource(r, nbCardsForThief * -1);
@@ -333,9 +333,8 @@ public class BoardPane extends JPanel {
                     this.gameSettings.getCurrentPlayer().updateResource(r, this.gameSettings.getCurrentPlayer().getResource(r) * -1);
                 }
             }
-
         }
-
+        this.updateStatusBars();
         this.revalidate();
         this.repaint();
     }
