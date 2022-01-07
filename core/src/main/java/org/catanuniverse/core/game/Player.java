@@ -207,8 +207,14 @@ public class Player {
      */
     public void updateResource(Resource r, int i) {
         this.resources.put(r, this.resources.get(r) + i);
+        this.updateTotalResources();
     }
 
+    /**
+     * The number of resource owned by the current user
+     * @param resource The type of resource
+     * @return The number of resource owned by the current user
+     */
     public int getResource(Resource resource) {
         return this.resources.get(resource);
     }
@@ -233,12 +239,40 @@ public class Player {
         return this.resources;
     }
 
+    /**
+     * Updates the victory point
+     * @param n The number to add to current victory points
+     */
     public void addVictoryPoint(int n){
         this.victoryPoint = this.victoryPoint+n;
         this.achievements.put(Achievements.TROPHY,this.achievements.get(Achievements.TROPHY)+1);
     }
 
+    /**
+     * Increment a number of card of the current player
+     * @param card The type of the card to increment
+     * @param value The value to increment
+     */
     public void incrementUserCards(Card card, int value) {
         this.userCards.put(card, this.userCards.get(card) + value);
+    }
+
+    /**
+     * Calculate the total number of resources that current player owns
+     * @return
+     */
+    private int totalResources() {
+        int total = 0;
+        for (Integer nbResource: this.resources.values()) {
+            total+=nbResource;
+        }
+        return total;
+    }
+
+    /**
+     * Update the total resource achievement
+     */
+    public void updateTotalResources() {
+        this.achievements.put(Achievements.WOOD, this.totalResources());
     }
 }
