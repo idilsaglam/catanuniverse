@@ -66,14 +66,10 @@ public class Board {
                             harbor = tile.getHarbor(tile.getHarborIndex());
                             harborResource = harbor.getResource();
                             if (harborResource == null) {
-                                if (player.getAchievement(Achievements.RECARD) >= harbor.getCoeff()) {
-                                    harbors.add(harbor);
+                                 harbors.add(harbor);
                                     continue;
-                                }
                             }
-                            if (player.getResource(harborResource) >= harbor.getCoeff()) {
-                                harbors.add(harbor);
-                            }
+                            harbors.add(harbor);
                         } catch (NoSuchSlotException ignore) {
                         }
 
