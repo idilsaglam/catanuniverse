@@ -102,7 +102,6 @@ class PlayerCard extends JPanel {
 
     public void updateAchievements() {
       for (Achievements a: Achievements.values()) {
-      System.out.printf("Achievements card update achievements methods called. Username %s Achievement name %s Achievement value %d\n", PlayerCard.this.player.getUsername(), a, PlayerCard.this.player.getAchievement(a));
         this.achievementsJLabelMap.get(a).setText(""+PlayerCard.this.player.getAchievement(a));
         this.achievementsJLabelMap.get(a).revalidate();
         this.achievementsJLabelMap.get(a).repaint();

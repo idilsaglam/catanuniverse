@@ -107,6 +107,7 @@ public class BoardPane extends JPanel {
         });
         this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
             if (gameSettings.getCurrentPlayer().isAI()) {
+                // TODO: Make AI play
                 return false;
             }
             if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
