@@ -93,7 +93,6 @@ class BottomStatusBar extends JPanel {
         panel.add(jRadioButtonFarm);
         panel.add(jButton);
         panel.setLayout(new GridLayout(0, 2));
-        panel.setBackground(Color.red);
         return panel;
 
     }
