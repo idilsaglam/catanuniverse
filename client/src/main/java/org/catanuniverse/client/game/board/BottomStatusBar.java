@@ -34,20 +34,17 @@ class BottomStatusBar extends JPanel {
         GridBagConstraints gbc= new GridBagConstraints();
         this.setLayout(new GridBagLayout());
         this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
-        JPanel formPanel = new JPanel();
-        formPanel.setLayout(new GridLayout());
-        formPanel.add(new Exchange((HashMap<Resource, Integer> resourcesToExchange, Resource resourceToReceive) -> {
-            // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
-        },
-            // TODO: HARBOR LAZIM
-            this.currentPlayer.getResources(),
-            3
-        ));
-        formPanel.add(porteRadioButtons());
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.25;
-        this.add(formPanel, gbc);
+        this.add(new Exchange((HashMap<Resource, Integer> resourcesToExchange, Resource resourceToReceive) -> {
+            // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
+        },
+                // TODO: HARBOR LAZIM
+                this.currentPlayer.getResources(),
+                3
+        ), gbc);
         gbc.gridx = 1;
         this.add(this.playerCard, gbc);
         gbc.gridx = 2;
@@ -62,164 +59,8 @@ class BottomStatusBar extends JPanel {
 
     }
 
-    public JPanel porteCheckBox1(){
-        JPanel f = new JPanel();
-        JCheckBox checkBoxCorn = new JCheckBox("Corn");
-        JCheckBox checkBoxHill = new JCheckBox("Hill");
-        JCheckBox checkBoxFarm = new JCheckBox("Farm");
-        JCheckBox checkBoxMeadow = new JCheckBox("Meadow");
-        JCheckBox checkBoxMountain = new JCheckBox("Mountain");
-
-        f.add(checkBoxCorn);
-        f.add(checkBoxHill);
-        f.add(checkBoxFarm);
-        f.add(checkBoxMeadow);
-        f.add(checkBoxMountain);
-
-        f.setLayout(new GridLayout(0, 1));
-        return f;
-    }
 
 
-    public JPanel porteCheckBox(){
-        JPanel panel = new JPanel();
-        final JLabel label = new JLabel();
-        label.setHorizontalAlignment(JLabel.CENTER);
-
-        SpinnerModel cornModel = new SpinnerNumberModel(
-            2, //valeur initiale
-            0, //valeur minimum
-            20, //valeur maximum
-            1 //pas
-        );
-
-        SpinnerModel hillModel = new SpinnerNumberModel(
-            2, //valeur initiale
-            0, //valeur minimum
-            20, //valeur maximum
-            1 //pas
-        );
-
-        SpinnerModel farmModel = new SpinnerNumberModel(
-            2, //valeur initiale
-            0, //valeur minimum
-            20, //valeur maximum
-            1 //pas
-        );
-
-        SpinnerModel meadowModel = new SpinnerNumberModel(
-            2, //valeur initiale
-            0, //valeur minimum
-            20, //valeur maximum
-            1 //pas
-        );
-
-        SpinnerModel mountainModel = new SpinnerNumberModel(
-            2, //valeur initiale
-            0, //valeur minimum
-            20, //valeur maximum
-            1 //pas
-        );
-
-
-        JSpinner cornSpinner = new JSpinner(cornModel);
-        JSpinner hillSpinner = new JSpinner(hillModel);
-        JSpinner farmSpinner = new JSpinner(farmModel);
-        JSpinner mountainSpinner = new JSpinner(mountainModel);
-        JSpinner meadowSpinner = new JSpinner(meadowModel);
-
-
-        panel.add(label);
-        panel.add(cornSpinner);
-        panel.add(hillSpinner);
-        panel.add(farmSpinner);
-        panel.add(mountainSpinner);
-        panel.add(meadowSpinner);
-
-        panel.setLayout(new GridLayout(2, 1));
-
-        cornSpinner.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                label.setText("Valeur de Corn : " + ((JSpinner)e.getSource()).getValue());
-            }
-        });
-
-        hillSpinner.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                label.setText("Valeur de Hill : " + ((JSpinner)e.getSource()).getValue());
-            }
-        });
-
-        farmSpinner.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                label.setText("Valeur de Farm : " + ((JSpinner)e.getSource()).getValue());
-            }
-        });
-
-        mountainSpinner.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                label.setText("Valeur de mountain : " + ((JSpinner)e.getSource()).getValue());
-            }
-        });
-
-        meadowSpinner.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                label.setText("Valeur de Meadow : " + ((JSpinner)e.getSource()).getValue());
-            }
-        });
-
-
-        return panel;
-    }
-
-    public JPanel porteRadioButtons(){
-
-        JPanel panel = new JPanel();
-
-        JRadioButton jRadioButtonCorn = new JRadioButton();
-        JRadioButton jRadioButtonHill = new JRadioButton();
-        JRadioButton jRadioButtonFarm = new JRadioButton();
-        JRadioButton jRadioButtonMeadow = new JRadioButton();
-        JRadioButton jRadioButtonMountain = new JRadioButton();
-
-        JButton jButton = new JButton();
-        jButton.setText("Harbor");
-
-        ButtonGroup g1 = new ButtonGroup();
-
-
-        jRadioButtonCorn.setText("Corn");
-        jRadioButtonFarm.setText("Farm");
-        jRadioButtonHill.setText("Hill");
-        jRadioButtonMeadow.setText("Meadow");
-        jRadioButtonMountain.setText("Mountain");
-
-
-        this.add(jRadioButtonCorn);
-        this.add(jRadioButtonFarm);
-        this.add(jRadioButtonHill);
-        this.add(jRadioButtonMeadow);
-        this.add(jRadioButtonMountain);
-
-        this.add(jButton);
-
-
-        g1.add(jRadioButtonCorn);
-        g1.add(jRadioButtonHill);
-        g1.add(jRadioButtonMeadow);
-        g1.add(jRadioButtonMountain);
-        g1.add(jRadioButtonFarm);
-
-        panel.add(jRadioButtonCorn);
-        panel.add(jRadioButtonHill);
-        panel.add(jRadioButtonMeadow);
-        panel.add(jRadioButtonMountain);
-        panel.add(jRadioButtonFarm);
-        panel.add(jButton);
-        panel.setLayout(new GridLayout(0, 2));
-        return panel;
-
-    }
 
 
     public JButton nextPlayerButton(){

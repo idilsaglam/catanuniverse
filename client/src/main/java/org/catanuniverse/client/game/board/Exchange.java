@@ -1,14 +1,10 @@
 package org.catanuniverse.client.game.board;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.*;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSpinner;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
+import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import org.catanuniverse.core.game.Resource;
@@ -19,6 +15,8 @@ public class Exchange extends JPanel {
   private final HashMap<Resource, Integer> inputResources;
   private final HashMap<Resource, Integer> exchangeOutput;
   private final int coeff;
+  private final JPanel resourcesToGive, resourcesToReceive;
+  private final JButton confirmExchangeButton;
   /**
    * Create an exchange panel with given callback function
    * @param callback The callback methods which will be called when exchange button clicked
@@ -33,22 +31,62 @@ public class Exchange extends JPanel {
     this.inputResources = inputResources;
     this.coeff = coeff;
     this.exchangeOutput = new HashMap<>();
+    this.resourcesToGive = new JPanel();
+    this.initResourcesToGivePanel();
+    this.resourcesToReceive = new JPanel();
+    this.initResourceToReceivePanel();
+    this.confirmExchangeButton = new JButton("Exchange");
+    this.initPanels();
+
+  }
+
+  private void initResourcesToGivePanel() {
+    this.resourcesToGive.setLayout(new GridLayout(3, 0));
+    TitledBorder titledBorder = BorderFactory.createTitledBorder("Give");
+    titledBorder.setTitleJustification(TitledBorder.CENTER);
+    this.resourcesToGive.setBorder(titledBorder);
     SpinnerRow spinnerRow;
     for(Resource resource: this.inputResources.keySet()) {
       this.exchangeOutput.put(resource, 0);
       spinnerRow = new SpinnerRow(
-          resource,
-          this.inputResources.get(resource),
-          0,
-          (ChangeEvent e) -> {
-            this.exchangeOutput.put(resource, (Integer) ((JSpinner) e.getSource()).getValue());
-          }
+              resource,
+              this.inputResources.get(resource),
+              0,
+              (ChangeEvent e) -> {
+                this.exchangeOutput.put(resource, (Integer) ((JSpinner) e.getSource()).getValue());
+              }
       );
-      this.add(spinnerRow);
+      this.resourcesToGive.add(spinnerRow);
     }
-
-
   }
+
+  private void initResourceToReceivePanel() {
+    this.resourcesToReceive.setLayout(new GridLayout(3, 0));
+    TitledBorder titledBorder = BorderFactory.createTitledBorder("Receive");
+    titledBorder.setTitleJustification(TitledBorder.CENTER);
+    this.resourcesToReceive.setBorder(titledBorder);
+    ButtonGroup buttonGroup = new ButtonGroup();
+    JRadioButton radioButton;
+    for (Resource resource: Resource.values()) {
+      radioButton = new JRadioButton(resource.toString());
+      this.resourcesToReceive.add(radioButton);
+      buttonGroup.add(radioButton);
+    }
+  }
+
+  private void initPanels() {
+    GridBagConstraints gbc = new GridBagConstraints();
+    this.setLayout(new GridBagLayout());
+    gbc.gridx = 0;
+    gbc.gridy = 0;
+    this.add(this.resourcesToGive, gbc);
+    gbc.gridx++;
+    this.add(this.resourcesToReceive, gbc);
+    gbc.gridx--;
+    gbc.gridy++;
+    this.add(this.confirmExchangeButton, gbc);
+  }
+
 
   private static class SpinnerRow extends JPanel {
     private final SpinnerModel model;
@@ -71,7 +109,6 @@ public class Exchange extends JPanel {
       gbc.gridx++;
       this.spinner.addChangeListener(changeListener);
       this.add(this.spinner, gbc);
-
     }
   }
 
