@@ -71,6 +71,13 @@ class PlayerCard extends JPanel {
     this.achievementsContainer.repaint();
   }
 
+  /**
+   * Updates the achievement container of the player
+   */
+  public void updateAchievements() {
+    this.achievementsContainer.updateAchievements();
+  }
+
   private class PlayerAchievementsContainer extends JPanel {
 
     private final Map<Achievements, JLabel> achievementsJLabelMap = new HashMap<>(), achievementsJLabelImageMap = new HashMap<>();
