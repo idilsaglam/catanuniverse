@@ -304,6 +304,7 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane.updateResources();
         this.topStatusPane.updatePlayerCard();
         this.bottomStatusPane.updateUserCards();
+        this.bottomStatusPane.updateExchange();
     }
 
     private void desactivateRobber() {
