@@ -27,11 +27,12 @@ class BoardSidePane extends JPanel {
         CardPanel cardPanel = new CardPanel();
         gbc.gridx = 0;
         gbc.gridwidth = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         this.dice = new Dice(onDiceRolled);
         this.add(this.dice,gbc);
 
         gbc.gridx = 1;
+        gbc.gridy = 0;
         this.add(cardPanel,gbc);
         this.onCardUsed = onCardUsed;
         this.onCardStocked = onCardStocked;
@@ -39,9 +40,11 @@ class BoardSidePane extends JPanel {
         this.add(cardPanel.stockButton());
         this.add(cardPanel.useButton());
 
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+
+
     }
-
-
 
 
     public int updateRandomLabel() {

@@ -23,6 +23,7 @@ class BottomStatusBar extends JPanel {
     private CartDeck cartDeck;
     private EmptyCallback onNextButtonClicked;
     public BottomStatusBar(Player currentPlayer, int playerIndex,EmptyCallback e) throws IOException {
+
         this.currentPlayer = currentPlayer;
         this.cartDeck = new CartDeck(this.currentPlayer);
         this.resourceCards = new ArrayList<ResourceCard>();
@@ -34,14 +35,19 @@ class BottomStatusBar extends JPanel {
         gbc.gridy = 0;
         gbc.weightx = 0.5;
         this.playerCard.setBackground(Color.ORANGE);
-        this.add(this.playerCard, gbc);
+        this.add(porteRadioButtons(), gbc);
         gbc.gridx = 1;
+        this.add(this.playerCard, gbc);
+        gbc.gridx = 2;
         this.add(this.getResourcesRow(), gbc);
-        this.add(cartDeck);
-        this.add(nextPlayerButton());
+        gbc.gridx = 3;
+        this.add(cartDeck, gbc);
+        gbc.gridx = 4;
+        this.add(nextPlayerButton(), gbc);
         this.onNextButtonClicked = e;
-        this.add(porteRadioButtons());
+
     }
+
 
     public JPanel porteRadioButtons(){
 
@@ -92,6 +98,7 @@ class BottomStatusBar extends JPanel {
         return panel;
 
     }
+
 
     public JButton nextPlayerButton(){
         JButton button = new JButton();
