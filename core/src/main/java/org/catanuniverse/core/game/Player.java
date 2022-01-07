@@ -155,10 +155,12 @@ public class Player {
         if(canBuildRoad()){
             if(nbRoad > 0){
                 this.nbRoad--;
+                this.updateTotalResources();
                 return;
             }
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
             this.resources.put(Resource.Clay,this.resources.get(Resource.Clay)-1);
+            this.updateTotalResources();
         }
     }
 
@@ -170,11 +172,13 @@ public class Player {
             this.addVictoryPoint(1);
             if(nbSettlement > 0){
                 this.nbSettlement--;
+                return;
             }
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wood)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
+            this.updateTotalResources();
         }
     }
 
@@ -185,6 +189,7 @@ public class Player {
         if(canBuildCity()){
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-3);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Clay)-2);
+            this.updateTotalResources();
             this.addVictoryPoint(2);
         }
     }
