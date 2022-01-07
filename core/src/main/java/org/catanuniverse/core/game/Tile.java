@@ -452,7 +452,7 @@ abstract class Tile {
         for (int i = 0; i<this.roadSlots.length; i++) {
             try {
                 if (this.canAddRoad(i, road)) return i;
-            } catch (NoSuchSlotException ignore) {
+            } catch (NoSuchSlotException e) {
                 e.printStackTrace();
             }
         }
