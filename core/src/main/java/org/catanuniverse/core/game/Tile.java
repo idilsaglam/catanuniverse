@@ -389,6 +389,10 @@ abstract class Tile {
 
     public abstract void sendResources();
 
+    /**
+     * Checks if current tile has harbor or not
+     * @return True if current tile has harbor or false
+     */
     public boolean hasHarbor() {
         for (Harbor h: this.harbors) {
             if (h == null) continue;
@@ -397,6 +401,10 @@ abstract class Tile {
         return false;
     }
 
+    /**
+     * Get the harbor index from the current Tile
+     * @return The index of the harbor or null
+     */
     public Integer getHarborIndex(){
         for (int i = 0; i<this.harbors.length; i++) {
             if (this.harbors[i] == null) continue;
