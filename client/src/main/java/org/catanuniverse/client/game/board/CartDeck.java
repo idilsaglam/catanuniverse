@@ -18,7 +18,6 @@ public class CartDeck extends JPanel {
 
   public CartDeck(Player currentPlayer) throws IOException {
     this.currentPlayer = currentPlayer;
-    this.setBackground(Color.CYAN);
     CardDeckItem cdi;
     for (Card card: Card.values()) {
         cdi = new CardDeckItem((card));
