@@ -22,7 +22,6 @@ class BoardSidePane extends JPanel {
     private JButton useBtn = null;
 
     public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Card> onCardUsed, Consumer<Card> onCardStocked) throws IOException {
-        this.setBackground(Color.YELLOW);
         GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
         CardPanel cardPanel = new CardPanel();
