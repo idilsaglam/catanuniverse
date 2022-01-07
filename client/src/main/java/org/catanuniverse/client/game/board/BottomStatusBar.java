@@ -17,8 +17,10 @@ class BottomStatusBar extends JPanel {
     private Player currentPlayer;
     private java.util.List<ResourceCard> resourceCards;
     private PlayerCard playerCard;
+    private CartDeck cartDeck;
     public BottomStatusBar(Player currentPlayer, int playerIndex) throws IOException {
         this.currentPlayer = currentPlayer;
+        this.cartDeck = new CartDeck(this.currentPlayer);
         this.resourceCards = new ArrayList<ResourceCard>();
         // TODO: Update grid layout
         GridBagConstraints gbc= new GridBagConstraints();
@@ -31,6 +33,7 @@ class BottomStatusBar extends JPanel {
         this.add(this.playerCard, gbc);
         gbc.gridx = 1;
         this.add(this.getResourcesRow(), gbc);
+        this.add(cartDeck);
     }
 
     public JPanel getResourcesRow() throws IOException {
@@ -61,16 +64,20 @@ class BottomStatusBar extends JPanel {
     public void setCurrentPlayer(Player currentPlayer, int currentPlayerIndex) throws IOException {
         this.currentPlayer = currentPlayer;
         this.playerCard.setPlayer(currentPlayer, currentPlayerIndex);
+        this.cartDeck.setCurrentPlayer(this.currentPlayer);
         this.updateResources();
         this.playerCard.revalidate();
         this.playerCard.repaint();
+    }
+
+    public void updateUserCards() {
+        this.cartDeck.updateCards();
     }
 
 
     private class ResourceCard extends JPanel {
         private final Resource resource;
         private final JLabel imageLabel, countLabel;
-
         /**
          * Creates a resource card for given resource type
          * @param resource The type of resource
@@ -94,5 +101,6 @@ class BottomStatusBar extends JPanel {
             this.countLabel.repaint();
         }
     }
+
 
 }

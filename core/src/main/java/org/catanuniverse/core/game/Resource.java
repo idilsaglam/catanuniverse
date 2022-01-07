@@ -18,6 +18,14 @@ public enum Resource {
     Corn,
     Mineral;
 
+    /**
+     * Get the Image for the current resource
+     * @param width Image width
+     * @param height Image height
+     * @param scale Image scale constant
+     * @return The image object for the current resource value
+     * @throws IOException If the image file not found
+     */
     public Image getImage(int width, int height, int scale) throws IOException {
         String imagePath = String.format("/%s.png",switch (this) {
             case Wood -> "wood";

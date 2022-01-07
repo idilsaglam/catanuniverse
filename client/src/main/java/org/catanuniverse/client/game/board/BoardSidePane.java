@@ -1,5 +1,7 @@
 package org.catanuniverse.client.game.board;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import javax.imageio.ImageIO;
@@ -9,13 +11,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.Random;
+import org.catanuniverse.core.game.Card;
 
 class BoardSidePane extends JPanel {
-    private Consumer<Integer> consumer;
+    private Consumer<Card> onCardUsed;
+    private Consumer<Card> onCardStocked;
     private final Dice dice;
-    public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Integer> consumer) throws IOException {
+    private JButton stockBtn = null;
+    private JButton useBtn = null;
+
+    public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Card> onCardUsed, Consumer<Card> onCardStocked) throws IOException {
         this.setBackground(Color.YELLOW);
         GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
@@ -28,7 +34,12 @@ class BoardSidePane extends JPanel {
 
         gbc.gridx = 1;
         this.add(cardPanel,gbc);
-        this.consumer = consumer;
+        this.onCardUsed = onCardUsed;
+        this.onCardStocked = onCardStocked;
+
+        this.add(cardPanel.stockButton());
+        this.add(cardPanel.useButton());
+
     }
 
 
@@ -43,6 +54,7 @@ class BoardSidePane extends JPanel {
     }
 
     private class CardPanel extends JPanel implements MouseListener {
+        Card currentCard;
 
         public CardPanel() throws IOException {
             JLabel cardLabel;
@@ -65,7 +77,7 @@ class BoardSidePane extends JPanel {
             try {
                 int val = BoardSidePane.this.updateRandomLabel();
                 card = ImageIO.read(this.getClass().getResource("/cart"+val+".png"));
-                BoardSidePane.this.consumer.accept(val);
+                currentCard = Card.fromInt(val);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -76,6 +88,36 @@ class BoardSidePane extends JPanel {
             this.revalidate();
             this.repaint();
 
+        }
+
+        /**
+         * Creates stock card button
+         * @return The stock card button
+         */
+        public JButton stockButton(){
+            JButton button = new JButton();
+            button.setText("Stock");
+            button.addActionListener(new ActionListener(){
+                    public void actionPerformed(ActionEvent e){
+                        BoardSidePane.this.onCardStocked.accept(CardPanel.this.currentCard);
+                    }
+                });
+           return button;
+        }
+
+        /**
+         * Creates the use card button
+         * @return The use card button
+         */
+        public JButton useButton(){
+            JButton button = new JButton();
+            button.setText("Use");
+            button.addActionListener(new java.awt.event.ActionListener(){
+                    public void actionPerformed(java.awt.event.ActionEvent e){
+                        BoardSidePane.this.onCardUsed.accept(CardPanel.this.currentCard);
+                    }
+                });
+          return button;
         }
 
         @Override
