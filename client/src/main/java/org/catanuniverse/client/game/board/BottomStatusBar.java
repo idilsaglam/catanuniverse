@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.function.Consumer;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -35,7 +36,13 @@ class BottomStatusBar extends JPanel {
         this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new GridLayout());
-        formPanel.add(porteCheckBox());
+        formPanel.add(new Exchange((HashMap<Resource, Integer> resourcesToExchange, Resource resourceToReceive) -> {
+            // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
+        },
+            // TODO: HARBOR LAZIM
+            this.currentPlayer.getResources(),
+            3
+        ));
         formPanel.add(porteRadioButtons());
         gbc.gridx = 0;
         gbc.gridy = 0;
