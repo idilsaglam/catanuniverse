@@ -61,6 +61,12 @@ public class BoardPane extends JPanel {
             if (this.gameSettings.getCurrentPlayer().isAI()) {
                 return false;
             }
+            try {
+                if (!tile.canAddSettlement(settlementIndex)) return false;
+            } catch (NoSuchSlotException e) {
+                e.printStackTrace();
+                return false;
+            }
             if (this.gameSettings.getCurrentPlayer().canBuildSettlement()) {
                 System.out.printf("Game board pane on settlement added to %d\n", settlementIndex);
                 if (tile.getSettlementSlot(settlementIndex) != null) {
@@ -84,7 +90,11 @@ public class BoardPane extends JPanel {
                 }
                 // FIXME: Build settlement apply point to next player
                 System.out.println("");
-                tile.addSettlement(settlementIndex, new Settlement(this.gameSettings.getCurrentPlayer()));
+                try {
+                    tile.addSettlement(settlementIndex, new Settlement(this.gameSettings.getCurrentPlayer()));
+                } catch (SlotAlreadyTakenException|NoSuchSlotException ignore) {
+                     return false;
+                }
                 this.revalidate();
                 this.repaint();
                 this.gameSettings.getCurrentPlayer().buildSettlement();
