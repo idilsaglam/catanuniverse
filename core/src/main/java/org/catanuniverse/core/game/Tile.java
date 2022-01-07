@@ -404,4 +404,13 @@ abstract class Tile {
         }
         return null;
     }
+
+    /**
+     * Checks if a road can added with given index or not
+     * @param roadIndex The index of the road slot
+     * @return True if a road can added to the given slot, or not
+     */
+    public boolean canAddRoad(Integer roadIndex) {
+        return (this.roadSlots[roadIndex] == null) && (this.getGroundType() != GroundType.Water) || (this.neighbors[roadIndex] != null && this.neighbors[roadIndex].getGroundType() != GroundType.Water);
+    }
 }
