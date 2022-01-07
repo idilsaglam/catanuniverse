@@ -260,6 +260,7 @@ public class Player {
      */
     public void incrementUserCards(Card card, int value) {
         this.userCards.put(card, this.userCards.get(card) + value);
+        this.incrementAchievement(Achievements.DEVCARD, value);
     }
 
     /**
