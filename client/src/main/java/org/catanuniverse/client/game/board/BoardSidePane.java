@@ -23,11 +23,11 @@ class BoardSidePane extends JPanel {
         gbc.gridx = 0;
         gbc.gridwidth = 1;
         gbc.gridy = 0;
-        this.add(cardPanel,gbc);
-        this.addMouseListener(cardPanel);
         this.dice = new Dice(onDiceRolled);
-        gbc.gridx = 1;
         this.add(this.dice,gbc);
+
+        gbc.gridx = 1;
+        this.add(cardPanel,gbc);
         this.consumer = consumer;
     }
 
@@ -50,6 +50,7 @@ class BoardSidePane extends JPanel {
             Image simg = card.getScaledInstance(200,400,Image.SCALE_SMOOTH);
             cardLabel = new JLabel(new ImageIcon(simg));
             this.add(cardLabel,BorderLayout.CENTER);
+            this.addMouseListener(this);
         }
 
         @Override
