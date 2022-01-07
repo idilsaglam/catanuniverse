@@ -80,6 +80,14 @@ public class Player {
         return this.username;
     }
 
+    public int getNbSettlement() {
+        return this.nbSettlement;
+    }
+
+    public int getNbRoad() {
+        return this.nbRoad;
+    }
+
     /**
      * Verify if the given player is valid or not
      *
