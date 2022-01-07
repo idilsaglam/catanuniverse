@@ -177,6 +177,10 @@ public class BoardPane extends JPanel {
         this.boardSidePane.setNextButton(show);
     }
 
+    /**
+     * Passes to the next player
+     * @throws IOException
+     */
     private void next() throws IOException {
         System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.gameSettings.next();
