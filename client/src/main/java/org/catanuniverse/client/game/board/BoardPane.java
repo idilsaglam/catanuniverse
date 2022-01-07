@@ -128,7 +128,11 @@ public class BoardPane extends JPanel {
             }
             return false;
         });
-        this.bottomStatusPane = new BottomStatusBar(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex());
+        this.bottomStatusPane = new BottomStatusBar(
+            this.gameSettings.getCurrentPlayer(),
+            this.gameSettings.getCurrentPlayerIndex(),
+            this::next
+        );
         this.initPanes(size);
     }
 

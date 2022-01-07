@@ -39,7 +39,9 @@ class BoardSidePane extends JPanel {
         this.add(cardPanel.stockButton());
         this.add(cardPanel.useButton());
 
+
     }
+
 
 
 

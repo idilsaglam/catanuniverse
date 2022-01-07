@@ -5,7 +5,9 @@
 */
 package org.catanuniverse.core.utils;
 
+import java.io.IOException;
+
 @FunctionalInterface
 public interface EmptyCallback {
-    public void call();
+    public void call() throws IOException;
 }

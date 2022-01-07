@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -217,7 +218,11 @@ class PlayersInputContainer extends JPanel {
                     new FocusListener() {
                         @Override
                         public void focusGained(FocusEvent e) {
-                            PlayerInputContainer.this.onFocusGained.call();
+                            try {
+                                PlayerInputContainer.this.onFocusGained.call();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
                         }
 
                         @Override
