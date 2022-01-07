@@ -1,6 +1,6 @@
 package org.catanuniverse.client.game.board;
 
-import java.util.function.Consumer;
+import java.awt.event.ActionEvent;
 import java.util.function.Predicate;
 import javax.swing.*;
 import java.awt.*;
@@ -15,57 +15,47 @@ class Dice extends JPanel {
     private int dice2 = 1;
     private JButton rollBtn = null;
     private static final String BUTTON_TEXT = "Roll dice!";
-    private BufferedImage image;
-    private BufferedImage image2;
-    private JLabel imageLabel;
-    private  JLabel imageLabel2;
+    private final BufferedImage diceImage1, diceImage2;
+    private final JLabel diceLabel1, diceLabel2;
+    private final JButton rollButton;
     private final Predicate<Integer> onDiceRolled;
+    private final JPanel diceContainer;
+
     public Dice(Predicate<Integer> onDiceRolled) {
         this.onDiceRolled = onDiceRolled;
-        image = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
-        image2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
 
-        this.setPreferredSize(new Dimension(400, 250));
+        this.diceImage1 = new BufferedImage(100,100, BufferedImage.TYPE_INT_RGB);
+        this.diceImage2 = new BufferedImage(100,100,BufferedImage.TYPE_INT_RGB);
+        this.rollButton = new JButton(Dice.BUTTON_TEXT);
+        this.rollButton.addActionListener((ActionEvent ignore) -> {
+            roll();
+        });
+        this.diceContainer = new JPanel();
+        this.diceContainer.setLayout(new GridLayout(2, 1));
+        GridBagConstraints gbc = new GridBagConstraints();
+        this.setLayout(new GridBagLayout());
 
-        this.setLayout(null);
+        diceLabel1 = new JLabel(new ImageIcon(diceImage1));
+        diceLabel2 = new JLabel(new ImageIcon(diceImage2));
 
-        imageLabel = new JLabel(new ImageIcon(image));
-        imageLabel.setBounds(200,100, 100,100);
-        this.add(imageLabel);
+        this.diceContainer.add(diceLabel1);
+        this.diceContainer.add(diceLabel2);
 
-        imageLabel2 = new JLabel(new ImageIcon(image2));
-        imageLabel2.setBounds(100,100,100,100);
-        this.add(imageLabel2);
-        this.add(getRollBtn());
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        this.add(diceContainer, gbc);
+        gbc.gridy++;
+        this.add(this.rollButton, gbc);
         displayDie();
         displayDie2();
     }
 
 
-    private JButton getRollBtn() {
-
-        if (rollBtn == null) {
-            rollBtn = new JButton();
-            rollBtn.setBounds(new Rectangle(105, 208, 114, 31));
-            rollBtn.setFont(new Font("Verdana", Font.BOLD, 14));
-            rollBtn.setForeground(new Color(153, 153, 0));
-            rollBtn.setMnemonic(KeyEvent.VK_ENTER);
-            rollBtn.setText(Dice.BUTTON_TEXT);
-            rollBtn.addActionListener(new java.awt.event.ActionListener() {
-                public void actionPerformed(java.awt.event.ActionEvent e) {
-                    displayDie2();
-                    displayDie();
-                    roll();
-                }
-            });
-        }
-        return rollBtn;
-    }
 
 
     void displayDie(){
         //dieValueTF.setText(String.valueOf(die1));
-        Graphics g = image.getGraphics();
+        Graphics g = diceImage1.getGraphics();
         try {
             g.setColor(Color.WHITE);
             g.fillRect(0,0, 100,100);
@@ -100,7 +90,7 @@ class Dice extends JPanel {
                     g.fillOval(80,80, 10,10);
                     break;
             }
-            imageLabel.repaint();
+            diceLabel1.repaint();
         } finally {
             g.dispose();
         }
@@ -109,7 +99,7 @@ class Dice extends JPanel {
 
     void displayDie2(){
         //dieValueTF2.setText(String.valueOf(die2));
-        Graphics g = image2.getGraphics();
+        Graphics g = diceImage2.getGraphics();
         try {
             g.setColor(Color.WHITE);
             g.fillRect(0,0, 100,100);
@@ -144,7 +134,7 @@ class Dice extends JPanel {
                     g.fillOval(80,80, 10,10);
                     break;
             }
-            imageLabel2.repaint();
+            diceLabel2.repaint();
         } finally {
             g.dispose();
         }
@@ -152,15 +142,14 @@ class Dice extends JPanel {
     }
 
     void roll() {
-            System.out.println("WILL ROLL DICE");
             dice1 = rand.nextInt(6) + 1;
             dice2 = rand.nextInt(6) + 1;
             this.displayDie();
             this.displayDie2();
-            this.imageLabel2.revalidate();
-            this.imageLabel2.repaint();
-            this.imageLabel.revalidate();
-            this.imageLabel.repaint();
+            this.diceLabel2.revalidate();
+            this.diceLabel2.repaint();
+            this.diceLabel1.revalidate();
+            this.diceLabel1.repaint();
             if (this.onDiceRolled != null) {
                 if (this.onDiceRolled.test(dice1 + dice2)) {
                     return;
