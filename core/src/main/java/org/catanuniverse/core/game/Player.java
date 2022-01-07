@@ -131,7 +131,7 @@ public class Player {
      * @return true if user can build a settlement false if not.
      */
     public boolean canBuildSettlement(){
-        return this.nbRoad>0||(canBuildRoad() && this.resources.get(Resource.Corn) >= 1 && this.resources.get(Resource.Wool)>=1);
+        return this.nbSettlement>0 || (canBuildRoad() && this.resources.get(Resource.Corn) >= 1 && this.resources.get(Resource.Wool)>=1);
     }
 
     /**
