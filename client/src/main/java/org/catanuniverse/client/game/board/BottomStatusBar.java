@@ -23,7 +23,6 @@ class BottomStatusBar extends JPanel {
     private CartDeck cartDeck;
     private EmptyCallback onNextButtonClicked;
     public BottomStatusBar(Player currentPlayer, int playerIndex,EmptyCallback e) throws IOException {
-
         this.currentPlayer = currentPlayer;
         this.cartDeck = new CartDeck(this.currentPlayer);
         this.resourceCards = new ArrayList<ResourceCard>();
@@ -34,7 +33,10 @@ class BottomStatusBar extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.5;
-        this.add(porteRadioButtons(), gbc);
+        JPanel formPanel = new JPanel();
+        formPanel.add(porteCheckBox(),gbc);
+        formPanel.add(porteRadioButtons(),gbc);
+        this.add(formPanel, gbc);
         gbc.gridx = 1;
         this.add(this.playerCard, gbc);
         gbc.gridx = 2;
@@ -43,11 +45,29 @@ class BottomStatusBar extends JPanel {
         this.add(cartDeck, gbc);
         gbc.gridx = 4;
         this.add(nextPlayerButton(), gbc);
+        gbc.gridx=5;
+
         this.onNextButtonClicked = e;
 
     }
 
+    public JPanel porteCheckBox(){
+        JPanel f = new JPanel();
+        JCheckBox checkBoxCorn = new JCheckBox("Corn");
+        JCheckBox checkBoxHill = new JCheckBox("Hill");
+        JCheckBox checkBoxFarm = new JCheckBox("Farm");
+        JCheckBox checkBoxMeadow = new JCheckBox("Meadow");
+        JCheckBox checkBoxMountain = new JCheckBox("Mountain");
 
+        f.add(checkBoxCorn);
+        f.add(checkBoxHill);
+        f.add(checkBoxFarm);
+        f.add(checkBoxMeadow);
+        f.add(checkBoxMountain);
+
+        f.setLayout(new GridLayout(0, 1));
+        return f;
+    }
     public JPanel porteRadioButtons(){
 
         JPanel panel = new JPanel();
@@ -57,10 +77,10 @@ class BottomStatusBar extends JPanel {
         JRadioButton jRadioButtonFarm = new JRadioButton();
         JRadioButton jRadioButtonMeadow = new JRadioButton();
         JRadioButton jRadioButtonMountain = new JRadioButton();
-        JRadioButton jRadioButtonHarbor = new JRadioButton();
 
         JButton jButton = new JButton();
         jButton.setText("Harbor");
+
         ButtonGroup g1 = new ButtonGroup();
 
 
