@@ -88,8 +88,6 @@ public class BoardPane extends JPanel {
                         return false;
                     }
                 }
-                // FIXME: Build settlement apply point to next player
-                System.out.println("");
                 try {
                     tile.addSettlement(settlementIndex, new Settlement(this.gameSettings.getCurrentPlayer()));
                 } catch (SlotAlreadyTakenException|NoSuchSlotException ignore) {
@@ -108,7 +106,6 @@ public class BoardPane extends JPanel {
             return false;
         });
         this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
-            // FIXME: Click on two road passes next player
             if (gameSettings.getCurrentPlayer().isAI()) {
                 return false;
             }
