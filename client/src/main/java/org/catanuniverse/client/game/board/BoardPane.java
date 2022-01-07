@@ -7,6 +7,7 @@ package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.HashMap;
 import javax.swing.*;
 
 import org.catanuniverse.commons.GameSettings;
@@ -53,12 +54,14 @@ public class BoardPane extends JPanel {
             this.gameSettings.getCurrentPlayer(),
             this.gameSettings.getCurrentPlayerIndex(),
             this::onNextPlayerButtonPressed,
-            this::onCardUsed
+            this::onCardUsed,
+            this::getHarborsOwnedByCurrentPlayer
         );
         this.initPanes(size);
         this.desactivateRobber();
         this.boardSidePane.disableDice();
     }
+
 
     private void onNextPlayerButtonPressed() throws IOException {
         if (this.gameSettings.isRobberActivated()) return;
@@ -345,4 +348,11 @@ public class BoardPane extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Get the harbors owned by the current user
+     * @return The list of harbors owned by the current user
+     */
+    java.util.List<Harbor> getHarborsOwnedByCurrentPlayer() {
+        return this.gameBoardPane.getBoard().getHarborsOfPlayer(this.gameSettings.getCurrentPlayer());
+    }
 }

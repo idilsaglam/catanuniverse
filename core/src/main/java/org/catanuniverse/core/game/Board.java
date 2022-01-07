@@ -38,7 +38,7 @@ public class Board {
      * @param player The player to check
      * @return Harbor owned by the given player
      */
-    public java.util.List<Harbor> canExchange(Player  player){
+    public java.util.List<Harbor> getHarborsOfPlayer(Player  player){
         // resouces && settlement
         Hextile tile;
         Harbor harbor;
@@ -56,8 +56,10 @@ public class Board {
                 ) {
                     int harborIndex = this.tiles[row][column].getHarborIndex();
                     tile = this.tiles[row][column];
-                    if (tile.getSettlementSlot(harborIndex).getOwner().uid == player.uid ||
-                        tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES).getOwner().uid == player.uid)
+                    if (
+                            (tile.getSettlementSlot(harborIndex) != null &&
+                            tile.getSettlementSlot(harborIndex).getOwner().uid == player.uid) ||
+                            (tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES) != null && tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES).getOwner().uid == player.uid))
                     {
 
                         try {
