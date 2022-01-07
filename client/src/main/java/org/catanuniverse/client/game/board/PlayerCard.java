@@ -19,7 +19,7 @@ import org.catanuniverse.core.game.Achievements;
 import org.catanuniverse.core.game.Player;
 
 class PlayerCard extends JPanel {
-  private final Player player;
+  private Player player;
   private final JLabel avatarLabel;
   private final JLabel username;
   private final int widthPlayer, heightPlayer;
@@ -59,6 +59,7 @@ class PlayerCard extends JPanel {
   }
 
   public void setPlayer(Player p, int i) throws IOException {
+    this.player = p;
     String avatarURL = String.format("/avatar%d.png", i);
     System.out.printf("Avatar URL %s\n", avatarURL);
     BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
@@ -91,7 +92,10 @@ class PlayerCard extends JPanel {
 
     public void updateAchievements() {
       for (Achievements a: Achievements.values()) {
+      System.out.printf("Achievements card update achievements methods called. Username %s Achievement name %s Achievement value %d\n", PlayerCard.this.player.getUsername(), a, PlayerCard.this.player.getAchievement(a));
         this.achievementsJLabelMap.get(a).setText(""+PlayerCard.this.player.getAchievement(a));
+        this.achievementsJLabelMap.get(a).revalidate();
+        this.achievementsJLabelMap.get(a).repaint();
       }
     }
   }
