@@ -236,8 +236,15 @@ public class BoardPane extends JPanel {
             boolean res = r.nextBoolean();
             if(res){
                 this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+                boolean res2 = r.nextBoolean();
+                if(res2){
+                    this.boardSidePane.stockCard();
+                }else{
+                    this.boardSidePane.useCard();
+                }
             }
         }
+        next();
 
     }
 

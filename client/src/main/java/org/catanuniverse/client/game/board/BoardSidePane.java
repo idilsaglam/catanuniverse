@@ -20,11 +20,11 @@ class BoardSidePane extends JPanel {
     private final Consumer<Card> onCardStocked;
     private final Dice dice;
     private final Supplier<Boolean> canCardBeDrawn;
-
+   private final  CardPanel cardPanel;
     public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Card> onCardUsed, Consumer<Card> onCardStocked, Supplier<Boolean> canCardBeDrawn) throws IOException {
         GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
-        CardPanel cardPanel = new CardPanel();
+        cardPanel = new CardPanel();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
@@ -46,6 +46,14 @@ class BoardSidePane extends JPanel {
 
     public void roll(){
         this.dice.roll();
+    }
+
+    public void stockCard(){
+        this.cardPanel.stockCard(null);
+    }
+
+    public void useCard(){
+        this.cardPanel.useCard(null);
     }
 
     public void disableDice() {
