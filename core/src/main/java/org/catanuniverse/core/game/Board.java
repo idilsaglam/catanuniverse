@@ -147,4 +147,16 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Make all playable except for water and desert
+     */
+    public void resetRobber() {
+        for (Hextile[] row: this.tiles) {
+            for (Hextile tile: row) {
+                if ( tile.getGroundType() == GroundType.Water) continue;
+                tile.setPlayable(true);
+            }
+        }
+    }
 }

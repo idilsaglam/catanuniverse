@@ -89,6 +89,7 @@ public final class Hextile extends Tile {
 
     @Override
     public void sendResources() {
+        if (!this.playable) return;
         Resource r = this.getGroundType().produces();
         if (r == null) return;
         for (Settlement s: this.settlementSlots) {

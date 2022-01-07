@@ -168,9 +168,9 @@ class Hexagon extends Polygon {
             }
             if (!this.hextile.getPlayable() && this.hextile.getGroundType() != GroundType.Water) {
                 double r = this.radius/2.;
-                Ellipse2D robber = new Ellipse2D.Double(this.center.x - r/2, this.center.y - r/2, this.radius /2. , this.radius /2.);
+
                 g.setColor(Color.BLACK);
-                g.fill(robber);
+                g.fill(this.getRobberEllipse());
             }
         }
         else g.drawPolygon(xpoints, ypoints, npoints);
@@ -178,6 +178,15 @@ class Hexagon extends Polygon {
         // Set values to previous when done.
         g.setColor(tmpC);
         g.setStroke(tmpS);
+    }
+
+
+    /**
+     * Get the robber ellipse shape
+     * @return The 2D ellipse for robber
+     */
+    Ellipse2D getRobberEllipse() {
+        return new Ellipse2D.Double(this.center.x - this.radius/4., this.center.y - this.radius/4., this.radius /2. , this.radius /2.);
     }
 
     private Polygon getTriangle(int side) {

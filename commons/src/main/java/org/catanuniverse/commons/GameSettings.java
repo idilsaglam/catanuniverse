@@ -15,12 +15,14 @@ public abstract class GameSettings {
     protected Difficulty difficulty;
     protected Player[] players;
     protected int currentPlayerIndex = 0;
+    protected boolean robberActivated;
 
     public GameSettings() {
         this.capacity = -1;
         this.numberOfAI = -1;
         this.difficulty = null;
         this.players = new Player[0];
+        this.robberActivated = false;
     }
 
     public GameSettings(int capacity, int numberOfAI, Difficulty difficulty) {
@@ -266,5 +268,21 @@ public abstract class GameSettings {
      */
     public int getCurrentPlayerIndex() {
         return this.currentPlayerIndex;
+    }
+
+    /**
+     * Update robberActivated value
+     * @param robberActivated the new robber activated
+     */
+    public void setRobberActivated(boolean robberActivated) {
+        this.robberActivated = robberActivated;
+    }
+
+    /**
+     * Return robber activated value
+     * @return If robber activated
+     */
+    public boolean isRobberActivated() {
+        return this.robberActivated;
     }
 }

@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,6 +32,7 @@ class GameBoardPane extends JPanel {
     private FontMetrics metrics;
 
     private BiPredicate<Hextile, Integer> onRoadAdded, onSettlementAdded;
+    private Predicate<Hextile> onRobberMoved;
 
     public GameBoardPane(Dimension size)  {
         this.size = size;
@@ -55,6 +57,14 @@ class GameBoardPane extends JPanel {
         this.onSettlementAdded = onSettlementAdded;
     }
 
+    /**
+     * Updates the onRobberMoved predicate
+     * @param onRobberMoved The new onRobberMoved predicate
+     */
+    void setOnRobberMoved(Predicate<Hextile> onRobberMoved) {
+        this.onRobberMoved = onRobberMoved;
+    }
+
     Board getBoard() {
         return this.board;
     }
@@ -73,9 +83,24 @@ class GameBoardPane extends JPanel {
                 HexagonTile tile = new HexagonTile(x, y, radius, this.board.get(row, column));
                 tile.setOnAddRoadCallback(this::addRoad);
                 tile.setOnAddSettlementCallback(this::addSettlement);
+                tile.setOnRobberMoved(this::onRobberMoved);
                 this.add(tile);
             }
         }
+    }
+
+    /**
+     * Method called when the robber moved
+     * @param hextile The hextile on which the robber moved
+     * @return True if the robber can moved, false if not
+     */
+    private boolean onRobberMoved(Hextile hextile) {
+        if (hextile.getPlayable() && this.onRobberMoved.test(hextile)) {
+            this.board.resetRobber();
+            hextile.setPlayable(false);
+            return true;
+        }
+        return false;
     }
 
     private boolean addRoad(Hextile tile , Integer roadSlot) {
@@ -101,6 +126,7 @@ class GameBoardPane extends JPanel {
      */
     boolean diceRolled(Integer diceResult) {
         if (this.board.isTileExists(diceResult)) {
+            System.out.printf("GameBoardPane diceRolled called with diceResult %d\n", diceResult);
             this.board.sendResourcesToPlayers(diceResult);
             return true;
         }

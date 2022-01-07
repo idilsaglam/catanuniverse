@@ -21,6 +21,8 @@ public class BoardPane extends JPanel {
     private final GameBoardPane gameBoardPane;
     private final BottomStatusBar bottomStatusPane;
     private final BoardSidePane boardSidePane;
+    private final JLabel robberLabel;
+    private final Color defaultBackground;
     /**
      * Creates a BoardPane with given size and configuration
      *
@@ -29,6 +31,11 @@ public class BoardPane extends JPanel {
      */
     public BoardPane(Dimension size, GameSettings gameSettings) throws IOException {
         this.initSizes(size);
+        this.defaultBackground = this.getBackground();
+        this.robberLabel = new JLabel("Robber activated");
+        this.robberLabel.setVisible(false);
+        this.add(this.robberLabel,BorderLayout.AFTER_LAST_LINE);
+
         final Dimension sideSize = new Dimension(size.width, size.height / 8),
                 centerSize = new Dimension(size.width, 3 * size.height / 4);
         this.gameSettings = gameSettings;
@@ -37,7 +44,7 @@ public class BoardPane extends JPanel {
         this.gameBoardPane = new GameBoardPane(centerSize);
         this.boardSidePane = new BoardSidePane((Integer diceValue) -> {
 
-            if(diceValue != null && diceValue== 7){this.thief(); return true;}
+            if(diceValue != null && diceValue== 7){this.activateRobber(); return true;}
 
             System.out.printf("DICE VALUE %d\n", diceValue);
             if (this.gameBoardPane.diceRolled(diceValue)) {
@@ -53,7 +60,18 @@ public class BoardPane extends JPanel {
                 stockedCard.stock(this.gameSettings.getCurrentPlayer());
                 this.updateStatusBars();
             });
+        this.gameBoardPane.setOnRobberMoved((Hextile tile) -> {
+            System.out.printf("Robber moved tile id %d\n", tile.getId());
+            if (this.gameSettings.isRobberActivated() && tile.getPlayable()) {
+                this.gameSettings.setRobberActivated(false);
+                this.desactivateRobber();
+                tile.setPlayable(false);
+                return true;
+            }
+            return false;
+        });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
+            if (this.gameSettings.isRobberActivated()) return false;
             if (this.gameSettings.getCurrentPlayer().isAI()) {
                 return false;
             }
@@ -96,6 +114,7 @@ public class BoardPane extends JPanel {
             return false;
         });
         this.gameBoardPane.setOnRoadAdded((Hextile tile, Integer roadIndex) -> {
+            if (this.gameSettings.isRobberActivated()) return false;
             if (gameSettings.getCurrentPlayer().isAI()) {
                 // TODO: Make AI play
                 return false;
@@ -196,10 +215,18 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane.updateUserCards();
     }
 
+    private void desactivateRobber() {
+        this.setBackground(this.defaultBackground);
+        this.robberLabel.setVisible(false);
+    }
 
-    public void thief(){
+    /**
+     * Activate robber mode
+     */
+    private void activateRobber(){
         this.setBackground(Color.RED);
-        this.add(new Label("Il y a une voleur!!!"),BorderLayout.AFTER_LAST_LINE);
+        this.gameSettings.setRobberActivated(true);
+        this.robberLabel.setVisible(true);
         int nbCardsForThief;
         for(int i=0; i<gameSettings.getPlayers().length; i++){
             if (gameSettings.getPlayers()[i].getRessourceNumber() <= 7) {

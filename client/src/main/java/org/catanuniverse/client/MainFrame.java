@@ -58,10 +58,11 @@ public class MainFrame extends JFrame {
     private void maximise() {
         // Get the current screen size
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int w = 2560, h = 1600;
         // Update the position. The position should be top left corner of the screen
-        this.position = new Point(0, 0);
+        this.position = new Point((screenSize.width - w) / 2, (screenSize.height - h) /2);
         // The frame size should be the screen size
-        this.size = screenSize;
+        this.size = new Dimension(w,h);
         // Update the bounds of the current frame
         super.setBounds(this.position.x, this.position.y, this.size.width, this.size.height);
         // Update the minimum frame size

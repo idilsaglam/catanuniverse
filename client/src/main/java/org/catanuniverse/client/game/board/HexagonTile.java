@@ -5,15 +5,13 @@
 */
 package org.catanuniverse.client.game.board;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.Ellipse2D;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 import javax.swing.JPanel;
 import org.catanuniverse.core.game.GroundType;
@@ -25,7 +23,7 @@ class HexagonTile extends JPanel implements MouseListener {
     private final Hexagon hexagon;
     private FontMetrics metrics;
     private BiPredicate<Hextile, Integer> onAddSettlement, onAddRoad;
-
+    private Predicate<Hextile> onRobberMoved;
     public HexagonTile(int x, int y, int radius, Hextile tile) {
         final double r3 = Math.sqrt(3);
         this.setOpaque(false);
@@ -40,6 +38,14 @@ class HexagonTile extends JPanel implements MouseListener {
 
     public void setOnAddSettlementCallback(BiPredicate<Hextile,Integer> onAddSettlement) {
         this.onAddSettlement = onAddSettlement;
+    }
+
+    /**
+     * Updates the onRobberMoved predicate
+     * @param onRobberMoved The nex onRobberMoved predicate function
+     */
+    public void setOnRobberMoved(Predicate<Hextile> onRobberMoved) {
+        this.onRobberMoved = onRobberMoved;
     }
 
     public void setOnAddRoadCallback(BiPredicate<Hextile, Integer> onAddRoad) {
@@ -71,8 +77,22 @@ class HexagonTile extends JPanel implements MouseListener {
         // this.revalidate();
     }
 
+    /**
+     * Checks if clicked in the robber zone
+     * @param clickPoint The clicked point
+     * @return True if clicked inside the robber ellipse
+     */
+    private boolean isCenterClick(Point clickPoint) {
+        return this.hexagon.getRobberEllipse().contains(clickPoint);
+    }
+
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (this.isCenterClick(e.getPoint())) {
+            if (this.onRobberMoved != null && this.onRobberMoved.test(this.hexagon.getHextile())) {
+                return;
+            }
+        }
         Integer cornerIndex = this.hexagon.getCornerFromPoint(e.getPoint()),
             sideIndex = this.hexagon.getSideFromPoint(e.getPoint());
         boolean updated =
