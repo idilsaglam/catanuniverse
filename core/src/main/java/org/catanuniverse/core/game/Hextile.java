@@ -10,7 +10,7 @@ import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 
 public final class Hextile extends Tile {
 
-    private static final int NB_SIDES = 6;
+    public static final int NB_SIDES = 6;
 
     /**
      * Create a new instance of Tile object

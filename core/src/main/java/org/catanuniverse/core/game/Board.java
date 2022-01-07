@@ -32,6 +32,49 @@ public class Board {
         this.initNeighbors();
     }
 
+    public Harbor canExchange(Player player){
+        // resouces && settlement
+        Hextile tile;
+        Harbor harbor;
+        Resource harborResource;
+        for (int row = 0; row < this.tiles.length; row++) {
+            for (int column = 0; column<this.tiles[row].length; column++) {
+                if (
+                    (
+                        (row == 1) ||
+                        (row == this.tiles.length - 2) ||
+                        (column == 0) ||
+                        (column == this.tiles[row].length - 2)
+                    ) && this.tiles[row][column].hasHarbor()
+                ) {
+                    int harborIndex = this.tiles[row][column].getHarborIndex();
+                    tile = this.tiles[row][column];
+                    if (tile.getSettlementSlot(harborIndex).getOwner().uid == player.uid ||
+                        tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES).getOwner().uid == player.uid)
+                    {
+
+                        try {
+                            harbor = tile.getHarbor(tile.getHarborIndex());
+                            harborResource = harbor.getResource();
+                            if (harborResource == null) {
+                                if (player.getAchievement(Achievements.RECARD) >= harbor.getCoeff()) {
+                                    return harbor;
+                                }
+                            } else {
+                                if (player.getResource(harborResource) >= harbor.getCoeff()) {
+                                    return harbor;
+                                }
+                            }
+                        } catch (NoSuchSlotException ignore) {
+                        }
+
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Get the hextile in a specific row and column
      *
