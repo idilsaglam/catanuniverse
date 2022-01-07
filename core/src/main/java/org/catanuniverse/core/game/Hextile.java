@@ -98,9 +98,28 @@ public final class Hextile extends Tile {
         }
     }
 
+
+
+
+
     @Override
     public boolean canAddSettlement(int index) throws NoSuchSlotException {
-        return this.playable(new int[]{index, (index + this.neighbors.length - 1) % this.neighbors.length});
+        if(this.playable(new int[]{index, (index + this.neighbors.length - 1) % this.neighbors.length})) {
+            System.out.println("Playable");
+            boolean result = this.hasSettlementsOnBothSidesIntersection(index);
+            System.out.printf("Both sides safe %b\n", result);
+            if (!result) return false;
+            int compIndex = complementaryIndex(index);
+            result = this.neighbors[index].hasSettlementsOnBothSidesIntersection((compIndex + 1) % this.neighbors.length);
+            System.out.printf("Both sides safe at neighbor index %d %b\n", index, result);
+            if (!result) return false;
+            index = (index + this.neighbors.length - 1) % this.neighbors.length;
+            compIndex = complementaryIndex(index);
+            result = this.neighbors[compIndex].hasSettlementsOnBothSidesIntersection(index);
+            System.out.printf("Both sides safe at neighbor index %d %b\n", index, result);
+            return result;
+        }
+        return false;
     }
 
 }

@@ -414,4 +414,8 @@ abstract class Tile {
     public boolean canAddRoad(Integer roadIndex) {
         return (this.roadSlots[roadIndex] == null) && (this.getGroundType() != GroundType.Water) || (this.neighbors[roadIndex] != null && this.neighbors[roadIndex].getGroundType() != GroundType.Water);
     }
+
+    protected boolean hasSettlementsOnBothSidesIntersection(int cornerIndex) {
+        return this.settlementSlots[cornerIndex] == null && this.settlementSlots[(cornerIndex + 1) % this.settlementSlots.length] == null && this.settlementSlots[(cornerIndex - 1 + this.settlementSlots.length) % this.settlementSlots.length] == null;
+    }
 }
