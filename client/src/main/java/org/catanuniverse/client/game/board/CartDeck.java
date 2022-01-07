@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.function.Consumer;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,9 +16,10 @@ public class CartDeck extends JPanel {
 
   private final HashMap<Card, CardDeckItem> cardsDeckItems= new HashMap<>();
   private Player currentPlayer;
-
-  public CartDeck(Player currentPlayer) throws IOException {
+  private final Consumer<Card> onCardUsed;
+  public CartDeck(Player currentPlayer, Consumer<Card> onCardUsed) throws IOException {
     this.currentPlayer = currentPlayer;
+    this.onCardUsed = onCardUsed;
     CardDeckItem cdi;
     for (Card card: Card.values()) {
         cdi = new CardDeckItem((card));
@@ -67,8 +69,13 @@ public class CartDeck extends JPanel {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-      System.out.println("Clicked on card");
-      System.out.println(this.card);
+      if (CartDeck.this.currentPlayer.getUserCards().get(this.card) == 0) {
+        return;
+      }
+      if (CartDeck.this.onCardUsed == null) {
+        return;
+      }
+     CartDeck.this.onCardUsed.accept(card);
     }
 
     @Override

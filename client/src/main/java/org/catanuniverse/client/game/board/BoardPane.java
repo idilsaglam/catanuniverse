@@ -52,25 +52,28 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane = new BottomStatusBar(
             this.gameSettings.getCurrentPlayer(),
             this.gameSettings.getCurrentPlayerIndex(),
-            () -> {
-                if (this.gameSettings.isRobberActivated()) return;
-                if (
-                    (this.gameSettings.getRoundNumber() == 0) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 1 || this.gameSettings.getCurrentPlayer().getNbRoad() != 1) ||
-                    (this.gameSettings.getRoundNumber() == 1) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 0 || this.gameSettings.getCurrentPlayer().getNbRoad() != 0)
-                ) {
-                    // First two rounds, each user should build a road and a settlement
-                    return;
-                }
-                if (
-                    this.gameSettings.getRoundNumber() > 1 && this.diceValue == null
-                ) return;
-
-                this.next();
-            }
+            this::onNextPlayerButtonPressed,
+            this::onCardUsed
         );
         this.initPanes(size);
         this.desactivateRobber();
         this.boardSidePane.disableDice();
+    }
+
+    private void onNextPlayerButtonPressed() throws IOException {
+        if (this.gameSettings.isRobberActivated()) return;
+        if (
+            (this.gameSettings.getRoundNumber() == 0) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 1 || this.gameSettings.getCurrentPlayer().getNbRoad() != 1) ||
+                (this.gameSettings.getRoundNumber() == 1) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 0 || this.gameSettings.getCurrentPlayer().getNbRoad() != 0)
+        ) {
+            // First two rounds, each user should build a road and a settlement
+            return;
+        }
+        if (
+            this.gameSettings.getRoundNumber() > 1 && this.diceValue == null
+        ) return;
+
+        this.next();
     }
 
     /**

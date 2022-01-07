@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 import javax.swing.*;
+import org.catanuniverse.core.game.Card;
 import org.catanuniverse.core.game.Player;
 import org.catanuniverse.core.game.Resource;
 import org.catanuniverse.core.utils.EmptyCallback;
@@ -22,9 +24,9 @@ class BottomStatusBar extends JPanel {
     private PlayerCard playerCard;
     private CartDeck cartDeck;
     private EmptyCallback onNextButtonClicked;
-    public BottomStatusBar(Player currentPlayer, int playerIndex,EmptyCallback e) throws IOException {
+    public BottomStatusBar(Player currentPlayer, int playerIndex,EmptyCallback onNextButtonPressed, Consumer<Card> onCardUsed) throws IOException {
         this.currentPlayer = currentPlayer;
-        this.cartDeck = new CartDeck(this.currentPlayer);
+        this.cartDeck = new CartDeck(this.currentPlayer, onCardUsed);
         this.resourceCards = new ArrayList<ResourceCard>();
         // TODO: Update grid layout
         GridBagConstraints gbc= new GridBagConstraints();
@@ -47,7 +49,7 @@ class BottomStatusBar extends JPanel {
         this.add(nextPlayerButton(), gbc);
         gbc.gridx=5;
 
-        this.onNextButtonClicked = e;
+        this.onNextButtonClicked = onNextButtonPressed;
 
     }
 
