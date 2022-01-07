@@ -34,7 +34,6 @@ class BottomStatusBar extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.5;
-        this.playerCard.setBackground(Color.ORANGE);
         this.add(porteRadioButtons(), gbc);
         gbc.gridx = 1;
         this.add(this.playerCard, gbc);
@@ -93,7 +92,7 @@ class BottomStatusBar extends JPanel {
         panel.add(jRadioButtonMountain);
         panel.add(jRadioButtonFarm);
         panel.add(jButton);
-        panel.setLayout(new GridLayout(0, 1));
+        panel.setLayout(new GridLayout(0, 2));
         panel.setBackground(Color.red);
         return panel;
 
