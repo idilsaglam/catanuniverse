@@ -212,17 +212,23 @@ public class BoardPane extends JPanel {
             next();
             return;
         }
+        if (this.gameSettings.isRobberActivated()){
 
+        }
         if(this.gameSettings.getCurrentPlayer().canBuildCity()){
             boolean res = r.nextBoolean();
             if(res){
-             this.gameSettings.getCurrentPlayer().buildCity();
+                this.gameBoardPane.getBoard().addCity(this.gameSettings.getCurrentPlayer());
+                this.gameSettings.getCurrentPlayer().buildCity();
+                this.updateStatusBars();
+                return;
             }
         }
 
         if(this.gameSettings.getCurrentPlayer().canBuildRoad()){
             boolean res = r.nextBoolean();
             if(res){
+                this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
                 this.gameSettings.getCurrentPlayer().canBuildRoad();
             }
         }
@@ -255,7 +261,7 @@ public class BoardPane extends JPanel {
      * @param roadIndex The index of the road slot to add
      * @return True if the road can be added
      */
-    private boolean onRoadAdded(Hextile tile, Integer roadIndex)  {
+    private boolean onRoadAdded(Hextile tile, Integer roadIndex) throws IOException {
             if (this.gameSettings.isRobberActivated()) return false;
         if (
             (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbRoad() != 2) |
