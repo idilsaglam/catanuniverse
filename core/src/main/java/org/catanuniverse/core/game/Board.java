@@ -6,6 +6,8 @@
 package org.catanuniverse.core.game;
 
 import java.util.Random;
+import java.util.function.Supplier;
+
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
@@ -71,8 +73,15 @@ public class Board {
                     this.tiles[i][j] = new Hextile(7, GroundType.Desert);
                     continue;
                 }
-                Random r = new Random();
-                this.tiles[i][j] = new Hextile(r.nextInt(12) + 1, groundType);
+                Supplier<Integer> generateLabelId = () -> {
+                    Random r = new Random();
+                    int result;
+                    do {
+                        result = r.nextInt(12) + 1;
+                    } while(result == 7);
+                    return result;
+                };
+                this.tiles[i][j] = new Hextile(generateLabelId.get(), groundType);
 
             }
         }
@@ -129,6 +138,7 @@ public class Board {
      * @param diceResult The number of tile
      */
     public void sendResourcesToPlayers(Integer diceResult) {
+        System.out.printf("Send resource to players method called with %d\n", diceResult);
         for (Hextile[] row : this.tiles) {
             for (Hextile innerTile: row) {
                 if (innerTile.getId() == diceResult && innerTile.playable) {
