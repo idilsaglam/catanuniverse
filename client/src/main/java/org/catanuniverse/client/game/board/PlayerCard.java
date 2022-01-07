@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.catanuniverse.core.game.Achievements;
+import org.catanuniverse.core.game.Card;
 import org.catanuniverse.core.game.Player;
 
 class PlayerCard extends JPanel {
@@ -108,6 +109,7 @@ class PlayerCard extends JPanel {
         this.achievementsJLabelMap.get(a).repaint();
       }
     }
+
   }
 
 

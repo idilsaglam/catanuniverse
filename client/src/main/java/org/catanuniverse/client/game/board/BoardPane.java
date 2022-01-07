@@ -42,20 +42,17 @@ public class BoardPane extends JPanel {
             System.out.printf("DICE VALUE %d\n", diceValue);
             return this.gameBoardPane.diceRolled(diceValue);
         },
-            (Integer cardNumber)->{
-                if(cardNumber == 0){
-                    gameSettings.getCurrentPlayer().updateResource(Resource.Corn,2);
+            (Card usedCard) -> {
+                usedCard.use(this.gameSettings.getCurrentPlayer());
+                try {
+                    this.next();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                if (cardNumber == 1){
-                    gameSettings.getCurrentPlayer().addVictoryPoint(2);
-                }
-                if(cardNumber == 2){
-                    gameSettings.getCurrentPlayer().addVictoryPoint(1);
-                }
-                if(cardNumber == 3){
-                    gameSettings.getCurrentPlayer().updateResource(Resource.Mineral,1);
-                }
-                System.out.println(cardNumber);
+            },
+            (Card stockedCard) -> {
+                stockedCard.stock(this.gameSettings.getCurrentPlayer());
+                this.updateStatusBars();
             });
         this.gameBoardPane.setOnSettlementAdded((Hextile tile, Integer settlementIndex) -> {
             if (this.gameSettings.getCurrentPlayer().isAI()) {
@@ -199,6 +196,7 @@ public class BoardPane extends JPanel {
     private void updateStatusBars() {
         this.bottomStatusPane.updateResources();
         this.topStatusPane.updatePlayerCard();
+        this.bottomStatusPane.updateUserCards();
     }
 
 

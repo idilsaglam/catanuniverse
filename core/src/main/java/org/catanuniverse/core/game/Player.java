@@ -21,6 +21,12 @@ public class Player {
     public final int uid;
     private final boolean ai;
     private int nbSettlement,nbRoad;
+    private HashMap<Card,Integer> userCards;
+
+    public HashMap<Card, Integer> getUserCards() {
+        return userCards;
+    }
+
     /**
      * Create a player with the given username&
      *
@@ -31,7 +37,7 @@ public class Player {
         this.color = Helpers.randomColor();
         this.achievements = new HashMap<>();
         this.resources = new HashMap<>();
-
+        this.userCards = new HashMap<>();
         this.uid = Player.COUNTER++;
         System.out.println("PLAYER UID " + this.uid);
         for (Achievements a: Achievements.values()) {
@@ -39,6 +45,9 @@ public class Player {
         }
         for (Resource r: Resource.values()) {
             this.resources.put(r, Player.DEFAULT_RESOURCE_VALUE);
+        }
+        for (Card card: Card.values()) {
+            this.userCards.put(card, 0);
         }
         this.ai = isAI;
         this.nbRoad = 2;
@@ -229,4 +238,7 @@ public class Player {
         this.achievements.put(Achievements.TROPHY,this.achievements.get(Achievements.TROPHY)+1);
     }
 
+    public void incrementUserCards(Card card, int value) {
+        this.userCards.put(card, this.userCards.get(card) + value);
+    }
 }
