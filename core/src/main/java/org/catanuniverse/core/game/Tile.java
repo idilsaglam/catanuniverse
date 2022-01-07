@@ -411,8 +411,31 @@ abstract class Tile {
      * @param roadIndex The index of the road slot
      * @return True if a road can added to the given slot, or not
      */
-    public boolean canAddRoad(Integer roadIndex) {
-        return (this.roadSlots[roadIndex] == null) && (this.getGroundType() != GroundType.Water) || (this.neighbors[roadIndex] != null && this.neighbors[roadIndex].getGroundType() != GroundType.Water);
+    public boolean canAddRoad(Integer roadIndex, Road road) throws NoSuchSlotException {
+        if ((this.roadSlots[roadIndex] == null) && (this.getGroundType() != GroundType.Water) || (this.neighbors[roadIndex] != null && this.neighbors[roadIndex].getGroundType() != GroundType.Water)) {
+            final int roadPlayerUid = road.getOwner().uid;
+            final int cindex = complementaryIndex(roadIndex);
+            return !(
+                (
+                    this.roadSlots[(roadIndex + 1) % this.roadSlots.length] != null &&
+                        this.roadSlots[(roadIndex + 1) % this.roadSlots.length].getOwner().uid != roadPlayerUid
+                ) ||
+                    (
+                        this.roadSlots[(roadIndex - 1 + this.roadSlots.length) % this.roadSlots.length] != null &&
+                            this.roadSlots[(roadIndex - 1 + this.roadSlots.length) % this.roadSlots.length].getOwner().uid != roadPlayerUid
+                    ) ||
+                    (
+                        this.neighbors[roadIndex].roadSlots[(cindex + 1) % this.neighbors[roadIndex].roadSlots.length] != null &&
+                            this.neighbors[roadIndex].roadSlots[(cindex + 1) % this.neighbors[roadIndex].roadSlots.length].getOwner().uid != roadPlayerUid
+                    ) ||
+                    (
+                        this.neighbors[roadIndex].roadSlots[(cindex - 1 + this.neighbors[roadIndex].roadSlots.length) % this.neighbors[roadIndex].roadSlots.length] != null &&
+                            this.neighbors[roadIndex].roadSlots[(cindex - 1 + this.neighbors[roadIndex].roadSlots.length) % this.neighbors[roadIndex].roadSlots.length].getOwner().uid != roadPlayerUid
+                    )
+            );
+
+        }
+        return false;
     }
 
     protected boolean hasSettlementsOnBothSidesIntersection(int cornerIndex) {

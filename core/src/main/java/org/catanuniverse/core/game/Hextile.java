@@ -110,12 +110,12 @@ public final class Hextile extends Tile {
             System.out.printf("Both sides safe %b\n", result);
             if (!result) return false;
             int compIndex = complementaryIndex(index);
-            result = this.neighbors[index].hasSettlementsOnBothSidesIntersection((compIndex + 1) % this.neighbors.length);
+            result = this.neighbors[index] != null && this.neighbors[index].hasSettlementsOnBothSidesIntersection((compIndex + 1) % this.neighbors.length);
             System.out.printf("Both sides safe at neighbor index %d %b\n", index, result);
             if (!result) return false;
             index = (index + this.neighbors.length - 1) % this.neighbors.length;
             compIndex = complementaryIndex(index);
-            result = this.neighbors[compIndex].hasSettlementsOnBothSidesIntersection(index);
+            result = this.neighbors[compIndex] != null && this.neighbors[compIndex].hasSettlementsOnBothSidesIntersection(index);
             System.out.printf("Both sides safe at neighbor index %d %b\n", index, result);
             return result;
         }
