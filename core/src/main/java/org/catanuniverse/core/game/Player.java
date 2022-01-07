@@ -196,7 +196,7 @@ public class Player {
             this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Corn)-1);
             this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
-            this.achievements.put(Achievements.CARD,this.achievements.get(Achievements.CARD)+1);
+            this.achievements.put(Achievements.DEVCARD,this.achievements.get(Achievements.DEVCARD)+1);
         }
     }
 

@@ -92,7 +92,9 @@ class PlayerCard extends JPanel {
       this.setLayout(new GridBagLayout());
       for (Achievements a: Achievements.values()) {
         this.achievementsJLabelMap.put(a, new JLabel());
-        this.achievementsJLabelImageMap.put(a, new JLabel(new ImageIcon(a.getImage())));
+        JLabel imageLabel = new JLabel(new ImageIcon(a.getImage()));
+        imageLabel.setToolTipText(a.getTooltipText());
+        this.achievementsJLabelImageMap.put(a, imageLabel);
       }
       this.updateAchievements();
       for (Achievements a: Achievements.values()) {

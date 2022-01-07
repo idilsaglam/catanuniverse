@@ -7,9 +7,9 @@ import javax.imageio.ImageIO;
 public enum Achievements {
   // TODO: Change names
   SWORD,
-  CARD,
+  DEVCARD,
   ROAD,
-  WOOD,
+  RECARD,
   TROPHY;
 
   /**
@@ -21,11 +21,26 @@ public enum Achievements {
     System.out.printf("Current achievement %s\n", this.toString());
     return ImageIO.read(this.getClass().getResource(switch (this) {
       case SWORD -> "/sword.png";
-      case CARD -> "/card.png";
-      case WOOD -> "/wood.png";
+      case DEVCARD -> "/card.png";
+      case RECARD -> "/card2.png";
       case ROAD -> "/route.png";
       case TROPHY -> "/winn.png";
     })).getScaledInstance(width, height, hints);
+  }
+
+  /**
+   * Get the tooltip test
+   * @return The tooltip text for the current achievement
+   */
+  public String getTooltipText() {
+    //TODO: Switch case yapip hepsi icin kendi Stringini doncek
+    return switch (this) {
+      case SWORD -> "";
+      case DEVCARD -> "Development card";
+      case ROAD -> "Maximum road ";
+      case RECARD -> "Resources card";
+      case TROPHY -> "Victory point";
+    };
   }
 
   public Image getImage() throws IOException {
