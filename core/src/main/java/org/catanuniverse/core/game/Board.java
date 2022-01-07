@@ -6,6 +6,7 @@
 package org.catanuniverse.core.game;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Supplier;
 
@@ -204,6 +205,36 @@ public class Board {
             for (Hextile tile: row) {
                 if ( tile.getGroundType() == GroundType.Water) continue;
                 tile.setPlayable(true);
+            }
+        }
+    }
+
+    public void addCity(Player p){
+        List<Settlement> settlements;
+        for(int i=0; i< tiles.length; i++){
+           for(int j=0; j<tiles[i].length; j++){
+               for (int settlementSlot = 0; i<Hextile.NB_SIDES; settlementSlot++) {
+                   if (
+                       this.tiles[i][j].getSettlementSlot(settlementSlot) != null &&
+                       this.tiles[i][j].getSettlementSlot(settlementSlot).getOwner().uid == p.uid
+                   ) {
+                       try {
+                           this.tiles[i][j].upgradeSettlement(settlementSlot);
+                           return;
+                       } catch (NoSuchSlotException e) {
+                           e.printStackTrace();
+                       }
+                   }
+               }
+
+           }
+        }
+    }
+
+    public void buildRoad(Player currentPlayer) {
+        for (int i = 0; i<this.tiles.length; i++) {
+            for (j = 0; j<this.tiles[i].length; j++) {
+
             }
         }
     }

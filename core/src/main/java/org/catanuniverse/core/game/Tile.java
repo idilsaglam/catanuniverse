@@ -7,6 +7,7 @@ package org.catanuniverse.core.game;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
@@ -441,4 +442,5 @@ abstract class Tile {
     protected boolean hasSettlementsOnBothSidesIntersection(int cornerIndex) {
         return this.settlementSlots[cornerIndex] == null && this.settlementSlots[(cornerIndex + 1) % this.settlementSlots.length] == null && this.settlementSlots[(cornerIndex - 1 + this.settlementSlots.length) % this.settlementSlots.length] == null;
     }
+
 }

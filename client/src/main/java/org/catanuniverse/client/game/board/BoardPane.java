@@ -7,6 +7,7 @@ package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Random;
 import java.util.HashMap;
 import javax.swing.*;
 
@@ -196,20 +197,78 @@ public class BoardPane extends JPanel {
         return false;
     }
 
+    private void playAI() throws IOException {
+        Random r = new Random();
+
+        if(this.gameSettings.getRoundNumber() != 0 || this.gameSettings.getRoundNumber()!=1 ){
+            boardSidePane.roll();
+        }
+
+        if( !this.gameSettings.getCurrentPlayer().canBuildSettlement() &&
+            !this.gameSettings.getCurrentPlayer().canBuildCity() &&
+            !this.gameSettings.getCurrentPlayer().canBuildRoad() &&
+            !this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()
+        ){
+            next();
+            return;
+        }
+        if (this.gameSettings.isRobberActivated()){
+
+        }
+        if(this.gameSettings.getCurrentPlayer().canBuildCity()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameBoardPane.getBoard().addCity(this.gameSettings.getCurrentPlayer());
+                this.gameSettings.getCurrentPlayer().buildCity();
+                this.updateStatusBars();
+                return;
+            }
+        }
+
+        if(this.gameSettings.getCurrentPlayer().canBuildRoad()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
+                this.gameSettings.getCurrentPlayer().canBuildRoad();
+            }
+        }
+        if(this.gameSettings.getCurrentPlayer().canBuildSettlement()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameSettings.getCurrentPlayer().buildSettlement();
+            }
+        }
+        if(this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()){
+            boolean res = r.nextBoolean();
+            if(res){
+                this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+                boolean res2 = r.nextBoolean();
+                if(res2){
+                    this.boardSidePane.stockCard();
+                }else{
+                    this.boardSidePane.useCard();
+                }
+            }
+        }
+        next();
+
+    }
+
+
     /**
      * Method handles onRoadAdded event
      * @param tile The tile on which the road is added
      * @param roadIndex The index of the road slot to add
      * @return True if the road can be added
      */
-    private boolean onRoadAdded(Hextile tile, Integer roadIndex)  {
+    private boolean onRoadAdded(Hextile tile, Integer roadIndex) throws IOException {
             if (this.gameSettings.isRobberActivated()) return false;
         if (
             (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbRoad() != 2) |
                 (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbRoad() != 1)) return false;
 
         if (gameSettings.getCurrentPlayer().isAI()) {
-                // TODO: Make AI play
+                playAI();
                 return false;
             }
 
@@ -227,6 +286,7 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildRoad();
+                    updateStatusBars();
                     return true;
                 } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
@@ -285,6 +345,13 @@ public class BoardPane extends JPanel {
      */
     private void next() throws IOException {
         this.gameSettings.next();
+        System.out.println(gameSettings.getCurrentPlayer().getUsername());
+        System.out.println(gameSettings.getCurrentPlayer().isAI());
+        if (gameSettings.getCurrentPlayer().isAI()) {
+            playAI();
+            this.next();
+            return;
+        }
         this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
         this.topStatusPane.updatePlayerCard();
         //this.bottomStatusPane.revalidate();
