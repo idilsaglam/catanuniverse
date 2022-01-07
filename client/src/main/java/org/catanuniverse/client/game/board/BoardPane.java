@@ -186,6 +186,7 @@ public class BoardPane extends JPanel {
         this.gameSettings.next();
         System.out.printf("Current player username %s Current player index %d\n", this.gameSettings.getCurrentPlayer().getUsername(), this.gameSettings.getCurrentPlayerIndex());
         this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
+        this.topStatusPane.updatePlayerCard();
         //this.bottomStatusPane.revalidate();
         //this.bottomStatusPane.repaint();
         this.showNextButton(false);
