@@ -61,6 +61,7 @@ class BottomStatusBar extends JPanel {
     public void setCurrentPlayer(Player currentPlayer, int currentPlayerIndex) throws IOException {
         this.currentPlayer = currentPlayer;
         this.playerCard.setPlayer(currentPlayer, currentPlayerIndex);
+        this.updateResources();
         this.playerCard.revalidate();
         this.playerCard.repaint();
     }
@@ -80,6 +81,8 @@ class BottomStatusBar extends JPanel {
 
         private void updateResource() {
             this.countLabel.setText(""+BottomStatusBar.this.currentPlayer.getResource(resource));
+            this.countLabel.revalidate();
+            this.countLabel.repaint();
         }
     }
 
