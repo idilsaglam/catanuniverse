@@ -75,7 +75,7 @@ public class BoardPane extends JPanel {
         if (
             this.gameSettings.getRoundNumber() > 1 && this.diceValue == null
         ) return;
-
+        this.updateStatusBars();
         this.next();
     }
 
