@@ -233,7 +233,7 @@ public class Player {
 
     /**
      * Getter for resources.
-     * @return
+     * @return The resource HashMap
      */
     public HashMap<Resource, Integer> getResources(){
         return this.resources;
