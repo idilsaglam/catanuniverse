@@ -209,6 +209,10 @@ public class Board {
         }
     }
 
+    /**
+     * Add a city on behalf of the given player
+     * @param p The player who adds the city
+     */
     public void addCity(Player p){
         List<Settlement> settlements;
         for(int i=0; i< tiles.length; i++){
