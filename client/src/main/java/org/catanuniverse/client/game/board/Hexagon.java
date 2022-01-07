@@ -165,7 +165,12 @@ class Hexagon extends Polygon {
                 } catch (NoSuchSlotException e) {
                     e.printStackTrace();
                 }
-
+            }
+            if (!this.hextile.getPlayable() && this.hextile.getGroundType() != GroundType.Water) {
+                double r = this.radius/2.;
+                Ellipse2D robber = new Ellipse2D.Double(this.center.x - r/2, this.center.y - r/2, this.radius /2. , this.radius /2.);
+                g.setColor(Color.BLACK);
+                g.fill(robber);
             }
         }
         else g.drawPolygon(xpoints, ypoints, npoints);
