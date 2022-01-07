@@ -40,7 +40,11 @@ public class BoardPane extends JPanel {
             if(diceValue != null && diceValue== 7){this.thief(); return true;}
 
             System.out.printf("DICE VALUE %d\n", diceValue);
-            return this.gameBoardPane.diceRolled(diceValue);
+            if (this.gameBoardPane.diceRolled(diceValue)) {
+                this.updateStatusBars();
+                return true;
+            }
+            return false;
         },
             (Card usedCard) -> {
                 usedCard.use(this.gameSettings.getCurrentPlayer());
