@@ -105,7 +105,7 @@ public class BoardPane extends JPanel {
             if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
 
             if (tile.getRoadSlot(roadIndex) != null) return false;
-
+            if (!tile.canAddRoad(roadIndex)) return false;
             try {
                 tile.addRoad(roadIndex, new Road(this.gameSettings.getCurrentPlayer()));
                 this.revalidate();
