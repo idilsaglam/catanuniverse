@@ -46,8 +46,7 @@ class Dice extends JPanel {
         this.add(diceContainer, gbc);
         gbc.gridy++;
         this.add(this.rollButton, gbc);
-        displayDie();
-        displayDie2();
+        this.reset();
     }
 
 
@@ -152,16 +151,24 @@ class Dice extends JPanel {
             this.diceLabel1.repaint();
             if (this.onDiceRolled != null) {
                 if (this.onDiceRolled.test(dice1 + dice2)) {
+                    this.rollButton.setVisible(false);
+                    this.diceContainer.setVisible(true);
                     return;
                 }
                 roll();
             }
+
     }
 
+    public void setDisabled() {
+        this.rollButton.setVisible(true);
+        this.rollButton.setEnabled(false);
+        this.diceContainer.setVisible(false);
+    }
 
-    public void setNextButton(boolean show) {
-        this.rollBtn.setText(show ? "NEXT": Dice.BUTTON_TEXT);
-        this.rollBtn.revalidate();
-        this.rollBtn.repaint();
+    public void reset() {
+        this.rollButton.setVisible(true);
+        this.rollButton.setEnabled(true);
+        this.diceContainer.setVisible(false);
     }
 }

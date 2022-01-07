@@ -34,7 +34,6 @@ public class BoardPane extends JPanel {
         this.defaultBackground = this.getBackground();
         this.robberLabel = new JLabel("Robber activated");
         this.add(this.robberLabel,BorderLayout.AFTER_LAST_LINE);
-        this.desactivateRobber();
         final Dimension sideSize = new Dimension(size.width, size.height / 8),
                 centerSize = new Dimension(size.width, 3 * size.height / 4);
         this.gameSettings = gameSettings;
@@ -55,6 +54,8 @@ public class BoardPane extends JPanel {
             this::next
         );
         this.initPanes(size);
+        this.desactivateRobber();
+
     }
 
     /**
@@ -241,10 +242,6 @@ public class BoardPane extends JPanel {
         super.setMinimumSize(size);
     }
 
-    private void showNextButton(boolean show) {
-        this.boardSidePane.setNextButton(show);
-    }
-
     /**
      * Passes to the next player
      * @throws IOException
@@ -257,8 +254,9 @@ public class BoardPane extends JPanel {
         this.topStatusPane.updatePlayerCard();
         //this.bottomStatusPane.revalidate();
         //this.bottomStatusPane.repaint();
-        this.showNextButton(false);
-
+        this.boardSidePane.resetDice();
+        this.boardSidePane.revalidate();
+        this.boardSidePane.repaint();
     }
 
     /**
@@ -273,6 +271,7 @@ public class BoardPane extends JPanel {
     private void desactivateRobber() {
         this.setBackground(this.defaultBackground);
         this.robberLabel.setVisible(false);
+        this.boardSidePane.resetDice();
     }
 
     /**
@@ -280,6 +279,7 @@ public class BoardPane extends JPanel {
      */
     private void activateRobber(){
         this.setBackground(Color.RED);
+        this.boardSidePane.disableDice();
         this.gameSettings.setRobberActivated(true);
         this.robberLabel.setVisible(true);
         int nbCardsForThief;

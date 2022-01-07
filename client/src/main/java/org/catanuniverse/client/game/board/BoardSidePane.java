@@ -45,9 +45,12 @@ class BoardSidePane extends JPanel {
     }
 
 
+    public void disableDice() {
+        this.dice.setDisabled();
+    }
 
-    public void setNextButton(boolean show) {
-        this.dice.setNextButton(show);
+    public void resetDice(){
+        this.dice.reset();
     }
 
     private class CardPanel extends JPanel implements MouseListener {
