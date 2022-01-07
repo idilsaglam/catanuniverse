@@ -443,4 +443,22 @@ abstract class Tile {
         return this.settlementSlots[cornerIndex] == null && this.settlementSlots[(cornerIndex + 1) % this.settlementSlots.length] == null && this.settlementSlots[(cornerIndex - 1 + this.settlementSlots.length) % this.settlementSlots.length] == null;
     }
 
+    /**
+     * Get the value of the first eligible road slot to build the given road
+     * @param road The road to build
+     * @return The value of the road slot or null, if any slot is not possible
+     */
+    public Integer getFirstEligibleRoadSlot(Road road) {
+        for (int i = 0; i<this.roadSlots.length; i++) {
+            try {
+                if (this.canAddRoad(i, road)) return i;
+            } catch (NoSuchSlotException ignore) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+
 }
