@@ -303,7 +303,6 @@ public class BoardPane extends JPanel {
     private void desactivateRobber() {
         this.setBackground(this.defaultBackground);
         this.robberLabel.setVisible(false);
-        this.boardSidePane.resetDice();
     }
 
     /**
