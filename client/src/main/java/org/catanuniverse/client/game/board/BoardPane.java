@@ -193,6 +193,14 @@ public class BoardPane extends JPanel {
 
     }
 
+    /**
+     * Updates top and bottom status bars
+     */
+    private void updateStatusBars() {
+        this.bottomStatusPane.updateResources();
+        this.topStatusPane.updatePlayerCard();
+    }
+
 
     public void thief(){
         this.setBackground(Color.RED);
