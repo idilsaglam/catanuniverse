@@ -460,5 +460,10 @@ abstract class Tile {
     }
 
 
-
+    /**
+     * Return the fist eligible settlement slot to build  the given settlement
+     * @param settlement The settlement to build
+     * @return the number of the settlement slot to build the given settlement
+     */
+    public abstract Integer getFirstEligibleSettlementSlot(Settlement settlement);
 }
