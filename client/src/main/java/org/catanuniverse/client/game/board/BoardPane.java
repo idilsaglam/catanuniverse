@@ -216,7 +216,12 @@ public class BoardPane extends JPanel {
             return;
         }
         if (this.gameSettings.isRobberActivated()){
-            // TODO: Play robber
+            this.gameBoardPane.getBoard().randomRobber();
+            this.gameBoardPane.revalidate();
+            this.gameBoardPane.repaint();
+            this.updateStatusBars();
+            this.playAI();
+            return;
         }
         if(this.gameSettings.getCurrentPlayer().canBuildCity()){
             boolean res = r.nextBoolean();
