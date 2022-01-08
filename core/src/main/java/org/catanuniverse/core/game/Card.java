@@ -2,6 +2,7 @@ package org.catanuniverse.core.game;
 
 import java.awt.Image;
 import java.io.IOException;
+import java.time.format.ResolverStyle;
 import javax.imageio.ImageIO;
 
 public enum Card {
@@ -15,29 +16,18 @@ public enum Card {
    * @param p Player
    */
   public void use(Player p) {
-/*    (Integer cardNumber)->{
-      if(cardNumber == 0){
-        gameSettings.getCurrentPlayer().updateResource(Resource.Corn,2);
-      }
-      if (cardNumber == 1){
-        gameSettings.getCurrentPlayer().addVictoryPoint(2);
-      }
-      if(cardNumber == 2){
-        gameSettings.getCurrentPlayer().addVictoryPoint(1);
-      }
-      if(cardNumber == 3){
-        gameSettings.getCurrentPlayer().updateResource(Resource.Mineral,1);
-      }
-      System.out.println(cardNumber);
-    }*/
     switch (this) {
       case BLE2 -> {
+        p.updateResource(Resource.Corn,2);
       }
       case MINERAL1 -> {
+        p.updateResource(Resource.Mineral,1);
       }
       case VP1 -> {
+        p.addVictoryPoint(1);
       }
       case VP2 -> {
+        p.addVictoryPoint(2);
       }
     }
   }
