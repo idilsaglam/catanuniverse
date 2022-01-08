@@ -275,4 +275,35 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Find the robber in the board
+     * @return The Hextile with the robber
+     */
+    private Hextile getRobber() {
+        for (Hextile[] row : this.tiles) {
+            for (Hextile tile: row) {
+                if (!tile.getPlayable() && tile.isNotWater()) {
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Move the robber to a random tile
+     */
+    public void randomRobber() {
+        Hextile initialTile = this.getRobber();
+        Random r = new Random();
+        int i, j;
+        do {
+            i = r.nextInt(this.tiles.length - 2) + 1;
+            j = r.nextInt(this.tiles[i].length - 2) + 1;
+        } while(this.tiles[i][j].playable && this.tiles[i][j].isNotWater());
+        this.tiles[i][j].setPlayable(false);
+        if (initialTile == null) return;
+        initialTile.setPlayable(true);
+    }
 }
