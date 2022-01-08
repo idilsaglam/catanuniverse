@@ -5,9 +5,8 @@
 */
 package org.catanuniverse.client;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import javax.swing.*;
 
@@ -22,6 +21,7 @@ public class MainFrame extends JFrame {
     private final ConfigurationPane configurationPane;
     private Dimension size;
     private Point position;
+    private Rectangle defaultSize;
 
     public MainFrame() {
         this.init();
@@ -51,7 +51,8 @@ public class MainFrame extends JFrame {
         // the maximum size of the screen should not be bigger than the screen size
         super.setMaximumSize(screenSize);
         // Set the JFrame bound with the given position and the given size
-        super.setBounds(this.position.x, this.position.y, this.size.width, this.size.height);
+        defaultSize = new Rectangle(this.position.x, this.position.y, this.size.width, this.size.height);
+        super.setBounds(defaultSize);
     }
 
     /** Maximise the current frame for the entire screen */
@@ -78,7 +79,7 @@ public class MainFrame extends JFrame {
      */
     private void setGameSettings(GameSettings gameSettings) {
         this.gameSettings = gameSettings;
-        // TODO: Start the game in a background thread
+        this.setVisible(false);
         this.maximise();
         this.gameSettings.completePlayers();
         try {
@@ -91,13 +92,23 @@ public class MainFrame extends JFrame {
     /** Load the game board after the configuration */
     private void loadGameBoard() throws IOException {
         if(this.gameSettings instanceof LocalGameSettings) {
+            JWindow window = new JWindow();
+            //TODO: Add loading picture here or anything here
+            window.setBounds(defaultSize);
+            window.setVisible(true);
             GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings);
+            window.setVisible(false);
+            this.setVisible(true);
+            window.dispose();
             super.setContentPane(gameBoard);
             super.revalidate();
             super.repaint();
             return;
         }
-        // Create a dialog
+
+        JOptionPane.showMessageDialog(this, "Due to time restrictions, this feature is under active development", "Information", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);
+/*        // Create a dialog
         JDialog d = new JDialog(this, "Dialog box");
         // Create a label
         JLabel l = new JLabel("This is a dialog box.");
@@ -106,7 +117,7 @@ public class MainFrame extends JFrame {
         // Set the size of the dialog box
         d.setSize(200, 100);
         // Set the visibility of the dialog box
-        d.setVisible(true);
+        d.setVisible(true);*/
     }
 
     /**
