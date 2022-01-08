@@ -55,6 +55,10 @@ public class Exchange extends JTabbedPane {
     this.repaint();
   }
 
+  /**
+   * Add new harbor pane to the current JTabPane
+   * @param harbor The harbor which will be used for creating the tab
+   */
   private void addNewPane(Harbor harbor) {
     Supplier<HashMap<Resource, Integer>> genereateResources = () -> {
       if (harbor.getResource() == null) {
@@ -77,6 +81,10 @@ public class Exchange extends JTabbedPane {
   }
 
 
+  /**
+   * Update harbors
+   * @param harbors The new harbors to update
+   */
   public void updateHarbors(Set<Harbor> harbors) {
     this.harbors = harbors;
     // TODO: Update tab panels
