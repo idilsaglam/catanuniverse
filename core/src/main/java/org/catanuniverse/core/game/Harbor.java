@@ -61,4 +61,11 @@ public class Harbor {
         Random r = new Random();
         return new Harbor(Resource.random(), r.nextInt(3) + 1);
     }
+
+    @Override
+    public String toString() {
+        return (this.isSpecialised() ?
+                String.format("Harbor resource type %s with exchange rate %d:1", this.getResource(), this.getCoeff())
+        : String.format("harbor generic with an exchange rate %d:1", this.getCoeff()));
+    }
 }
