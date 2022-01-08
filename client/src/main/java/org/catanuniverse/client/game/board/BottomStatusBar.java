@@ -30,7 +30,7 @@ class BottomStatusBar extends JPanel {
     private java.util.List<ResourceCard> resourceCards;
     private PlayerCard playerCard;
     private CartDeck cartDeck;
-    private EmptyCallback onNextButtonClicked;
+    private EmptyCallback onNextButtonClicked, onExchangeCompleted;
     private final Supplier<Set<Harbor>> getCurrentPlayerHarbors;
     private Exchange exchangePanel;
     private Set<Harbor> harbors;
@@ -39,8 +39,10 @@ class BottomStatusBar extends JPanel {
             int playerIndex,
             EmptyCallback onNextButtonPressed,
             Consumer<Card> onCardUsed,
-            Supplier<Set<Harbor>> harborSupplier
+            Supplier<Set<Harbor>> harborSupplier,
+            EmptyCallback onExchangeCompleted
     ) throws IOException {
+        this.onExchangeCompleted = onExchangeCompleted;
         this.harbors = harborSupplier.get();
         this.getCurrentPlayerHarbors = harborSupplier;
         this.currentPlayer = currentPlayer;
@@ -53,15 +55,9 @@ class BottomStatusBar extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.25;
-        this.exchangePanel = new Exchange((
-                HashMap<Resource, Integer> resourcesToExchange,
-                AbstractMap.Entry<Resource,Integer> resourceToReceive) -> {
-                    // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
-                },
-                // TODO: HARBOR LAZIM
+        this.exchangePanel = new Exchange(this::onExchangeConfirmed,
                 this.currentPlayer.getResources(),
-                this.harbors,
-                3
+                this.harbors
         );
         this.add(this.exchangePanel, gbc);
         gbc.gridx = 1;
@@ -78,7 +74,24 @@ class BottomStatusBar extends JPanel {
     }
 
 
-
+    /**
+     * Handles the exchange confirmation event from exchange form
+     * @param resourcesToExchange The hash map of resources that current user will lose
+     * @param resourceToReceive The resource type and the resource value that current user receives
+     */
+    private void onExchangeConfirmed (
+            HashMap<Resource, Integer> resourcesToExchange,
+            AbstractMap.Entry<Resource,Integer> resourceToReceive) {
+        // Current user will lose resources in the hashmap
+        for (Map.Entry<Resource, Integer> e: resourcesToExchange.entrySet()) {
+            this.currentPlayer.updateResource(e.getKey(), -1 * e.getValue());
+        }
+        // Current user will receive resource and value from Entry
+        this.currentPlayer.updateResource(resourceToReceive.getKey(), resourceToReceive.getValue());
+        try {
+            this.onExchangeCompleted.call();
+        } catch (IOException ignore) {}
+    }
 
 
     public JButton nextPlayerButton(){
