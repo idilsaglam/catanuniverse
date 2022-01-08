@@ -291,7 +291,6 @@ public class Player {
 
     /**
      * Runs an exchange operation
-     * @param resourcesToGive An array of resource types to give for the exchange
      * @param resourceToReceive The resource type will be received after exchange
      * @param exchangeRate The rate of the exchange
      */

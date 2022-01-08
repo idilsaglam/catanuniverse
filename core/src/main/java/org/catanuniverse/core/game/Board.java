@@ -245,8 +245,7 @@ public class Board {
                 if (roadSlot == null) continue;
                 try {
                     hextile.addRoad(roadSlot, roadToAdd);
-                } catch (SlotAlreadyTakenException | NoSuchSlotException e) {
-                    e.printStackTrace();
+                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     continue;
                 }
                 return;

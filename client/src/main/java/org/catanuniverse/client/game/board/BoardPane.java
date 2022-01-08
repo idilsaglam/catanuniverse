@@ -93,7 +93,15 @@ public class BoardPane extends JPanel {
         if (this.gameSettings.getRoundNumber() <= 1) return false;
         if (this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard() && !this.gameSettings.isRobberActivated()) {
             // A card can be drawn if the current player has enough resources to draw the card and the robber is not activated
+            System.out.printf("Before buying development card. Wood %d Corn %d Mineral %d\n",
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Wood),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Corn),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Mineral));
             this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+            System.out.printf("After buying development card. Wood %d Corn %d Mineral %d\n",
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Wood),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Corn),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Mineral));
             this.updateStatusBars();
             return true;
         }
@@ -210,9 +218,25 @@ public class BoardPane extends JPanel {
      */
     private void playAI() throws IOException {
         Random r = new Random();
-
-        if(this.gameSettings.getRoundNumber() != 0 || this.gameSettings.getRoundNumber()!=1 ){
+        System.out.println("AI is playing");
+        System.out.println(this.gameSettings.getRoundNumber());
+        // TODO: Check if the roll button is present
+        if(this.gameSettings.getRoundNumber() > 1 ){
+            System.out.println("Will roll the dice");
             boardSidePane.roll();
+        }
+
+        if (this.gameSettings.getRoundNumber() < 2) {
+            this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
+            this.gameSettings.getCurrentPlayer().buildRoad();
+            this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
+            this.gameBoardPane.revalidate();
+            this.gameBoardPane.repaint();
+            this.gameSettings.getCurrentPlayer().buildSettlement();
+            this.next();
+            this.revalidate();
+            this.repaint();
+            return;
         }
 
         if( !this.gameSettings.getCurrentPlayer().canBuildSettlement() &&
@@ -220,10 +244,12 @@ public class BoardPane extends JPanel {
             !this.gameSettings.getCurrentPlayer().canBuildRoad() &&
             !this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()
         ){
+            System.out.println("Can do nothing here. Pass the next");
             next();
             return;
         }
         if (this.gameSettings.isRobberActivated()){
+            System.out.println("Play robber");
             this.gameBoardPane.getBoard().randomRobber();
             this.gameBoardPane.revalidate();
             this.gameBoardPane.repaint();
@@ -232,6 +258,7 @@ public class BoardPane extends JPanel {
             return;
         }
         if(this.gameSettings.getCurrentPlayer().canBuildCity()){
+            System.out.println("Building a CITY");
             boolean res = r.nextBoolean();
             if(res){
                 this.gameBoardPane.getBoard().addCity(this.gameSettings.getCurrentPlayer());
@@ -243,6 +270,7 @@ public class BoardPane extends JPanel {
         }
 
         if(this.gameSettings.getCurrentPlayer().canBuildRoad()){
+            System.out.println("BUILDING A ROAD");
             boolean res = r.nextBoolean();
             if(res){
                 this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
@@ -253,6 +281,7 @@ public class BoardPane extends JPanel {
             }
         }
         if(this.gameSettings.getCurrentPlayer().canBuildSettlement()){
+            System.out.println("BUILDING A SETTLEMENT");
             boolean res = r.nextBoolean();
             if(res){
                 this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
