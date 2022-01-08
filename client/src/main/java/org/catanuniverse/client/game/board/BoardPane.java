@@ -233,7 +233,7 @@ public class BoardPane extends JPanel {
             this.gameBoardPane.revalidate();
             this.gameBoardPane.repaint();
             this.gameSettings.getCurrentPlayer().buildSettlement();
-            this.next();
+            //this.next();
             this.revalidate();
             this.repaint();
             return;
