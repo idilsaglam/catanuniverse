@@ -57,7 +57,8 @@ public class BoardPane extends JPanel {
             this.gameSettings.getCurrentPlayerIndex(),
             this::onNextPlayerButtonPressed,
             this::onCardUsed,
-            this::getHarborsOwnedByCurrentPlayer
+            this::getHarborsOwnedByCurrentPlayer,
+            this::updateStatusBars
         );
         this.initPanes(size);
         this.desactivateRobber();
@@ -65,6 +66,9 @@ public class BoardPane extends JPanel {
     }
 
 
+    /**
+     * Method handles the on next button pressed action
+     */
     private void onNextPlayerButtonPressed() throws IOException {
         if (this.gameSettings.isRobberActivated()) return;
         if (
