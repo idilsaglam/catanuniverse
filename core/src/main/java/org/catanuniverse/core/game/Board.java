@@ -255,4 +255,24 @@ public class Board {
             }
         }
     }
+
+    /**
+     * Make the given player build a settlement to the first eligible place in the board
+     * @param player The player who will build the settlement on the board
+     */
+    public void buildSettlement(Player player) {
+        Settlement settlement = new Settlement(player);
+        for (Hextile[] row: this.tiles) {
+            for (Hextile tile: row) {
+                Integer settlementSlot = tile.getFirstEligibleSettlementSlot(settlement);
+                if (settlementSlot == null) continue;
+                try {
+                    tile.addSettlement(settlementSlot, settlement);
+                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                    continue;
+                }
+                return;
+            }
+        }
+    }
 }
