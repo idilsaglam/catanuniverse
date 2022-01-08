@@ -466,4 +466,28 @@ abstract class Tile {
      * @return the number of the settlement slot to build the given settlement
      */
     public abstract Integer getFirstEligibleSettlementSlot(Settlement settlement);
+
+    /**
+     * Verify if the current tile is water
+     * @return True if the current tile is water, false if not
+     */
+    public boolean isWater() {
+        return this.getGroundType() == GroundType.Water;
+    }
+
+    /**
+     * Verify if the current tile is not a water tile
+     * @return True if the current tile is not a water tile
+     */
+    public boolean isNotWater() {
+        return !isWater();
+    }
+
+    /**
+     * Verify if the current tile is desert
+     * @return True if the current tile is desert, false if not
+     */
+    public boolean isDesert() {
+        return this.getGroundType() == GroundType.Desert;
+    }
 }
