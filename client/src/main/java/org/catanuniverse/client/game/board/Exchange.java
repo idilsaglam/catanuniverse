@@ -37,14 +37,6 @@ public class Exchange extends JTabbedPane {
     this.callback = callback;
     this.update(inputResources, harbors);
     this.coeff = coeff;
-
-    // TODO: Create other panes for harbors
-  }
-
-  private void removeAllTabs() {
-    for (int i = 0; i<this.getTabCount(); i++) {
-      this.removeTabAt(i);
-    }
   }
 
   /**
@@ -53,11 +45,14 @@ public class Exchange extends JTabbedPane {
    * @param harbors The set of harbors of the current user
    */
     public void update(HashMap<Resource, Integer> inputResources, Set<Harbor> harbors) {
-    this.removeAllTabs();
+
+    this.removeAll();
     this.inputResources = inputResources;
     this.harbors = harbors;
     this.addTab("Exchange", new ExchangePane(this.inputResources, this.coeff));
     this.harbors.forEach(this::addNewPane);
+    this.revalidate();
+    this.repaint();
   }
 
   private void addNewPane(Harbor harbor) {
