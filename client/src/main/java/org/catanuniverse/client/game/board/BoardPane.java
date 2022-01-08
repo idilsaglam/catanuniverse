@@ -310,7 +310,6 @@ public class BoardPane extends JPanel {
                 return;
             }
         }
-        this.playAI();
     }
 
 
