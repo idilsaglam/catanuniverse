@@ -90,6 +90,7 @@ public class BoardPane extends JPanel {
         if (this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard() && !this.gameSettings.isRobberActivated()) {
             // A card can be drawn if the current player has enough resources to draw the card and the robber is not activated
             this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+            this.updateStatusBars();
             return true;
         }
         return false;
@@ -180,6 +181,7 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildCity();
+                    this.updateStatusBars();
                     return true;
                 } catch (NoSuchSlotException ignore) {
                     return false;
@@ -298,6 +300,7 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildRoad();
+                    this.updateStatusBars();
                     return true;
                 } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
