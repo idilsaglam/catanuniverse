@@ -249,8 +249,9 @@ public class BoardPane extends JPanel {
         if(this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()){
             boolean res = r.nextBoolean();
             if(res){
-                // TODO: Add draw card function in boardSidePane
-                this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+                this.boardSidePane.drawCard();
+                //TODO: Not sure if it is necessary
+                //this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
                 boolean res2 = r.nextBoolean();
                 if(res2){
                     this.boardSidePane.stockCard();
