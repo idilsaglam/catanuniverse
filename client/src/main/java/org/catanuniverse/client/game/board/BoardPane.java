@@ -224,6 +224,13 @@ public class BoardPane extends JPanel {
         if(this.gameSettings.getRoundNumber() > 1 ){
             System.out.println("Will roll the dice");
             boardSidePane.roll();
+            this.boardSidePane.revalidate();
+            this.boardSidePane.repaint();
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
         if (this.gameSettings.getRoundNumber() < 2) {
@@ -302,8 +309,6 @@ public class BoardPane extends JPanel {
                 }
             }
         }
-        next();
-
     }
 
 

@@ -48,7 +48,12 @@ public enum Card {
    * @return The card corresponding the given index
    */
   public static Card fromInt(int index) {
-    return Card.values()[index];
+    return switch(index) {
+      case 0 -> BLE2;
+      case 1 -> VP2;
+      case 2 -> VP1;
+      default -> MINERAL1;
+    };
   }
 
   public void stock(Player currentPlayer) {
