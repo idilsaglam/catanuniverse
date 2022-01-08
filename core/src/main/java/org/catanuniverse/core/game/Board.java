@@ -5,9 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Supplier;
 
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
@@ -39,12 +37,12 @@ public class Board {
      * @param player The player to check
      * @return Harbor owned by the given player
      */
-    public java.util.List<Harbor> getHarborsOfPlayer(Player  player){
+    public java.util.Set<Harbor> getHarborsOfPlayer(Player  player){
         // resouces && settlement
         Hextile tile;
         Harbor harbor;
         Resource harborResource;
-        java.util.List<Harbor> harbors = new ArrayList<>();
+        Set<Harbor> harbors = new HashSet<>();
         for (int row = 0; row < this.tiles.length; row++) {
             for (int column = 0; column<this.tiles[row].length; column++) {
                 if (
@@ -67,14 +65,10 @@ public class Board {
                             harbor = tile.getHarbor(tile.getHarborIndex());
                             harborResource = harbor.getResource();
                             if (harborResource == null) {
-                                if (player.getAchievement(Achievements.RECARD) >= harbor.getCoeff()) {
-                                    harbors.add(harbor);
+                                 harbors.add(harbor);
                                     continue;
-                                }
                             }
-                            if (player.getResource(harborResource) >= harbor.getCoeff()) {
-                                harbors.add(harbor);
-                            }
+                            harbors.add(harbor);
                         } catch (NoSuchSlotException ignore) {
                         }
 
@@ -213,6 +207,10 @@ public class Board {
         }
     }
 
+    /**
+     * Add a city on behalf of the given player
+     * @param p The player who adds the city
+     */
     public void addCity(Player p){
         List<Settlement> settlements;
         for(int i=0; i< tiles.length; i++){
@@ -235,11 +233,74 @@ public class Board {
         }
     }
 
+    /**
+     * Make build a road to the first eligible slot the given player
+     * @param currentPlayer The player to build the road
+     */
     public void buildRoad(Player currentPlayer) {
-        for (int i = 0; i<this.tiles.length; i++) {
-            for (j = 0; j<this.tiles[i].length; j++) {
-
+        Road roadToAdd = new Road(currentPlayer);
+        for (Hextile[] tile : this.tiles) {
+            for (Hextile hextile : tile) {
+                Integer roadSlot = hextile.getFirstEligibleRoadSlot(roadToAdd);
+                if (roadSlot == null) continue;
+                try {
+                    hextile.addRoad(roadSlot, roadToAdd);
+                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                    continue;
+                }
+                return;
             }
         }
+    }
+
+    /**
+     * Make the given player build a settlement to the first eligible place in the board
+     * @param player The player who will build the settlement on the board
+     */
+    public void buildSettlement(Player player) {
+        Settlement settlement = new Settlement(player);
+        for (Hextile[] row: this.tiles) {
+            for (Hextile tile: row) {
+                Integer settlementSlot = tile.getFirstEligibleSettlementSlot(settlement);
+                if (settlementSlot == null) continue;
+                try {
+                    tile.addSettlement(settlementSlot, settlement);
+                } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
+                    continue;
+                }
+                return;
+            }
+        }
+    }
+
+    /**
+     * Find the robber in the board
+     * @return The Hextile with the robber
+     */
+    private Hextile getRobber() {
+        for (Hextile[] row : this.tiles) {
+            for (Hextile tile: row) {
+                if (!tile.getPlayable() && tile.isNotWater()) {
+                    return tile;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Move the robber to a random tile
+     */
+    public void randomRobber() {
+        Hextile initialTile = this.getRobber();
+        Random r = new Random();
+        int i, j;
+        do {
+            i = r.nextInt(this.tiles.length - 2) + 1;
+            j = r.nextInt(this.tiles[i].length - 2) + 1;
+        } while(this.tiles[i][j].playable && this.tiles[i][j].isNotWater());
+        this.tiles[i][j].setPlayable(false);
+        if (initialTile == null) return;
+        initialTile.setPlayable(true);
     }
 }

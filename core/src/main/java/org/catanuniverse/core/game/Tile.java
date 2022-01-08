@@ -443,4 +443,51 @@ abstract class Tile {
         return this.settlementSlots[cornerIndex] == null && this.settlementSlots[(cornerIndex + 1) % this.settlementSlots.length] == null && this.settlementSlots[(cornerIndex - 1 + this.settlementSlots.length) % this.settlementSlots.length] == null;
     }
 
+    /**
+     * Get the value of the first eligible road slot to build the given road
+     * @param road The road to build
+     * @return The value of the road slot or null, if any slot is not possible
+     */
+    public Integer getFirstEligibleRoadSlot(Road road) {
+        for (int i = 0; i<this.roadSlots.length; i++) {
+            try {
+                if (this.canAddRoad(i, road)) return i;
+            } catch (NoSuchSlotException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Return the fist eligible settlement slot to build  the given settlement
+     * @param settlement The settlement to build
+     * @return the number of the settlement slot to build the given settlement
+     */
+    public abstract Integer getFirstEligibleSettlementSlot(Settlement settlement);
+
+    /**
+     * Verify if the current tile is water
+     * @return True if the current tile is water, false if not
+     */
+    public boolean isWater() {
+        return this.getGroundType() == GroundType.Water;
+    }
+
+    /**
+     * Verify if the current tile is not a water tile
+     * @return True if the current tile is not a water tile
+     */
+    public boolean isNotWater() {
+        return !isWater();
+    }
+
+    /**
+     * Verify if the current tile is desert
+     * @return True if the current tile is desert, false if not
+     */
+    public boolean isDesert() {
+        return this.getGroundType() == GroundType.Desert;
+    }
 }

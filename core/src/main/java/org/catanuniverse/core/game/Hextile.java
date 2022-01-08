@@ -122,4 +122,18 @@ public final class Hextile extends Tile {
         return false;
     }
 
+    @Override
+    public Integer getFirstEligibleSettlementSlot(Settlement settlement) {
+        for (int i = 0; i<this.settlementSlots.length; i++) {
+            try {
+                if (this.canAddSettlement(i)) {
+                    return i;
+                }
+            } catch (NoSuchSlotException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
 }

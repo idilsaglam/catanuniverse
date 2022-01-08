@@ -8,10 +8,10 @@ package org.catanuniverse.client.game.board;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Console;
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -30,17 +30,19 @@ class BottomStatusBar extends JPanel {
     private java.util.List<ResourceCard> resourceCards;
     private PlayerCard playerCard;
     private CartDeck cartDeck;
-    private EmptyCallback onNextButtonClicked;
-    private final Supplier<List<Harbor>> getCurrentPlayerHarbors;
+    private EmptyCallback onNextButtonClicked, onExchangeCompleted;
+    private final Supplier<Set<Harbor>> getCurrentPlayerHarbors;
     private Exchange exchangePanel;
-    private java.util.List<Harbor> harbors;
+    private Set<Harbor> harbors;
     public BottomStatusBar(
             Player currentPlayer,
             int playerIndex,
             EmptyCallback onNextButtonPressed,
             Consumer<Card> onCardUsed,
-            Supplier<java.util.List<Harbor>> harborSupplier
+            Supplier<Set<Harbor>> harborSupplier,
+            EmptyCallback onExchangeCompleted
     ) throws IOException {
+        this.onExchangeCompleted = onExchangeCompleted;
         this.harbors = harborSupplier.get();
         this.getCurrentPlayerHarbors = harborSupplier;
         this.currentPlayer = currentPlayer;
@@ -53,15 +55,9 @@ class BottomStatusBar extends JPanel {
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.25;
-        this.exchangePanel = new Exchange((
-                HashMap<Resource, Integer> resourcesToExchange,
-                AbstractMap.Entry<Resource,Integer> resourceToReceive) -> {
-                    // TODO: BUNU DA CLASSIN ICINE BIR FONKSIYON OLARAK YAZAK
-                },
-                // TODO: HARBOR LAZIM
+        this.exchangePanel = new Exchange(this::onExchangeConfirmed,
                 this.currentPlayer.getResources(),
-                this.harbors,
-                3
+                this.harbors
         );
         this.add(this.exchangePanel, gbc);
         gbc.gridx = 1;
@@ -78,7 +74,24 @@ class BottomStatusBar extends JPanel {
     }
 
 
-
+    /**
+     * Handles the exchange confirmation event from exchange form
+     * @param resourcesToExchange The hash map of resources that current user will lose
+     * @param resourceToReceive The resource type and the resource value that current user receives
+     */
+    private void onExchangeConfirmed (
+            HashMap<Resource, Integer> resourcesToExchange,
+            AbstractMap.Entry<Resource,Integer> resourceToReceive) {
+        // Current user will lose resources in the hashmap
+        for (Map.Entry<Resource, Integer> e: resourcesToExchange.entrySet()) {
+            this.currentPlayer.updateResource(e.getKey(), -1 * e.getValue());
+        }
+        // Current user will receive resource and value from Entry
+        this.currentPlayer.updateResource(resourceToReceive.getKey(), resourceToReceive.getValue());
+        try {
+            this.onExchangeCompleted.call();
+        } catch (IOException ignore) {}
+    }
 
 
     public JButton nextPlayerButton(){
@@ -120,10 +133,18 @@ class BottomStatusBar extends JPanel {
     /**
      * Updates the harbors with the given harbor list supplier
      */
-    public void updateHarbors() {
+    public void updateExchange() {
+        System.out.println("Update exchange method called");
+        System.out.println("Current player username " + this.currentPlayer.getUsername());
         this.harbors = this.getCurrentPlayerHarbors.get();
-        this.exchangePanel.updateHarbors(this.harbors);
+        System.out.println("Number of harbors " + this.harbors.size());
+        this.harbors = this.getCurrentPlayerHarbors.get();
+        System.out.println("Number of harbors after update " + this.harbors);
+        this.exchangePanel.update(this.currentPlayer.getResources(), this.harbors);
+        this.exchangePanel.revalidate();
+        this.exchangePanel.repaint();
     }
+
 
     /**
      * Update the current player with a new one

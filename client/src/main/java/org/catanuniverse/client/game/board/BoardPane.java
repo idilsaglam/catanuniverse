@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.*;
 
 import org.catanuniverse.commons.GameSettings;
@@ -56,7 +57,8 @@ public class BoardPane extends JPanel {
             this.gameSettings.getCurrentPlayerIndex(),
             this::onNextPlayerButtonPressed,
             this::onCardUsed,
-            this::getHarborsOwnedByCurrentPlayer
+            this::getHarborsOwnedByCurrentPlayer,
+            this::updateStatusBars
         );
         this.initPanes(size);
         this.desactivateRobber();
@@ -64,6 +66,9 @@ public class BoardPane extends JPanel {
     }
 
 
+    /**
+     * Method handles the on next button pressed action
+     */
     private void onNextPlayerButtonPressed() throws IOException {
         if (this.gameSettings.isRobberActivated()) return;
         if (
@@ -76,8 +81,8 @@ public class BoardPane extends JPanel {
         if (
             this.gameSettings.getRoundNumber() > 1 && this.diceValue == null
         ) return;
-
         this.next();
+        this.updateStatusBars();
     }
 
     /**
@@ -88,7 +93,16 @@ public class BoardPane extends JPanel {
         if (this.gameSettings.getRoundNumber() <= 1) return false;
         if (this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard() && !this.gameSettings.isRobberActivated()) {
             // A card can be drawn if the current player has enough resources to draw the card and the robber is not activated
+            System.out.printf("Before buying development card. Wood %d Corn %d Mineral %d\n",
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Wood),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Corn),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Mineral));
             this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+            System.out.printf("After buying development card. Wood %d Corn %d Mineral %d\n",
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Wood),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Corn),
+                    this.gameSettings.getCurrentPlayer().getResource(Resource.Mineral));
+            this.updateStatusBars();
             return true;
         }
         return false;
@@ -179,6 +193,7 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildCity();
+                    this.updateStatusBars();
                     return true;
                 } catch (NoSuchSlotException ignore) {
                     return false;
@@ -197,11 +212,31 @@ public class BoardPane extends JPanel {
         return false;
     }
 
+    /**
+     * let the AI play
+     * FIXME: Block the UI thread
+     */
     private void playAI() throws IOException {
         Random r = new Random();
-
-        if(this.gameSettings.getRoundNumber() != 0 || this.gameSettings.getRoundNumber()!=1 ){
+        System.out.println("AI is playing");
+        System.out.println(this.gameSettings.getRoundNumber());
+        // TODO: Check if the roll button is present
+        if(this.gameSettings.getRoundNumber() > 1 ){
+            System.out.println("Will roll the dice");
             boardSidePane.roll();
+        }
+
+        if (this.gameSettings.getRoundNumber() < 2) {
+            this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
+            this.gameSettings.getCurrentPlayer().buildRoad();
+            this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
+            this.gameBoardPane.revalidate();
+            this.gameBoardPane.repaint();
+            this.gameSettings.getCurrentPlayer().buildSettlement();
+            this.next();
+            this.revalidate();
+            this.repaint();
+            return;
         }
 
         if( !this.gameSettings.getCurrentPlayer().canBuildSettlement() &&
@@ -209,39 +244,56 @@ public class BoardPane extends JPanel {
             !this.gameSettings.getCurrentPlayer().canBuildRoad() &&
             !this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()
         ){
+            System.out.println("Can do nothing here. Pass the next");
             next();
             return;
         }
         if (this.gameSettings.isRobberActivated()){
-
+            System.out.println("Play robber");
+            this.gameBoardPane.getBoard().randomRobber();
+            this.gameBoardPane.revalidate();
+            this.gameBoardPane.repaint();
+            this.updateStatusBars();
+            this.playAI();
+            return;
         }
         if(this.gameSettings.getCurrentPlayer().canBuildCity()){
+            System.out.println("Building a CITY");
             boolean res = r.nextBoolean();
             if(res){
                 this.gameBoardPane.getBoard().addCity(this.gameSettings.getCurrentPlayer());
                 this.gameSettings.getCurrentPlayer().buildCity();
                 this.updateStatusBars();
+                this.playAI();
                 return;
             }
         }
 
         if(this.gameSettings.getCurrentPlayer().canBuildRoad()){
+            System.out.println("BUILDING A ROAD");
             boolean res = r.nextBoolean();
             if(res){
                 this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
-                this.gameSettings.getCurrentPlayer().canBuildRoad();
+                this.gameSettings.getCurrentPlayer().buildRoad();
+                this.updateStatusBars();
+                this.playAI();
+                return;
             }
         }
         if(this.gameSettings.getCurrentPlayer().canBuildSettlement()){
+            System.out.println("BUILDING A SETTLEMENT");
             boolean res = r.nextBoolean();
             if(res){
+                this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
                 this.gameSettings.getCurrentPlayer().buildSettlement();
             }
         }
         if(this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()){
             boolean res = r.nextBoolean();
             if(res){
-                this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
+                this.boardSidePane.drawCard();
+                //TODO: Not sure if it is necessary
+                //this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
                 boolean res2 = r.nextBoolean();
                 if(res2){
                     this.boardSidePane.stockCard();
@@ -261,16 +313,11 @@ public class BoardPane extends JPanel {
      * @param roadIndex The index of the road slot to add
      * @return True if the road can be added
      */
-    private boolean onRoadAdded(Hextile tile, Integer roadIndex) throws IOException {
+    private boolean onRoadAdded(Hextile tile, Integer roadIndex) {
             if (this.gameSettings.isRobberActivated()) return false;
         if (
             (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbRoad() != 2) |
                 (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbRoad() != 1)) return false;
-
-        if (gameSettings.getCurrentPlayer().isAI()) {
-                playAI();
-                return false;
-            }
 
             if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
                 Road r = new Road(this.gameSettings.getCurrentPlayer());
@@ -286,7 +333,7 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildRoad();
-                    updateStatusBars();
+                    this.updateStatusBars();
                     return true;
                 } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
@@ -371,6 +418,7 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane.updateResources();
         this.topStatusPane.updatePlayerCard();
         this.bottomStatusPane.updateUserCards();
+        this.bottomStatusPane.updateExchange();
     }
 
     private void desactivateRobber() {
@@ -419,7 +467,12 @@ public class BoardPane extends JPanel {
      * Get the harbors owned by the current user
      * @return The list of harbors owned by the current user
      */
-    java.util.List<Harbor> getHarborsOwnedByCurrentPlayer() {
-        return this.gameBoardPane.getBoard().getHarborsOfPlayer(this.gameSettings.getCurrentPlayer());
+    Set<Harbor> getHarborsOwnedByCurrentPlayer() {
+        Set<Harbor> harbors = this.gameBoardPane.getBoard().getHarborsOfPlayer(this.gameSettings.getCurrentPlayer());
+        System.out.printf("Number of harbors for the current player %d %s\n",
+                harbors.size(),
+                this.gameSettings.getCurrentPlayer().getUsername()
+        );
+        return harbors;
     }
 }

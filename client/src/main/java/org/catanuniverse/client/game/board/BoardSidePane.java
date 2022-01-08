@@ -64,6 +64,10 @@ class BoardSidePane extends JPanel {
         this.dice.reset();
     }
 
+    public void drawCard() {
+        this.cardPanel.mouseClicked(null);
+    }
+
     private class CardPanel extends JPanel implements MouseListener {
         private Card currentCard;
         private final JButton stockButton, useButton;
@@ -139,16 +143,28 @@ class BoardSidePane extends JPanel {
             }
         }
 
+        /**
+         * Method calls the onCardStocked callback method to the drawn card
+         * @param e The action event
+         */
         private void stockCard(ActionEvent e) {
             BoardSidePane.this.onCardStocked.accept(CardPanel.this.currentCard);
             this.resetDrawnCard();
         }
 
+        /**
+         * Method calls the onCardUsed callback method with the drawn card
+         * @param e The action event
+         */
         private void useCard(ActionEvent e) {
             BoardSidePane.this.onCardUsed.accept(CardPanel.this.currentCard);
             CardPanel.this.resetDrawnCard();
         }
 
+        /**
+         * Create the random integer for the card value
+         * @return The integer for the card value
+         */
         private int updateRandomLabel() {
             Random r = new Random();
             return (r.nextInt(4));

@@ -206,10 +206,9 @@ public class Player {
      */
     public void buyDeveloppementCard(){
         if(canBuyDeveloppementCard()){
-            this.resources.put(Resource.Wood,this.resources.get(Resource.Wool)-1);
-            this.resources.put(Resource.Wood,this.resources.get(Resource.Corn)-1);
-            this.resources.put(Resource.Wood,this.resources.get(Resource.Mineral)-1);
-            this.achievements.put(Achievements.DEVCARD,this.achievements.get(Achievements.DEVCARD)+1);
+            this.updateResource(Resource.Wood, -1);
+            this.updateResource(Resource.Corn, -1);
+            this.updateResource(Resource.Mineral, -1);;
         }
     }
 
@@ -292,9 +291,8 @@ public class Player {
 
     /**
      * Runs an exchange operation
-     * @param resourcesToGive An array of resource types to give for the exchange
      * @param resourceToReceive The resource type will be received after exchange
-     * @param exhangeRate The rate of the exchange
+     * @param exchangeRate The rate of the exchange
      */
     public void exchange(HashMap<Resource, Integer> resourcesTable, Resource resourceToReceive, int exchangeRate) {
         // TODO: COMPLETE

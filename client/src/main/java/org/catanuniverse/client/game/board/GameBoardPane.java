@@ -70,6 +70,8 @@ class GameBoardPane extends JPanel {
     }
 
     private void setHexagons(int s, int radius, int padding) {
+        double r3 = Math.sqrt(3);
+
         Point origin = new Point(size.width / 6, 3 * size.height / 8);
         double ang30 = Math.toRadians(30);
         double xOff = Math.cos(ang30) * (radius + padding);
