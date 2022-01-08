@@ -70,6 +70,7 @@ public class BoardPane extends JPanel {
      * Method handles the on next button pressed action
      */
     private void onNextPlayerButtonPressed() throws IOException {
+        System.out.println("Next buttonuna bastilar reis");
         if (this.gameSettings.isRobberActivated()) return;
         if (
             (this.gameSettings.getRoundNumber() == 0) && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 1 || this.gameSettings.getCurrentPlayer().getNbRoad() != 1) ||
@@ -164,14 +165,13 @@ public class BoardPane extends JPanel {
      * @return True if a settlement can be added to the given slot false if not
      */
     private boolean onSettlementAdded(Hextile tile, Integer settlementIndex) {
+        System.out.println("Clicked to add a settlement");
         if (this.gameSettings.isRobberActivated()) return false;
         if (
             (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbSettlement() != 2) |
                 (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbSettlement() != 1)
         ) return false;
-        if (this.gameSettings.getCurrentPlayer().isAI()) {
-            return false;
-        }
+
         try {
             if (!tile.canAddSettlement(settlementIndex)) return false;
         } catch (NoSuchSlotException e) {
@@ -224,9 +224,11 @@ public class BoardPane extends JPanel {
         if(this.gameSettings.getRoundNumber() > 1 ){
             System.out.println("Will roll the dice");
             boardSidePane.roll();
+            return;
         }
 
         if (this.gameSettings.getRoundNumber() < 2) {
+            System.out.println("We are within first two rounds. Will build a road and settlement");
             this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
             this.gameSettings.getCurrentPlayer().buildRoad();
             this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
@@ -245,7 +247,8 @@ public class BoardPane extends JPanel {
             !this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()
         ){
             System.out.println("Can do nothing here. Pass the next");
-            next();
+            System.out.println("NEXT");
+            //next();
             return;
         }
         if (this.gameSettings.isRobberActivated()){
@@ -286,9 +289,12 @@ public class BoardPane extends JPanel {
             if(res){
                 this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
                 this.gameSettings.getCurrentPlayer().buildSettlement();
+                this.playAI();
+                return;
             }
         }
         if(this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()){
+            System.out.println("Player can buy a development card");
             boolean res = r.nextBoolean();
             if(res){
                 this.boardSidePane.drawCard();
@@ -300,10 +306,11 @@ public class BoardPane extends JPanel {
                 }else{
                     this.boardSidePane.useCard();
                 }
+                this.playAI();
+                return;
             }
         }
-        next();
-
+        this.playAI();
     }
 
 
@@ -391,12 +398,20 @@ public class BoardPane extends JPanel {
      * @throws IOException
      */
     private void next() throws IOException {
+        System.out.println("Next called usta");
         this.gameSettings.next();
         System.out.println(gameSettings.getCurrentPlayer().getUsername());
         System.out.println(gameSettings.getCurrentPlayer().isAI());
         if (gameSettings.getCurrentPlayer().isAI()) {
+            System.out.printf("Current username before AI %s\n", this.gameSettings.getCurrentPlayer().getUsername());
             playAI();
-            this.next();
+            System.out.println("BURAYA GELDIK");
+            System.out.println("Update status bars");
+            System.out.printf("Username before updating status bars %s\n", this.gameSettings.getCurrentPlayer().getUsername());
+            this.updateStatusBars();
+            System.out.println(this.gameSettings.getCurrentPlayer().getUsername());
+            //TODO: Burayi unutma
+            //this.next();
             return;
         }
         this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
