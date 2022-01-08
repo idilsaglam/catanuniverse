@@ -123,6 +123,7 @@ class BottomStatusBar extends JPanel {
     public void updateExchange() {
         System.out.println("Update exchange method called");
         System.out.println("Current player username " + this.currentPlayer.getUsername());
+        this.harbors = this.getCurrentPlayerHarbors.get();
         System.out.println("Number of harbors " + this.harbors.size());
         this.harbors = this.getCurrentPlayerHarbors.get();
         System.out.println("Number of harbors after update " + this.harbors);
