@@ -9,6 +9,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Random;
 import java.util.HashMap;
+import java.util.Set;
 import javax.swing.*;
 
 import org.catanuniverse.commons.GameSettings;
@@ -199,6 +200,7 @@ public class BoardPane extends JPanel {
 
     /**
      * let the AI play
+     * FIXME: Block the UI thread
      */
     private void playAI() throws IOException {
         Random r = new Random();
@@ -430,7 +432,12 @@ public class BoardPane extends JPanel {
      * Get the harbors owned by the current user
      * @return The list of harbors owned by the current user
      */
-    java.util.List<Harbor> getHarborsOwnedByCurrentPlayer() {
-        return this.gameBoardPane.getBoard().getHarborsOfPlayer(this.gameSettings.getCurrentPlayer());
+    Set<Harbor> getHarborsOwnedByCurrentPlayer() {
+        Set<Harbor> harbors = this.gameBoardPane.getBoard().getHarborsOfPlayer(this.gameSettings.getCurrentPlayer());
+        System.out.printf("Number of harbors for the current player %d %s\n",
+                harbors.size(),
+                this.gameSettings.getCurrentPlayer().getUsername()
+        );
+        return harbors;
     }
 }

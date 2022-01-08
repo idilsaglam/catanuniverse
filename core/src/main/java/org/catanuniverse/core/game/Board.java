@@ -5,9 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Supplier;
 
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
@@ -39,12 +37,12 @@ public class Board {
      * @param player The player to check
      * @return Harbor owned by the given player
      */
-    public java.util.List<Harbor> getHarborsOfPlayer(Player  player){
+    public java.util.Set<Harbor> getHarborsOfPlayer(Player  player){
         // resouces && settlement
         Hextile tile;
         Harbor harbor;
         Resource harborResource;
-        java.util.List<Harbor> harbors = new ArrayList<>();
+        Set<Harbor> harbors = new HashSet<>();
         for (int row = 0; row < this.tiles.length; row++) {
             for (int column = 0; column<this.tiles[row].length; column++) {
                 if (

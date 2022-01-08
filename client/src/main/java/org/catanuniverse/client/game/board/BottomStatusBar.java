@@ -11,9 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.Console;
 import java.io.IOException;
 import java.sql.SQLOutput;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -33,15 +31,15 @@ class BottomStatusBar extends JPanel {
     private PlayerCard playerCard;
     private CartDeck cartDeck;
     private EmptyCallback onNextButtonClicked;
-    private final Supplier<List<Harbor>> getCurrentPlayerHarbors;
+    private final Supplier<Set<Harbor>> getCurrentPlayerHarbors;
     private Exchange exchangePanel;
-    private java.util.List<Harbor> harbors;
+    private Set<Harbor> harbors;
     public BottomStatusBar(
             Player currentPlayer,
             int playerIndex,
             EmptyCallback onNextButtonPressed,
             Consumer<Card> onCardUsed,
-            Supplier<java.util.List<Harbor>> harborSupplier
+            Supplier<Set<Harbor>> harborSupplier
     ) throws IOException {
         this.harbors = harborSupplier.get();
         this.getCurrentPlayerHarbors = harborSupplier;

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import javax.swing.*;
@@ -21,7 +22,7 @@ public class Exchange extends JTabbedPane {
   private final BiConsumer<HashMap<Resource, Integer>, AbstractMap.Entry<Resource, Integer>> callback;
   private HashMap<Resource, Integer> inputResources;
   private final int coeff;
-  private java.util.List<Harbor> harbors;
+  private Set<Harbor> harbors;
   /**
    * Create an exchange panel with given callback function
    * @param callback The callback methods which will be called when exchange button clicked
@@ -32,7 +33,7 @@ public class Exchange extends JTabbedPane {
   public Exchange(
           BiConsumer<HashMap<Resource, Integer>, AbstractMap.Entry<Resource, Integer>> callback,
           HashMap<Resource, Integer> inputResources,
-          List<Harbor> harbors, int coeff) {
+          Set<Harbor> harbors, int coeff) {
     this.callback = callback;
     this.update(inputResources, harbors);
     this.coeff = coeff;
@@ -46,7 +47,12 @@ public class Exchange extends JTabbedPane {
     }
   }
 
-    public void update(HashMap<Resource, Integer> inputResources, java.util.List<Harbor> harbors) {
+  /**
+   * Updates the inputResources and harbors for the exchange
+   * @param inputResources The hashmap of input resources of the current user
+   * @param harbors The set of harbors of the current user
+   */
+    public void update(HashMap<Resource, Integer> inputResources, Set<Harbor> harbors) {
     this.removeAllTabs();
     this.inputResources = inputResources;
     this.harbors = harbors;
@@ -76,11 +82,7 @@ public class Exchange extends JTabbedPane {
   }
 
 
-
-
-
-
-  public void updateHarbors(List<Harbor> harbors) {
+  public void updateHarbors(Set<Harbor> harbors) {
     this.harbors = harbors;
     // TODO: Update tab panels
   }
