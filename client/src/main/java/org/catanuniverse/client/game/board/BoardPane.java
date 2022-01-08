@@ -197,6 +197,9 @@ public class BoardPane extends JPanel {
         return false;
     }
 
+    /**
+     * let the AI play
+     */
     private void playAI() throws IOException {
         Random r = new Random();
 
@@ -213,7 +216,7 @@ public class BoardPane extends JPanel {
             return;
         }
         if (this.gameSettings.isRobberActivated()){
-
+            // TODO: Play robber
         }
         if(this.gameSettings.getCurrentPlayer().canBuildCity()){
             boolean res = r.nextBoolean();
@@ -221,6 +224,7 @@ public class BoardPane extends JPanel {
                 this.gameBoardPane.getBoard().addCity(this.gameSettings.getCurrentPlayer());
                 this.gameSettings.getCurrentPlayer().buildCity();
                 this.updateStatusBars();
+                this.playAI();
                 return;
             }
         }
@@ -229,18 +233,23 @@ public class BoardPane extends JPanel {
             boolean res = r.nextBoolean();
             if(res){
                 this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
-                this.gameSettings.getCurrentPlayer().canBuildRoad();
+                this.gameSettings.getCurrentPlayer().buildRoad();
+                this.updateStatusBars();
+                this.playAI();
+                return;
             }
         }
         if(this.gameSettings.getCurrentPlayer().canBuildSettlement()){
             boolean res = r.nextBoolean();
             if(res){
+                this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
                 this.gameSettings.getCurrentPlayer().buildSettlement();
             }
         }
         if(this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()){
             boolean res = r.nextBoolean();
             if(res){
+                // TODO: Add draw card function in boardSidePane
                 this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
                 boolean res2 = r.nextBoolean();
                 if(res2){
@@ -261,16 +270,11 @@ public class BoardPane extends JPanel {
      * @param roadIndex The index of the road slot to add
      * @return True if the road can be added
      */
-    private boolean onRoadAdded(Hextile tile, Integer roadIndex) throws IOException {
+    private boolean onRoadAdded(Hextile tile, Integer roadIndex) {
             if (this.gameSettings.isRobberActivated()) return false;
         if (
             (this.gameSettings.getRoundNumber() == 0 && this.gameSettings.getCurrentPlayer().getNbRoad() != 2) |
                 (this.gameSettings.getRoundNumber() == 1 && this.gameSettings.getCurrentPlayer().getNbRoad() != 1)) return false;
-
-        if (gameSettings.getCurrentPlayer().isAI()) {
-                playAI();
-                return false;
-            }
 
             if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
                 Road r = new Road(this.gameSettings.getCurrentPlayer());
