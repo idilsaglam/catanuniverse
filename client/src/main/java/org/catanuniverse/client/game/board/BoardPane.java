@@ -407,11 +407,8 @@ public class BoardPane extends JPanel {
             System.out.println("BURAYA GELDIK");
             System.out.println("Update status bars");
             System.out.printf("Username before updating status bars %s\n", this.gameSettings.getCurrentPlayer().getUsername());
-            this.updateStatusBars();
             System.out.println(this.gameSettings.getCurrentPlayer().getUsername());
-            //TODO: Burayi unutma
-            //this.next();
-            return;
+            this.next();
         }
         this.bottomStatusPane.setCurrentPlayer(this.gameSettings.getCurrentPlayer(), this.gameSettings.getCurrentPlayerIndex()+1);
         this.topStatusPane.updatePlayerCard();
