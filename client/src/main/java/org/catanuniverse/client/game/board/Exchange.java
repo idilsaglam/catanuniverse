@@ -2,10 +2,8 @@ package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.AbstractMap;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 import javax.swing.*;
@@ -21,22 +19,19 @@ public class Exchange extends JTabbedPane {
 
   private final BiConsumer<HashMap<Resource, Integer>, AbstractMap.Entry<Resource, Integer>> callback;
   private HashMap<Resource, Integer> inputResources;
-  private final int coeff;
   private Set<Harbor> harbors;
   /**
    * Create an exchange panel with given callback function
    * @param callback The callback methods which will be called when exchange button clicked
    * @param inputResources The input resource to exchange
    * @param harbors The list of harbors of the current user
-   * @param coeff The exchange rate
    */
   public Exchange(
           BiConsumer<HashMap<Resource, Integer>, AbstractMap.Entry<Resource, Integer>> callback,
           HashMap<Resource, Integer> inputResources,
-          Set<Harbor> harbors, int coeff) {
+          Set<Harbor> harbors) {
     this.callback = callback;
     this.update(inputResources, harbors);
-    this.coeff = coeff;
   }
 
   /**
@@ -49,7 +44,7 @@ public class Exchange extends JTabbedPane {
     this.removeAll();
     this.inputResources = inputResources;
     this.harbors = harbors;
-    this.addTab("Exchange", new ExchangePane(this.inputResources, this.coeff));
+    this.addTab("Exchange", new ExchangePane(this.inputResources, Exchange.DEFAULT_COEFFICIENT));
     this.harbors.forEach(this::addNewPane);
     this.revalidate();
     this.repaint();
@@ -74,8 +69,8 @@ public class Exchange extends JTabbedPane {
                     harbor.getCoeff(),
                     harbor.getResource() == null ? "?" : harbor.getResource()),
             new ExchangePane(
-               genereateResources.get(),
-                harbor.getCoeff()
+                    genereateResources.get(),
+                    harbor.getCoeff()
             )
             );
   }
@@ -98,12 +93,13 @@ public class Exchange extends JTabbedPane {
     private final HashMap<Resource, Integer> inputResources;
     private final int coefficient;
     private final HashMap<Resource, Integer> exchangeOutput;
-
+    private final ButtonGroup resourceToReceiveButtonGroup;
     public ExchangePane(HashMap<Resource, Integer> inputResources, int coefficient) {
       this.inputResources = inputResources;
       this.resourcesToGive = new JPanel();
       this.exchangeOutput = new HashMap<>();
       this.coefficient = coefficient;
+      this.resourceToReceiveButtonGroup = new ButtonGroup();
 
       this.initResourcesToGivePanel();
       this.resourcesToReceive = new JPanel();
@@ -113,6 +109,9 @@ public class Exchange extends JTabbedPane {
 
     }
 
+    /**
+     * Initialise both resources to give and resource to receive as well as the confirmation button
+     */
     private void initPanels() {
       GridBagConstraints gbc = new GridBagConstraints();
       this.setLayout(new GridBagLayout());
@@ -128,11 +127,17 @@ public class Exchange extends JTabbedPane {
     }
 
     /**
-     * Handles the exhange operation
+     * Handles the exchange operation
      * @param ignore The click event
      */
     private void exchange(ActionEvent ignore) {
-      // TODO: Complete
+      int sum = this.exchangeOutput.values().stream().reduce(0, Integer::sum);
+      System.out.printf("Sum of the all exchange output values %d\n", sum);
+      System.out.printf("The coefficient value %d\n", this.coefficient);
+      sum = (int)Math.ceil(sum / (this.coefficient * 1.));
+      System.out.printf("The calculated result %d\n", sum);
+      Resource r = Resource.valueOf(this.resourceToReceiveButtonGroup.getSelection().getActionCommand());
+      Exchange.this.callback.accept(this.exchangeOutput, new AbstractMap.SimpleEntry<>(r, sum));
     }
 
     private void initResourceToReceivePanel() {
@@ -140,12 +145,12 @@ public class Exchange extends JTabbedPane {
       TitledBorder titledBorder = BorderFactory.createTitledBorder("Receive");
       titledBorder.setTitleJustification(TitledBorder.CENTER);
       this.resourcesToReceive.setBorder(titledBorder);
-      ButtonGroup buttonGroup = new ButtonGroup();
       JRadioButton radioButton;
       for (Resource resource : Resource.values()) {
         radioButton = new JRadioButton(resource.toString());
+        radioButton.setActionCommand(resource.toString());
         this.resourcesToReceive.add(radioButton);
-        buttonGroup.add(radioButton);
+        this.resourceToReceiveButtonGroup.add(radioButton);
       }
     }
 
