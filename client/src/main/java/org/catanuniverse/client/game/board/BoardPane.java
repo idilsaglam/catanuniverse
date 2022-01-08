@@ -77,8 +77,8 @@ public class BoardPane extends JPanel {
         if (
             this.gameSettings.getRoundNumber() > 1 && this.diceValue == null
         ) return;
-        this.updateStatusBars();
         this.next();
+        this.updateStatusBars();
     }
 
     /**
@@ -298,7 +298,6 @@ public class BoardPane extends JPanel {
                     this.revalidate();
                     this.repaint();
                     this.gameSettings.getCurrentPlayer().buildRoad();
-                    updateStatusBars();
                     return true;
                 } catch (SlotAlreadyTakenException | NoSuchSlotException ignore) {
                     return false;
