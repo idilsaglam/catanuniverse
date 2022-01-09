@@ -1,28 +1,33 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.commons;
 
 import org.catanuniverse.core.game.Player;
 
 public abstract class GameSettings {
-    public static int DEFAULT_CAPACITY = 4, DEFAULT_NUMBER_OF_AI = 0;
+    public static int DEFAULT_CAPACITY = 4, DEFAULT_NUMBER_OF_AI = 0, DEFAULT_VICTORY_POINTS = 10;
 
     protected int capacity;
     protected int numberOfAI;
     protected Difficulty difficulty;
     protected Player[] players;
+    protected int currentPlayerIndex = 0;
+    protected boolean robberActivated;
+    protected int maxVictoryPoints;
+    private int nextCounter;
 
     public GameSettings() {
         this.capacity = -1;
         this.numberOfAI = -1;
         this.difficulty = null;
         this.players = new Player[0];
+        this.robberActivated = false;
+        this.nextCounter = 0;
+        this.maxVictoryPoints = GameSettings.DEFAULT_VICTORY_POINTS;
     }
 
-    public GameSettings(int capacity, int numberOfAI, Difficulty difficulty) {
+    public GameSettings(int capacity, int numberOfAI, Difficulty difficulty, int maxVictoryPoints) {
         if (numberOfAI >= capacity)
             throw new IllegalArgumentException(
                     "There should be at least one non AI player in the room");
@@ -35,14 +40,30 @@ public abstract class GameSettings {
         this.difficulty = difficulty;
         this.numberOfAI = numberOfAI;
         this.players = new Player[this.capacity];
+        this.robberActivated = false;
+        this.nextCounter = 0;
+        this.maxVictoryPoints = maxVictoryPoints;
     }
 
-    public GameSettings(int capacity) {
-        this(capacity, 0, null);
+    public GameSettings(int capacity, int maxVictoryPoints) {
+        this(capacity, 0, null, maxVictoryPoints);
     }
 
-    public GameSettings(int capacity, int numberOfAI) {
-        this(capacity, numberOfAI, numberOfAI == 0 ? null : Difficulty.EASY);
+    public GameSettings(int capacity, int numberOfAI, int maxVictoryPoints) {
+        this(capacity, numberOfAI, numberOfAI == 0 ? null : Difficulty.EASY, maxVictoryPoints);
+    }
+
+    public void next() {
+        this.nextCounter++;
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+    }
+
+    public int getRoundNumber() {
+        return this.nextCounter / this.capacity;
+    }
+
+    public Player getCurrentPlayer() {
+        return this.players[currentPlayerIndex];
     }
 
     /**
@@ -82,9 +103,9 @@ public abstract class GameSettings {
         this.capacity = capacity;
         Player[] oldPlayers = this.players;
         this.players = new Player[this.capacity];
-        System.out.printf("Capacity %d Requested players number %d old players capacity %d\n", this.capacity, this.getNumberOfRequestedPlayers(), oldPlayers.length);
-        System.arraycopy(oldPlayers, 0, this.players, 0,
-            Math.min(oldPlayers.length, this.players.length));
+
+        System.arraycopy(
+                oldPlayers, 0, this.players, 0, Math.min(oldPlayers.length, this.players.length));
     }
 
     /**
@@ -152,7 +173,7 @@ public abstract class GameSettings {
      * @return True if game settings are valid, false if not
      */
     public boolean isValid() {
-        System.out.printf("Requested players are valid %b\n", this.areRequestedPlayersValid());
+
         return (this.areRequestedPlayersValid() && this.capacity != -1 && this.areAIsValid());
     }
 
@@ -181,7 +202,11 @@ public abstract class GameSettings {
     public GameSettings merge(GameSettings settings) {
         GameSettings result = null;
         if (settings instanceof LocalGameSettings) {
-            result = new LocalGameSettings(settings.getCapacity(), settings.getNumberOfAI());
+            result =
+                    new LocalGameSettings(
+                            settings.getCapacity(),
+                            settings.getNumberOfAI(),
+                            settings.getMaxVictoryPoints());
         }
         if (settings instanceof MultiPlayerHostGameSettings) {
             result =
@@ -209,6 +234,7 @@ public abstract class GameSettings {
 
     public abstract boolean isOnline();
 
+    public abstract void completePlayers();
     /**
      * Verify if requested players are valid
      *
@@ -219,18 +245,12 @@ public abstract class GameSettings {
                 || this.players == null
                 || this.getNumberOfRequestedPlayers() > this.capacity
                 || this.getNumberOfRequestedPlayers() + this.numberOfAI > this.capacity) {
-            System.out.printf(
-                    "Number of requested players %d players null ? %b capacity %d  number of AI"
-                            + " %d\n",
-                    this.getNumberOfRequestedPlayers(),
-                    this.players == null,
-                    this.capacity,
-                    this.numberOfAI);
+
             return false;
         }
         for (Player p : this.players) {
             if (p == null || !p.isValid()) {
-                System.out.println("Found an invalid player");
+
                 return false;
             }
         }
@@ -246,5 +266,59 @@ public abstract class GameSettings {
         return (this.numberOfAI != -1
                 && ((this.numberOfAI == 0 && this.difficulty == null)
                         || (this.numberOfAI > 0 && this.difficulty != null)));
+    }
+
+    /**
+     * Get the current player index
+     *
+     * @return The index of the current player
+     */
+    public int getCurrentPlayerIndex() {
+        return this.currentPlayerIndex;
+    }
+
+    /**
+     * Update robberActivated value
+     *
+     * @param robberActivated the new robber activated
+     */
+    public void setRobberActivated(boolean robberActivated) {
+        this.robberActivated = robberActivated;
+    }
+
+    /**
+     * Return robber activated value
+     *
+     * @return If robber activated
+     */
+    public boolean isRobberActivated() {
+        return this.robberActivated;
+    }
+
+    /**
+     * Changes the maximum victory points of the game room
+     *
+     * @param victoryPoints The maximum victory points
+     */
+    public void setVictoryPoints(Integer victoryPoints) {
+        this.maxVictoryPoints = victoryPoints;
+    }
+
+    /**
+     * Get the number of victory points to win the game
+     *
+     * @return The number of victory points to win the game
+     */
+    public int getMaxVictoryPoints() {
+        return this.maxVictoryPoints;
+    }
+
+    /**
+     * Check if the game ends or not
+     *
+     * @return True if the current player has more than maxVictoryPoints
+     */
+    public boolean isGameEnd() {
+        return this.players[this.currentPlayerIndex].getVictoryPoint() >= this.maxVictoryPoints;
     }
 }

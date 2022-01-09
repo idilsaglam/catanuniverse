@@ -1,12 +1,12 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.core.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
@@ -21,6 +21,7 @@ abstract class Tile {
     protected final Road[] roadSlots;
     protected final Harbor[] harbors;
     protected final Settlement[] settlementSlots;
+    protected boolean playable;
 
     /**
      * Create a new instance of Tile object
@@ -43,6 +44,7 @@ abstract class Tile {
         this.roadSlots = new Road[nbSides];
         // Settlement slots are corners, counted from the top on the clockwise
         this.settlementSlots = new Settlement[nbSides];
+        this.playable = this.getGroundType().produces() != null;
     }
 
     /**
@@ -52,6 +54,24 @@ abstract class Tile {
      */
     protected Resource produce() {
         return this.resource;
+    }
+
+    /**
+     * Update the playable status of tile
+     *
+     * @param playable The value of playable attribute
+     */
+    public void setPlayable(boolean playable) {
+        this.playable = playable;
+    }
+
+    /**
+     * Gets if the current tile is playable or not
+     *
+     * @return True if the current tile is playable false if not
+     */
+    public boolean getPlayable() {
+        return this.playable;
     }
 
     /**
@@ -73,9 +93,28 @@ abstract class Tile {
      * @return The content of the harbor slot
      * @throws NoSuchSlotException If there's not slot matching with the given index
      */
-    protected Harbor getHarbor(int index) throws NoSuchSlotException {
+    public Harbor getHarbor(int index) throws NoSuchSlotException {
         this.isSlotExists(index);
         return this.harbors[index];
+    }
+
+    /**
+     * Checks if the current tile and given neighbours are playable. A tile is not playable if its
+     * ground type and its neighbors ground type are all water.
+     *
+     * @param indexes The array of indexes
+     * @return True if playable false if not
+     * @throws NoSuchSlotException If there's an index which does not exists
+     */
+    boolean playable(int[] indexes) throws NoSuchSlotException {
+        if (this.getGroundType() != GroundType.Water) return true;
+        for (int index : indexes) {
+            if (this.getNeighbor(index) != null
+                    && this.getNeighbor(index).getGroundType() != GroundType.Water) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -103,6 +142,24 @@ abstract class Tile {
     }
 
     /**
+     * Return the resource type
+     *
+     * @return The resource of the tile
+     */
+    protected GroundType getGroundType() {
+        return this.type;
+    }
+
+    /**
+     * Get the id of the tile
+     *
+     * @return the id of the tile
+     */
+    protected int getId() {
+        return this.id;
+    }
+
+    /**
      * Adds a road on the given position if possible
      *
      * @param index The index of the road slot
@@ -110,26 +167,25 @@ abstract class Tile {
      * @throws SlotAlreadyTakenException if the given slot is already occupied by another user
      * @throws NoSuchSlotException If there's no slot for the given index
      */
-    protected void addRoad(int index, Road road)
+    public void addRoad(int index, Road road)
             throws SlotAlreadyTakenException, NoSuchSlotException {
         this.isSlotExists(index);
-        if (this.roadSlots[index] == null) {
-            // We can insert only if the slot is empty
-            this.roadSlots[index] = road;
-            if (this.neighbors[index] == null) {
-                return;
-            }
-            /*
-               Road slots are the same as the neighbor slots
-               when we add road, we need to add the complementary road for our neighbor too
-            */
-            if (this.neighbors[index].roadSlots[this.complementaryIndex(index)] == null) {
-                this.neighbors[index].roadSlots[this.complementaryIndex(index)] = road;
-                return;
+        if (this.playable(new int[] {index})) {
+            if (this.roadSlots[index] == null) {
+                // We can insert only if the slot is empty
+                this.roadSlots[index] = road;
+                int complementaryIndex = this.complementaryIndex(index);
+                /*
+                   Road slots are the same as the neighbor slots
+                   when we add road, we need to add the complementary road for our neighbor too
+                */
+                if (this.neighbors[index].roadSlots[complementaryIndex] == null) {
+                    this.neighbors[index].roadSlots[complementaryIndex] = road;
+                    return;
+                }
             }
             throw new SlotAlreadyTakenException();
         }
-        throw new SlotAlreadyTakenException();
     }
 
     /**
@@ -140,15 +196,47 @@ abstract class Tile {
      * @throws SlotAlreadyTakenException If there's already a settlement on the given slot
      * @throws NoSuchSlotException If there's no slots matching the given index
      */
-    protected void addSettlement(int index, Settlement settlement)
-            throws SlotAlreadyTakenException, NoSuchSlotException {
-        this.isSlotExists(index);
-        if (this.settlementSlots[index] == null) {
+    protected abstract void addSettlement(int index, Settlement settlement)
+            throws SlotAlreadyTakenException, NoSuchSlotException;
+
+    /**
+     * Upgrades the settlement in the given slot to a City
+     *
+     * @param index The index of the settlement slot
+     * @throws NoSuchSlotException There's no slot with the given index
+     */
+    public void upgradeSettlement(int index) throws NoSuchSlotException {
+        if (this.settlementSlots[index] != null && !(this.settlementSlots[index] instanceof City)) {
+            City settlement = new City(this.settlementSlots[index].getOwner());
+            int compIndex = complementaryIndex(index);
             // We can insert only if the slot is null
             this.settlementSlots[index] = settlement;
-            return;
+            if (this.neighbors[index] != null) {
+
+                this.neighbors[index].settlementSlots[(compIndex + 1) % this.neighbors.length] =
+                        settlement;
+            }
+            index = (index + this.neighbors.length - 1) % this.neighbors.length;
+            compIndex = complementaryIndex(index);
+            if (this.neighbors[index] != null) {
+                this.neighbors[index].settlementSlots[compIndex] = settlement;
+            }
         }
-        throw new SlotAlreadyTakenException();
+    }
+
+    /**
+     * Get the index of the nearest neighbor which is not water
+     *
+     * @return The index of nearest neighbor which is not water
+     */
+    public Integer getNearestNeighbor() {
+        for (int i = 0; i < this.neighbors.length; i++) {
+            if (this.neighbors[i] != null
+                    && this.neighbors[i].getGroundType() != GroundType.Water) {
+                return i;
+            }
+        }
+        return null;
     }
 
     /**
@@ -186,16 +274,19 @@ abstract class Tile {
      * @param index The index of the slot
      * @param harbor The harbor object to add
      * @throws NoSuchSlotException If there's no slot matching with the given index
-     * @throws SlotAlreadyTakenException If the slot is not empty
      */
-    protected void addHarbor(int index, Harbor harbor)
-            throws NoSuchSlotException, SlotAlreadyTakenException {
+    protected void addHarbor(int index, Harbor harbor) throws NoSuchSlotException {
         this.isSlotExists(index);
-        if (this.neighbors[index] == null && this.harbors[index] == null) {
+        if ((this.getGroundType() == GroundType.Water
+                        || this.neighbors[index].getGroundType() == GroundType.Water)
+                && (this.neighbors[index] != null && this.harbors[index] == null)) {
             this.harbors[index] = harbor;
-            return;
+            this.neighbors[index].harbors[complementaryIndex(index)] = harbor;
         }
-        throw new SlotAlreadyTakenException();
+    }
+
+    public void addHarbor(Harbor h) throws NoSuchSlotException {
+        this.addHarbor(this.getNearestNeighbor(), h);
     }
 
     /**
@@ -282,9 +373,213 @@ abstract class Tile {
      * @param index The index of the slot
      * @throws NoSuchSlotException If there's no slot matching with the given index
      */
-    private void isSlotExists(int index) throws NoSuchSlotException {
+    void isSlotExists(int index) throws NoSuchSlotException {
         if (index < 0 || index >= this.neighbors.length) {
             throw new NoSuchSlotException();
         }
+    }
+
+    public abstract void sendResources();
+
+    /**
+     * Checks if current tile has harbor or not
+     *
+     * @return True if current tile has harbor or false
+     */
+    public boolean hasHarbor() {
+        for (Harbor h : this.harbors) {
+            if (h == null) continue;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Checks if a settlement can added to the given index of the given tile
+     *
+     * @param index The index of the settlement slot
+     * @return True if a settlement can be added to the given slot false if not
+     */
+    public abstract boolean canAddSettlement(int index) throws NoSuchSlotException;
+
+    /**
+     * Get the harbor index from the current Tile
+     *
+     * @return The index of the harbor or null
+     */
+    public Integer getHarborIndex() {
+        for (int i = 0; i < this.harbors.length; i++) {
+            if (this.harbors[i] == null) continue;
+            return i;
+        }
+        return null;
+    }
+
+    /**
+     * Checks if a road can added with given index or not
+     *
+     * @param roadIndex The index of the road slot
+     * @return True if a road can added to the given slot, or not
+     */
+    public boolean canAddRoad(Integer roadIndex, Road road) throws NoSuchSlotException {
+        if ((this.roadSlots[roadIndex] == null) && (this.getGroundType() != GroundType.Water)
+                || (this.neighbors[roadIndex] != null
+                        && this.neighbors[roadIndex].getGroundType() != GroundType.Water)) {
+            final int roadPlayerUid = road.getOwner().uid;
+            final int cindex = complementaryIndex(roadIndex);
+            return !((this.roadSlots[(roadIndex + 1) % this.roadSlots.length] != null
+                            && this.roadSlots[(roadIndex + 1) % this.roadSlots.length].getOwner()
+                                            .uid
+                                    != roadPlayerUid)
+                    || (this.roadSlots[
+                                            (roadIndex - 1 + this.roadSlots.length)
+                                                    % this.roadSlots.length]
+                                    != null
+                            && this
+                                            .roadSlots[
+                                            (roadIndex - 1 + this.roadSlots.length)
+                                                    % this.roadSlots.length]
+                                            .getOwner()
+                                            .uid
+                                    != roadPlayerUid)
+                    || (this.neighbors[roadIndex]
+                                            .roadSlots[
+                                            (cindex + 1)
+                                                    % this.neighbors[roadIndex].roadSlots.length]
+                                    != null
+                            && this.neighbors[roadIndex]
+                                            .roadSlots[
+                                            (cindex + 1)
+                                                    % this.neighbors[roadIndex].roadSlots.length]
+                                            .getOwner()
+                                            .uid
+                                    != roadPlayerUid)
+                    || (this.neighbors[roadIndex]
+                                            .roadSlots[
+                                            (cindex
+                                                            - 1
+                                                            + this.neighbors[roadIndex]
+                                                                    .roadSlots
+                                                                    .length)
+                                                    % this.neighbors[roadIndex].roadSlots.length]
+                                    != null
+                            && this.neighbors[roadIndex]
+                                            .roadSlots[
+                                            (cindex
+                                                            - 1
+                                                            + this.neighbors[roadIndex]
+                                                                    .roadSlots
+                                                                    .length)
+                                                    % this.neighbors[roadIndex].roadSlots.length]
+                                            .getOwner()
+                                            .uid
+                                    != roadPlayerUid));
+        }
+        return false;
+    }
+
+    protected boolean hasSettlementsOnBothSidesIntersection(int cornerIndex) {
+        return this.settlementSlots[cornerIndex] == null
+                && this.settlementSlots[(cornerIndex + 1) % this.settlementSlots.length] == null
+                && this.settlementSlots[
+                                (cornerIndex - 1 + this.settlementSlots.length)
+                                        % this.settlementSlots.length]
+                        == null;
+    }
+
+    /**
+     * Get the value of the first eligible road slot to build the given road
+     *
+     * @param road The road to build
+     * @return The value of the road slot or null, if any slot is not possible
+     */
+    public Integer getFirstEligibleRoadSlot(Road road) {
+        for (int i = 0; i < this.roadSlots.length; i++) {
+            try {
+                if (this.canAddRoad(i, road)) return i;
+            } catch (NoSuchSlotException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Return the fist eligible settlement slot to build the given settlement
+     *
+     * @param settlement The settlement to build
+     * @return the number of the settlement slot to build the given settlement
+     */
+    public abstract Integer getFirstEligibleSettlementSlot(Settlement settlement);
+
+    /**
+     * Verify if the current tile is water
+     *
+     * @return True if the current tile is water, false if not
+     */
+    public boolean isWater() {
+        return this.getGroundType() == GroundType.Water;
+    }
+
+    /**
+     * Verify if the current tile is not a water tile
+     *
+     * @return True if the current tile is not a water tile
+     */
+    public boolean isNotWater() {
+        return !isWater();
+    }
+
+    /**
+     * Verify if the current tile is desert
+     *
+     * @return True if the current tile is desert, false if not
+     */
+    public boolean isDesert() {
+        return this.getGroundType() == GroundType.Desert;
+    }
+
+    /**
+     * Get the set of road slot indexes that the given player owns
+     *
+     * @param player The player who we are looking for roads
+     * @return The set of indexes that player's roads passes from
+     */
+    public Set<Integer> getRoadIndexesOfPlayer(Player player) {
+        Set<Integer> roadIndexes = new HashSet<>();
+        for (int i = 0; i < this.roadSlots.length; i++) {
+            if (this.roadSlots[i] != null && this.roadSlots[i].getOwner().uid == player.uid) {
+                roadIndexes.add(i);
+            }
+        }
+        return roadIndexes;
+    }
+
+    /**
+     * Get number of roads owned by the current player
+     *
+     * @param player The player who owns the roads
+     * @return Number of roads owned by the given player
+     */
+    public int countPlayerRoads(Player player) {
+        int count = 0;
+        for (Road road : this.roadSlots) {
+            count += (road.getOwner().uid == player.uid ? 1 : 0);
+        }
+        return count;
+    }
+
+    /**
+     * Get set of settlement owners of the current tile
+     *
+     * @return The set of settlements
+     */
+    public Set<Player> getSettlementOwners() {
+        Set<Player> settlementOwners = new HashSet<Player>();
+        for (Settlement settlement : this.settlementSlots) {
+            if (settlement == null) continue;
+            settlementOwners.add(settlement.getOwner());
+        }
+        return settlementOwners;
     }
 }

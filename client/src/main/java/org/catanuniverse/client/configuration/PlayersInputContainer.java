@@ -1,7 +1,5 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration;
 
@@ -9,6 +7,7 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -53,9 +52,7 @@ class PlayersInputContainer extends JPanel {
      * @param numberOfPlayers The number of players to update with
      */
     void setNumberOfPlayers(int numberOfPlayers) {
-        System.out.printf(
-                "Players input container set number of players function called with %d\n",
-                numberOfPlayers);
+
         int old = this.numberOfPlayers;
         int delta = numberOfPlayers - this.numberOfPlayers;
         this.numberOfPlayers = numberOfPlayers;
@@ -81,11 +78,6 @@ class PlayersInputContainer extends JPanel {
                 playerContainerToAdd.setOnFocusGained(playerContainerToAdd::hideErrorMessage);
                 playerContainerToAdd.setOnChanged(
                         (String value) -> {
-                            System.out.printf(
-                                    "Player input container updated with text %s\n", value);
-                            System.out.printf(
-                                    "All player names are unique ? %b\n",
-                                    PlayersInputContainer.this.verifyAllPlayerNamesAreUnique());
                             if (PlayersInputContainer.this.onPlayersUpdated == null) {
                                 return;
                             }
@@ -129,15 +121,14 @@ class PlayersInputContainer extends JPanel {
      */
     boolean arePlayersValid() {
         if (this.numberOfPlayers == 0) {
-            System.out.println("No players to validate in arePlayersValid function");
+
             return false;
         }
         ;
         boolean result = this.players[0].isPlayerValid();
-        System.out.printf("Is first player is valid %b\n", result);
+
         for (int i = 1; i < this.numberOfPlayers && result; i++) {
             result = this.players[i].isPlayerValid();
-            System.out.printf("Player in index %d is valid ? %b\n", i, result);
         }
         return this.verifyAllPlayerNamesAreUnique() && result;
     }
@@ -217,7 +208,11 @@ class PlayersInputContainer extends JPanel {
                     new FocusListener() {
                         @Override
                         public void focusGained(FocusEvent e) {
-                            PlayerInputContainer.this.onFocusGained.call();
+                            try {
+                                PlayerInputContainer.this.onFocusGained.call();
+                            } catch (IOException ioException) {
+                                ioException.printStackTrace();
+                            }
                         }
 
                         @Override
@@ -280,11 +275,7 @@ class PlayersInputContainer extends JPanel {
          * @return True if the player is valid, false if not
          */
         boolean isPlayerValid() {
-            System.out.printf(
-                    "Is player valid function called. Is error message is visible ? %b\n"
-                            + " Is username field valid ? %b\n",
-                    this.errorMessageLabel.isVisible(),
-                    this.usernameField.getText().matches("^[a-zA-Z0-9]{4,10}$"));
+
             return !this.errorMessageLabel.isVisible()
                     && this.usernameField.getText().matches("^[a-zA-Z0-9]{4,10}$");
         }

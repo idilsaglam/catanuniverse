@@ -1,7 +1,5 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.commons;
 
@@ -19,9 +17,7 @@ public class MultiPlayerGuestGameSettings extends GameSettings {
 
     @Override
     public boolean isValid() {
-        System.out.printf(
-                "Game settings valid ? %b Server address not null ? %b\n",
-                super.isValid(), this.serverAddress != null);
+
         return super.isValid() && this.serverAddress != null;
     }
 
@@ -57,6 +53,9 @@ public class MultiPlayerGuestGameSettings extends GameSettings {
     public boolean isOnline() {
         return true;
     }
+
+    @Override
+    public void completePlayers() {}
 
     @Override
     public int getNumberOfRequestedPlayers() {

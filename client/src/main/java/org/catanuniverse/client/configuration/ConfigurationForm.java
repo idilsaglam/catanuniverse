@@ -1,7 +1,5 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration;
 
@@ -19,16 +17,14 @@ class ConfigurationForm extends JPanel {
     private final SettingsPane settingsPane;
     private final StartGameButton startButton;
     private ConfigurationFormController controller;
-    private Consumer<GameSettings> onSaved;
 
     public ConfigurationForm() {
         this(null);
     }
 
     public ConfigurationForm(Consumer<GameSettings> onSaved) {
-        this.onSaved = onSaved;
         GridBagConstraints constraints = new GridBagConstraints();
-        this.controller = new ConfigurationFormController(this);
+        this.controller = new ConfigurationFormController(this, onSaved);
         this.setLayout(new GridBagLayout());
         this.playersInputContainer = new PlayersInputContainer(0);
 
@@ -61,7 +57,7 @@ class ConfigurationForm extends JPanel {
      * @param callback The callback function to add
      */
     public void setOnSaved(Consumer<GameSettings> callback) {
-        this.onSaved = callback;
+        this.controller.setOnSavedCallback(callback);
     }
 
     SettingsPane getSettingsPane() {

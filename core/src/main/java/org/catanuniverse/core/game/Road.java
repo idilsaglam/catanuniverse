@@ -1,11 +1,9 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.core.game;
 
-class Road extends Pin {
+public class Road extends Pin {
 
     protected static final Positions[] SUPPORTED_DIRECTIONS =
             new Positions[] {
@@ -21,7 +19,7 @@ class Road extends Pin {
      *
      * @param owner The owner of the road pion
      */
-    protected Road(Player owner) {
+    public Road(Player owner) {
         super(owner);
     }
 }

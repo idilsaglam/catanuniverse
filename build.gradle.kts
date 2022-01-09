@@ -16,7 +16,6 @@ spotless {
         //   and/or reflow long strings (requires at least 1.8)
         //   and/or use custom group artifact (you probably don't need this)
         googleJavaFormat("1.12.0").aosp().reflowLongStrings().groupArtifact("com.google.googlejavaformat:google-java-format")
-        // TODO: Update Licence header with student number and binome members names
-        licenseHeader ("/*\n\tBinôme 35\n\t22015094 - Idil Saglam\n\t - Abderrahim Arous\n*/")
+                licenseHeader ("/*\n\t22015094 - Idil Saglam\n*/")
     }
 }

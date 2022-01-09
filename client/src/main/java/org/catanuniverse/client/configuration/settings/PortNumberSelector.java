@@ -1,7 +1,5 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.client.configuration.settings;
 
@@ -116,7 +114,6 @@ class PortNumberSelector extends JPanel {
                         return;
                     }
                     this.defaultPortNumber = currentValue;
-                    // TODO: Add automatic port number validation
                     if (currentValue.length() == 0) {
                         return;
                     }

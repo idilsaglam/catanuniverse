@@ -1,7 +1,5 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.commons;
 
@@ -50,6 +48,9 @@ public class MultiPlayerHostGameSettings extends GameSettings {
     public boolean isOnline() {
         return true;
     }
+
+    @Override
+    public void completePlayers() {}
 
     @Override
     public String toString() {

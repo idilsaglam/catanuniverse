@@ -1,9 +1,9 @@
 /*
-	Binôme 35
 	22015094 - Idil Saglam
-	 - Abderrahim Arous
 */
 package org.catanuniverse.commons;
+
+import org.catanuniverse.core.game.Player;
 
 public class LocalGameSettings extends GameSettings {
 
@@ -21,9 +21,10 @@ public class LocalGameSettings extends GameSettings {
      *
      * @param capacity the capacity of the game room
      * @param nbOfAI The number of AIs in the game room
+     * @param maxVictoryPoints The maximum of the victory points of the game room
      */
-    public LocalGameSettings(int capacity, int nbOfAI) {
-        super(capacity, nbOfAI);
+    public LocalGameSettings(int capacity, int nbOfAI, int maxVictoryPoints) {
+        super(capacity, nbOfAI, maxVictoryPoints);
     }
 
     @Override
@@ -37,9 +38,7 @@ public class LocalGameSettings extends GameSettings {
     }
 
     @Override
-    public void start() {
-        // TODO: Start local game
-    }
+    public void start() {}
 
     @Override
     public boolean isOnline() {
@@ -49,5 +48,16 @@ public class LocalGameSettings extends GameSettings {
     @Override
     public boolean isValid() {
         return super.isValid();
+    }
+
+    @Override
+    public void completePlayers() {
+
+        Player[] oldPlayers = this.players;
+        this.players = new Player[this.getCapacity()];
+        System.arraycopy(oldPlayers, 0, this.players, 0, oldPlayers.length);
+        for (int i = 0; i < getNumberOfAI(); i++) {
+            this.players[i + this.getNumberOfRequestedPlayers()] = new Player();
+        }
     }
 }
