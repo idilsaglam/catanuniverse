@@ -313,4 +313,12 @@ public abstract class GameSettings {
     public int getMaxVictoryPoints() {
         return this.maxVictoryPoints;
     }
+
+    /**
+     * Check if the game ends or not
+     * @return True if the current player has more than maxVictoryPoints
+     */
+    public boolean isGameEnd() {
+        return this.players[this.currentPlayerIndex].getVictoryPoint() >= this.maxVictoryPoints;
+    }
 }
