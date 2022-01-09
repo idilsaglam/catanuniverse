@@ -225,6 +225,7 @@ public class BoardPane extends JPanel {
             if (this.gameSettings.isRobberActivated()){
                 System.out.println("Play robber");
                 this.gameBoardPane.getBoard().randomRobber();
+                this.desactivateRobber();
                 this.gameBoardPane.revalidate();
                 this.gameBoardPane.repaint();
                 this.updateStatusBars();
