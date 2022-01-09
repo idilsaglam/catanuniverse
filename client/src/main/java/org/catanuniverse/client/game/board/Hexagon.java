@@ -68,8 +68,7 @@ class Hexagon extends Polygon {
                             this.ypoints[(i + 1) % Hexagon.SIDES]);
         }
         // updatePoints();
-        
-        
+
     }
 
     public Hexagon(int x, int y, int radius, Hextile hextile, Point parentPos) {

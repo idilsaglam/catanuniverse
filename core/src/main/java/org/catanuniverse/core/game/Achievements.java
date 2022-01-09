@@ -21,7 +21,7 @@ public enum Achievements {
      * @throws IOException If the Image file does not exists
      */
     public Image getImage(int width, int height, int hints) throws IOException {
-        
+
         return ImageIO.read(
                         this.getClass()
                                 .getResource(

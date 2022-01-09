@@ -72,7 +72,6 @@ public final class Hextile extends Tile {
                     this.settlementSlots[index] = settlement;
                     if (this.neighbors[index] != null) {
 
-                        
                         this.neighbors[index]
                                         .settlementSlots[(compIndex + 1) % this.neighbors.length] =
                                 settlement;
@@ -104,16 +103,16 @@ public final class Hextile extends Tile {
     public boolean canAddSettlement(int index) throws NoSuchSlotException {
         if (this.playable(
                 new int[] {index, (index + this.neighbors.length - 1) % this.neighbors.length})) {
-            
+
             boolean result = this.hasSettlementsOnBothSidesIntersection(index);
-            
+
             if (!result) return false;
             int compIndex = complementaryIndex(index);
             result =
                     this.neighbors[index] != null
                             && this.neighbors[index].hasSettlementsOnBothSidesIntersection(
                                     (compIndex + 1) % this.neighbors.length);
-            
+
             if (!result) return false;
             index = (index + this.neighbors.length - 1) % this.neighbors.length;
             compIndex = complementaryIndex(index);
@@ -121,7 +120,7 @@ public final class Hextile extends Tile {
                     this.neighbors[compIndex] != null
                             && this.neighbors[compIndex].hasSettlementsOnBothSidesIntersection(
                                     index);
-            
+
             return result;
         }
         return false;

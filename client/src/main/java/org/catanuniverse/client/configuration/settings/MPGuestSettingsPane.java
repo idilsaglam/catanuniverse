@@ -24,7 +24,6 @@ final class MPGuestSettingsPane extends GameSettingsPane<MultiPlayerGuestGameSet
         this.serverAddressSelector =
                 new ServerAddressSelector(
                         (URI uri) -> {
-                            
                             super.settings.setServerAddress(uri);
                             super.onGameSettingsChanged.accept(super.settings);
                         });

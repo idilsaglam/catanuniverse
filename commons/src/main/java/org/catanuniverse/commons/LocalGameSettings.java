@@ -38,9 +38,7 @@ public class LocalGameSettings extends GameSettings {
     }
 
     @Override
-    public void start() {
-        // TODO: Start local game
-    }
+    public void start() {}
 
     @Override
     public boolean isOnline() {
@@ -54,7 +52,7 @@ public class LocalGameSettings extends GameSettings {
 
     @Override
     public void completePlayers() {
-        
+
         Player[] oldPlayers = this.players;
         this.players = new Player[this.getCapacity()];
         System.arraycopy(oldPlayers, 0, this.players, 0, oldPlayers.length);

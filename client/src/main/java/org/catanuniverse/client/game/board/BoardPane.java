@@ -82,7 +82,7 @@ public class BoardPane extends JPanel {
     }
     /** Method handles the on next button pressed action */
     private void onNextPlayerButtonPressed() throws IOException {
-        
+
         if (this.gameSettings.isRobberActivated()) return;
         if ((this.gameSettings.getRoundNumber() == 0)
                         && (this.gameSettings.getCurrentPlayer().getNbSettlement() != 1
@@ -109,9 +109,9 @@ public class BoardPane extends JPanel {
                 && !this.gameSettings.isRobberActivated()) {
             // A card can be drawn if the current player has enough resources to draw the card and
             // the robber is not activated
-            
+
             this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
-            
+
             this.updateStatusBars();
             return true;
         }
@@ -130,7 +130,6 @@ public class BoardPane extends JPanel {
             return true;
         }
 
-        
         if (this.gameBoardPane.diceRolled(diceValue)) {
             this.updateStatusBars();
             return true;
@@ -168,7 +167,7 @@ public class BoardPane extends JPanel {
      * @return True if the robber can be moved to the given tile, false if not
      */
     private boolean onRobberMoved(Hextile tile) {
-        
+
         if (this.gameSettings.isRobberActivated() && tile.getPlayable()) {
             this.playRobber(tile);
             this.gameSettings.setRobberActivated(false);
@@ -187,7 +186,7 @@ public class BoardPane extends JPanel {
      * @return True if a settlement can be added to the given slot false if not
      */
     private boolean onSettlementAdded(Hextile tile, Integer settlementIndex) {
-        
+
         if (this.gameSettings.isRobberActivated()) return false;
         if ((this.gameSettings.getRoundNumber() == 0
                         && this.gameSettings.getCurrentPlayer().getNbSettlement() != 2)
@@ -202,7 +201,7 @@ public class BoardPane extends JPanel {
             return false;
         }
         if (this.gameSettings.getCurrentPlayer().canBuildSettlement()) {
-            
+
             if (tile.getSettlementSlot(settlementIndex) != null) {
                 if (tile.getSettlementSlot(settlementIndex) instanceof City) {
                     return false;
@@ -242,13 +241,12 @@ public class BoardPane extends JPanel {
     /** let the AI play */
     private void playAI() throws IOException {
         Random r = new Random();
-        
-        // TODO: Check if the roll button is present
+
         if (this.gameSettings.getRoundNumber() > 1) {
-            
+
             boardSidePane.roll();
             if (this.gameSettings.isRobberActivated()) {
-                
+
                 this.gameBoardPane.getBoard().randomRobber();
                 this.desactivateRobber();
                 this.gameBoardPane.revalidate();
@@ -260,7 +258,7 @@ public class BoardPane extends JPanel {
         }
 
         if (this.gameSettings.getRoundNumber() < 2) {
-            
+
             this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
             this.gameSettings.getCurrentPlayer().buildRoad();
             this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
@@ -277,13 +275,12 @@ public class BoardPane extends JPanel {
                 && !this.gameSettings.getCurrentPlayer().canBuildCity()
                 && !this.gameSettings.getCurrentPlayer().canBuildRoad()
                 && !this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()) {
-            
-            
+
             return;
         }
 
         if (this.gameSettings.getCurrentPlayer().canBuildCity()) {
-            
+
             boolean res = r.nextBoolean();
             if (res) {
                 this.gameBoardPane.getBoard().addCity(this.gameSettings.getCurrentPlayer());
@@ -295,7 +292,7 @@ public class BoardPane extends JPanel {
         }
 
         if (this.gameSettings.getCurrentPlayer().canBuildRoad()) {
-            
+
             boolean res = r.nextBoolean();
             if (res) {
                 this.gameBoardPane.getBoard().buildRoad(this.gameSettings.getCurrentPlayer());
@@ -306,7 +303,7 @@ public class BoardPane extends JPanel {
             }
         }
         if (this.gameSettings.getCurrentPlayer().canBuildSettlement()) {
-            
+
             boolean res = r.nextBoolean();
             if (res) {
                 this.gameBoardPane.getBoard().buildSettlement(this.gameSettings.getCurrentPlayer());
@@ -316,11 +313,10 @@ public class BoardPane extends JPanel {
             }
         }
         if (this.gameSettings.getCurrentPlayer().canBuyDeveloppementCard()) {
-            
+
             boolean res = r.nextBoolean();
             if (res) {
                 this.boardSidePane.drawCard();
-                // TODO: Not sure if it is necessary
                 // this.gameSettings.getCurrentPlayer().buyDeveloppementCard();
                 boolean res2 = r.nextBoolean();
                 if (res2) {
@@ -429,17 +425,13 @@ public class BoardPane extends JPanel {
 
     /** Passes to the next player */
     private void next() throws IOException {
-        
+
         this.gameSettings.next();
-        
-        
+
         if (gameSettings.getCurrentPlayer().isAI()) {
-            
+
             playAI();
-            
-            
-            
-            
+
             this.next();
         }
         this.bottomStatusPane.setCurrentPlayer(
@@ -522,7 +514,7 @@ public class BoardPane extends JPanel {
                 this.gameBoardPane
                         .getBoard()
                         .getHarborsOfPlayer(this.gameSettings.getCurrentPlayer());
-        
+
         return harbors;
     }
 }

@@ -112,13 +112,13 @@ class BoardSidePane extends JPanel {
 
         @Override
         public void mouseClicked(MouseEvent e) {
-            
+
             // If for some reason card drawn is blocked nothing will happen
             if (!BoardSidePane.this.canCardBeDrawn.get()) return;
-            
+
             // If the current card is not yet used or stocked nothing will happen
             if (this.currentCard != null) return;
-            
+
             // If there's already a card drawn will remove the card
             this.resetDrawnCard();
 

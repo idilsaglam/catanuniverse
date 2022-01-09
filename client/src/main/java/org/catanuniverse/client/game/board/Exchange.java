@@ -46,7 +46,7 @@ public class Exchange extends JTabbedPane {
     public void update(HashMap<Resource, Integer> inputResources, Set<Harbor> harbors) {
 
         this.removeAll();
-        
+
         this.inputResources = inputResources;
         this.harbors = harbors;
         this.addTab(
@@ -86,7 +86,6 @@ public class Exchange extends JTabbedPane {
      */
     public void updateHarbors(Set<Harbor> harbors) {
         this.harbors = harbors;
-        // TODO: Update tab panels
     }
 
     private class ExchangePane extends JPanel {
@@ -99,7 +98,7 @@ public class Exchange extends JTabbedPane {
         private final ButtonGroup resourceToReceiveButtonGroup;
 
         public ExchangePane(HashMap<Resource, Integer> inputResources, int coefficient) {
-            
+
             this.inputResources = inputResources;
             this.resourcesToGive = new JPanel();
             this.exchangeOutput = new HashMap<>();
@@ -138,10 +137,9 @@ public class Exchange extends JTabbedPane {
          */
         private void exchange(ActionEvent ignore) {
             int sum = this.exchangeOutput.values().stream().reduce(0, Integer::sum);
-            
-            
+
             sum = (int) Math.ceil(sum / (this.coefficient * 1.));
-            
+
             Resource r =
                     Resource.valueOf(
                             this.resourceToReceiveButtonGroup.getSelection().getActionCommand());

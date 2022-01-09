@@ -107,7 +107,6 @@ public class Board {
                         || (i == this.tiles.length - 1)
                         || (j == 0)
                         || (j == this.tiles[i].length - 1)) {
-                    // TODO: Initialise water tile
                     this.tiles[i][j] = new Hextile(-1, GroundType.Water);
                     continue;
                 }
@@ -184,7 +183,7 @@ public class Board {
      * @param diceResult The number of tile
      */
     public void sendResourcesToPlayers(Integer diceResult) {
-        
+
         for (Hextile[] row : this.tiles) {
             for (Hextile innerTile : row) {
                 if (innerTile.getId() == diceResult && innerTile.playable) {

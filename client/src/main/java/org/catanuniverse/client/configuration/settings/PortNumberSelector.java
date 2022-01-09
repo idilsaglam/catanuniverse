@@ -114,7 +114,6 @@ class PortNumberSelector extends JPanel {
                         return;
                     }
                     this.defaultPortNumber = currentValue;
-                    // TODO: Add automatic port number validation
                     if (currentValue.length() == 0) {
                         return;
                     }

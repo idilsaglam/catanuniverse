@@ -32,7 +32,6 @@ public class MainFrame extends JFrame {
     private void init() {
         super.setTitle("Catanuniverse");
         super.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        // TODO: Change the minimum size
         this.initSizes();
     }
 
@@ -91,7 +90,6 @@ public class MainFrame extends JFrame {
     private void loadGameBoard() throws IOException {
         if (this.gameSettings instanceof LocalGameSettings) {
             JWindow window = new JWindow();
-            // TODO: Add loading picture here or anything here
             window.setBounds(defaultSize);
             window.setVisible(true);
             GameBoard gameBoard =
@@ -155,7 +153,6 @@ public class MainFrame extends JFrame {
             // If the configuration is null, we need to add configuration pane to the screen
             super.setContentPane(this.configurationPane);
         }
-        // TODO: If the configuration is not null, we need to compute the screen with given
         // configuration
     }
 }

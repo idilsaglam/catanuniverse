@@ -54,7 +54,7 @@ class ConfigurationFormController {
      * @param event The action event related to the click on the button click
      */
     void startButtonListener(ActionEvent event) {
-        
+
         this.callCallback();
     }
 
@@ -74,7 +74,7 @@ class ConfigurationFormController {
      * @param type The new game type
      */
     void gameTypeSelectedListener(GameType type) {
-        
+
         this.configurationForm.getSettingsPane().changeGameType(type);
         this.configurationForm.getStartButton().setGameType(type);
         this.updateSettings(type);
@@ -86,8 +86,7 @@ class ConfigurationFormController {
      * @param settings The updated game settings
      */
     void gameSettingsPaneListener(GameSettings settings) {
-        
-        
+
         if (settings instanceof LocalGameSettings) {
             this.configurationForm
                     .getPlayersInputContainer()
@@ -126,15 +125,11 @@ class ConfigurationFormController {
      * @param settings The new game settings
      */
     private void updateSettings(GameSettings settings) {
-        if (settings instanceof MultiPlayerGuestGameSettings) {
-            
-            
-        }
+        if (settings instanceof MultiPlayerGuestGameSettings) {}
+
         this.settings = this.settings.merge(settings);
-        if (this.settings instanceof MultiPlayerGuestGameSettings) {
-            
-            
-        }
+        if (this.settings instanceof MultiPlayerGuestGameSettings) {}
+
         this.updateStartButtonEnabled();
         this.updatePlayersInputContainer();
     }
@@ -150,7 +145,7 @@ class ConfigurationFormController {
 
     /** Updates the enabled property of the start button */
     private void updateStartButtonEnabled() {
-        
+
         this.configurationForm.getStartButton().setEnabled(this.settings.isValid());
         this.configurationForm.getStartButton().revalidate();
         this.configurationForm.getStartButton().repaint();

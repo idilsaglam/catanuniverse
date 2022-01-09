@@ -52,7 +52,7 @@ class PlayersInputContainer extends JPanel {
      * @param numberOfPlayers The number of players to update with
      */
     void setNumberOfPlayers(int numberOfPlayers) {
-        
+
         int old = this.numberOfPlayers;
         int delta = numberOfPlayers - this.numberOfPlayers;
         this.numberOfPlayers = numberOfPlayers;
@@ -78,8 +78,6 @@ class PlayersInputContainer extends JPanel {
                 playerContainerToAdd.setOnFocusGained(playerContainerToAdd::hideErrorMessage);
                 playerContainerToAdd.setOnChanged(
                         (String value) -> {
-                            
-                            
                             if (PlayersInputContainer.this.onPlayersUpdated == null) {
                                 return;
                             }
@@ -123,15 +121,14 @@ class PlayersInputContainer extends JPanel {
      */
     boolean arePlayersValid() {
         if (this.numberOfPlayers == 0) {
-            
+
             return false;
         }
         ;
         boolean result = this.players[0].isPlayerValid();
-        
+
         for (int i = 1; i < this.numberOfPlayers && result; i++) {
             result = this.players[i].isPlayerValid();
-            
         }
         return this.verifyAllPlayerNamesAreUnique() && result;
     }
@@ -278,7 +275,7 @@ class PlayersInputContainer extends JPanel {
          * @return True if the player is valid, false if not
          */
         boolean isPlayerValid() {
-            
+
             return !this.errorMessageLabel.isVisible()
                     && this.usernameField.getText().matches("^[a-zA-Z0-9]{4,10}$");
         }

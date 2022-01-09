@@ -17,7 +17,7 @@ public class MultiPlayerGuestGameSettings extends GameSettings {
 
     @Override
     public boolean isValid() {
-        
+
         return super.isValid() && this.serverAddress != null;
     }
 

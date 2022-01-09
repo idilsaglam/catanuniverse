@@ -213,7 +213,6 @@ abstract class Tile {
             this.settlementSlots[index] = settlement;
             if (this.neighbors[index] != null) {
 
-                
                 this.neighbors[index].settlementSlots[(compIndex + 1) % this.neighbors.length] =
                         settlement;
             }

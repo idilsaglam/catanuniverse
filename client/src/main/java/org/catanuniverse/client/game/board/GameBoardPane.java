@@ -103,7 +103,7 @@ class GameBoardPane extends JPanel {
     }
 
     private boolean addRoad(Hextile tile, Integer roadSlot, Line2D lineModel) {
-        
+
         if (this.onRoadAdded == null) {
             return false;
         }
@@ -111,7 +111,7 @@ class GameBoardPane extends JPanel {
     }
 
     private boolean addSettlement(Hextile tile, Integer settlementSlot) {
-        
+
         if (this.onSettlementAdded == null) {
             return false;
         }
@@ -126,7 +126,7 @@ class GameBoardPane extends JPanel {
      */
     boolean diceRolled(Integer diceResult) {
         if (this.board.isTileExists(diceResult)) {
-            
+
             this.board.sendResourcesToPlayers(diceResult);
             return true;
         }

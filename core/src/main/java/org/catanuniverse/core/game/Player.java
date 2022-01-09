@@ -47,7 +47,7 @@ public class Player {
         this.resources = new HashMap<>();
         this.userCards = new HashMap<>();
         this.uid = Player.COUNTER++;
-        
+
         for (Achievements a : Achievements.values()) {
             this.achievements.put(a, 0);
         }
@@ -347,9 +347,7 @@ public class Player {
     public void exchange(
             HashMap<Resource, Integer> resourcesTable,
             Resource resourceToReceive,
-            int exchangeRate) {
-        // TODO: COMPLETE
-    }
+            int exchangeRate) {}
 
     /**
      * Choose a random resource between non null resources

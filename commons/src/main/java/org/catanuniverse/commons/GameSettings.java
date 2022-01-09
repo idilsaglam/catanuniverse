@@ -103,7 +103,7 @@ public abstract class GameSettings {
         this.capacity = capacity;
         Player[] oldPlayers = this.players;
         this.players = new Player[this.capacity];
-        
+
         System.arraycopy(
                 oldPlayers, 0, this.players, 0, Math.min(oldPlayers.length, this.players.length));
     }
@@ -173,7 +173,7 @@ public abstract class GameSettings {
      * @return True if game settings are valid, false if not
      */
     public boolean isValid() {
-        
+
         return (this.areRequestedPlayersValid() && this.capacity != -1 && this.areAIsValid());
     }
 
@@ -245,12 +245,12 @@ public abstract class GameSettings {
                 || this.players == null
                 || this.getNumberOfRequestedPlayers() > this.capacity
                 || this.getNumberOfRequestedPlayers() + this.numberOfAI > this.capacity) {
-            
+
             return false;
         }
         for (Player p : this.players) {
             if (p == null || !p.isValid()) {
-                
+
                 return false;
             }
         }

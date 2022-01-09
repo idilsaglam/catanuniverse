@@ -33,7 +33,6 @@ class ServerAddressSelector extends JPanel {
         JLabel label = new JLabel(labelText);
         this.defaultValue = "";
         super.setToolTipText(toolTipText);
-        // TODO: Add input validator
         this.textField.addCaretListener(
                 (CaretEvent ignore) -> {
                     String current = this.textField.getText();
@@ -44,7 +43,7 @@ class ServerAddressSelector extends JPanel {
                     try {
                         callback.accept(new URI(current));
                     } catch (URISyntaxException e) {
-                        
+
                     }
                 });
         ((AbstractDocument) this.textField.getDocument())

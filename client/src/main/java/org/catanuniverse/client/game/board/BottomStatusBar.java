@@ -127,12 +127,11 @@ class BottomStatusBar extends JPanel {
 
     /** Updates the harbors with the given harbor list supplier */
     public void updateExchange() {
-        
-        
+
         this.harbors = this.getCurrentPlayerHarbors.get();
-        
+
         this.harbors = this.getCurrentPlayerHarbors.get();
-        
+
         this.exchangePanel.update(this.currentPlayer.getResources(), this.harbors);
         this.exchangePanel.revalidate();
         this.exchangePanel.repaint();

@@ -60,7 +60,7 @@ public class SettingsPane extends JPanel {
      */
     public boolean isSettingsValid() {
         if (this.getComponentCount() == 1 && this.getComponent(0) instanceof GameSettingsPane) {
-            
+
             return ((GameSettingsPane<? extends GameSettings>) this.getComponent(0))
                     .isSettingsValid();
         }
@@ -90,7 +90,7 @@ public class SettingsPane extends JPanel {
             this.revalidate();
             this.repaint();
         }
-        
+
         this.add(
                 this.gameType == null
                         ? this.buildSelectGameTypeMessage()
@@ -100,7 +100,7 @@ public class SettingsPane extends JPanel {
                             case MP_HOST -> new MPHostSettingsPane(this.onGameSettingsChanged);
                         },
                 BorderLayout.CENTER);
-        
+
         this.revalidate();
         this.repaint();
     }
