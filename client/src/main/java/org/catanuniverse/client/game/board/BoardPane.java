@@ -444,7 +444,11 @@ public class BoardPane extends JPanel {
         this.bottomStatusPane.updateExchange();
     }
 
+    /**
+     * Deactivates robber
+     */
     private void desactivateRobber() {
+        this.gameSettings.setRobberActivated(false);
         this.setBackground(this.defaultBackground);
         this.robberLabel.setVisible(false);
     }
