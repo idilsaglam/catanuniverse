@@ -210,7 +210,7 @@ public class Player {
      */
     public void buyDeveloppementCard(){
         if(canBuyDeveloppementCard()){
-            this.updateResource(Resource.Wood, -1);
+            this.updateResource(Resource.Wool, -1);
             this.updateResource(Resource.Corn, -1);
             this.updateResource(Resource.Mineral, -1);;
         }
