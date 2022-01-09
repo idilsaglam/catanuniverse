@@ -5,6 +5,7 @@
 */
 package org.catanuniverse.core.game;
 
+import java.awt.Point;
 import java.util.*;
 import java.util.function.Supplier;
 
@@ -233,6 +234,7 @@ public class Board {
         }
     }
 
+
     /**
      * Make build a road to the first eligible slot the given player
      * @param currentPlayer The player to build the road
@@ -298,7 +300,7 @@ public class Board {
         do {
             i = r.nextInt(this.tiles.length - 2) + 1;
             j = r.nextInt(this.tiles[i].length - 2) + 1;
-        } while(this.tiles[i][j].playable && this.tiles[i][j].isNotWater());
+        } while(!this.tiles[i][j].playable && this.tiles[i][j].isNotWater());
         this.tiles[i][j].setPlayable(false);
         if (initialTile == null) return;
         initialTile.setPlayable(true);
