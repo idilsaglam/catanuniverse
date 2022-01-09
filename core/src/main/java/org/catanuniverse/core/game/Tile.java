@@ -6,6 +6,7 @@
 package org.catanuniverse.core.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
@@ -489,5 +490,46 @@ abstract class Tile {
      */
     public boolean isDesert() {
         return this.getGroundType() == GroundType.Desert;
+    }
+
+    /**
+     * Get the set of road slot indexes that the given player owns
+     * @param player The player who we are looking for roads
+     * @return The set of indexes that player's roads passes from
+     */
+    public Set<Integer> getRoadIndexesOfPlayer(Player player) {
+        Set<Integer> roadIndexes = new HashSet<>();
+        for (int i = 0; i<this.roadSlots.length; i++) {
+            if (this.roadSlots[i] != null && this.roadSlots[i].getOwner().uid == player.uid) {
+                roadIndexes.add(i);
+            }
+        }
+        return roadIndexes;
+    }
+
+    /**
+     * Get number of roads owned by the current player
+     * @param player The player who owns the roads
+     * @return Number of roads owned by the given player
+     */
+    public int countPlayerRoads(Player player) {
+        int count = 0;
+         for (Road road: this.roadSlots) {
+             count += (road.getOwner().uid == player.uid ? 1 : 0);
+         }
+         return count;
+    }
+
+    /**
+     * Get set of settlement owners of the current tile
+     * @return The set of settlements
+     */
+    public Set<Player> getSettlementOwners() {
+        Set<Player> settlementOwners = new HashSet<Player>();
+        for (Settlement settlement: this.settlementSlots) {
+            if (settlement == null) continue;
+            settlementOwners.add(settlement.getOwner());
+        }
+        return settlementOwners;
     }
 }
