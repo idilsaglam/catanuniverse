@@ -163,6 +163,7 @@ class BoardSidePane extends JPanel {
          * @param e The action event
          */
         private void useCard(ActionEvent e) {
+            BoardSidePane.this.onCardStocked.accept(CardPanel.this.currentCard);
             BoardSidePane.this.onCardUsed.accept(CardPanel.this.currentCard);
             CardPanel.this.resetDrawnCard();
         }
