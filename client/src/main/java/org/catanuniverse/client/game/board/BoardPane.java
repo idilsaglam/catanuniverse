@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import javax.swing.*;
 
@@ -29,13 +30,16 @@ public class BoardPane extends JPanel {
     private final JLabel robberLabel;
     private final Color defaultBackground;
     private Integer diceValue;
+    private final Consumer<Player> onGameEnd;
+
     /**
      * Creates a BoardPane with given size and configuration
      *
      * @param size The size of the board pane
      * @param gameSettings The configuration related to the game
      */
-    public BoardPane(Dimension size, GameSettings gameSettings) throws IOException {
+    public BoardPane(Dimension size, GameSettings gameSettings, Consumer<Player> onGameEnd) throws IOException {
+        this.onGameEnd = onGameEnd;
         this.initSizes(size);
         this.defaultBackground = this.getBackground();
         this.robberLabel = new JLabel("Robber activated");
@@ -439,6 +443,9 @@ public class BoardPane extends JPanel {
      * Updates top and bottom status bars
      */
     private void updateStatusBars() {
+        if (this.gameSettings.isGameEnd()) {
+            this.onGameEnd.accept(this.gameSettings.getCurrentPlayer());
+        }
         this.topStatusPane.updatePlayerCard();
         this.bottomStatusPane.update();
         this.boardSidePane.revalidate();

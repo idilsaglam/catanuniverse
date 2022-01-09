@@ -14,6 +14,7 @@ import org.catanuniverse.client.configuration.ConfigurationPane;
 import org.catanuniverse.client.game.GameBoard;
 import org.catanuniverse.commons.GameSettings;
 import org.catanuniverse.commons.LocalGameSettings;
+import org.catanuniverse.core.game.Player;
 
 public class MainFrame extends JFrame {
 
@@ -22,7 +23,6 @@ public class MainFrame extends JFrame {
     private Dimension size;
     private Point position;
     private Rectangle defaultSize;
-
     public MainFrame() {
         this.init();
         this.configurationPane = new ConfigurationPane(this::setGameSettings);
@@ -96,7 +96,7 @@ public class MainFrame extends JFrame {
             //TODO: Add loading picture here or anything here
             window.setBounds(defaultSize);
             window.setVisible(true);
-            GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings);
+            GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings, this::onGameEnd);
             window.setVisible(false);
             this.setVisible(true);
             window.dispose();
@@ -129,6 +129,16 @@ public class MainFrame extends JFrame {
         return new Dimension(
                 super.getWidth() - super.getInsets().right - super.getInsets().left,
                 super.getHeight() - super.getInsets().top - super.getInsets().bottom);
+    }
+
+    /**
+     * Method handles the end of game callback
+     * @param player The winner
+     */
+    private void onGameEnd(Player player) {
+        this.setVisible(false);
+        JOptionPane.showMessageDialog(this, String.format("%s won!", player.getUsername()), "End of game", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0);
     }
 
     /** Adds the current screen to the contentPane with current configuration state */
