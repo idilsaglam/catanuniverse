@@ -44,7 +44,7 @@ class ServerAddressSelector extends JPanel {
                     try {
                         callback.accept(new URI(current));
                     } catch (URISyntaxException e) {
-                        System.out.println("Not a valid uri");
+                        
                     }
                 });
         ((AbstractDocument) this.textField.getDocument())

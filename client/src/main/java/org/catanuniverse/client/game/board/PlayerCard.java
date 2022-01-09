@@ -28,7 +28,7 @@ class PlayerCard extends JPanel {
     PlayerCard(Player player, int index, int imageW, int imageH) throws IOException {
         this.heightPlayer = imageH;
         this.widthPlayer = imageW;
-        System.out.printf("PlayerCard constructor called with index %d\n", index);
+        
         this.player = player;
         this.avatarLabel = new JLabel();
         this.username = new JLabel();
@@ -61,7 +61,7 @@ class PlayerCard extends JPanel {
     public void setPlayer(Player p, int i) throws IOException {
         this.player = p;
         String avatarURL = String.format("/avatar%d.png", i);
-        System.out.printf("Avatar URL %s\n", avatarURL);
+        
         BufferedImage bufferedAvatarImage = ImageIO.read(this.getClass().getResource(avatarURL));
         Image scaledImage =
                 bufferedAvatarImage.getScaledInstance(

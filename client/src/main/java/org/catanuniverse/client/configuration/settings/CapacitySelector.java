@@ -28,7 +28,7 @@ class CapacitySelector extends GameSettingsSelectorPanel {
             int current,
             Consumer<Integer> callback) {
         super(labelText, toolTipText);
-        System.out.printf("Min %d Max %d Current %d\n", min, max, current);
+        
         this.slider = new JSlider(JSlider.HORIZONTAL, min, max, current);
         this.slider.setMinorTickSpacing(0);
         this.slider.setMajorTickSpacing(1);

@@ -17,9 +17,7 @@ public class MultiPlayerGuestGameSettings extends GameSettings {
 
     @Override
     public boolean isValid() {
-        System.out.printf(
-                "Game settings valid ? %b Server address not null ? %b\n",
-                super.isValid(), this.serverAddress != null);
+        
         return super.isValid() && this.serverAddress != null;
     }
 

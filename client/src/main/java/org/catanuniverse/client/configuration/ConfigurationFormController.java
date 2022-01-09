@@ -54,9 +54,7 @@ class ConfigurationFormController {
      * @param event The action event related to the click on the button click
      */
     void startButtonListener(ActionEvent event) {
-        System.out.printf(
-                "Start button clicked. Current client configuration %s\n",
-                this.settings.toString());
+        
         this.callCallback();
     }
 
@@ -76,7 +74,7 @@ class ConfigurationFormController {
      * @param type The new game type
      */
     void gameTypeSelectedListener(GameType type) {
-        System.out.printf("Selected game type %s\n", type);
+        
         this.configurationForm.getSettingsPane().changeGameType(type);
         this.configurationForm.getStartButton().setGameType(type);
         this.updateSettings(type);
@@ -88,8 +86,8 @@ class ConfigurationFormController {
      * @param settings The updated game settings
      */
     void gameSettingsPaneListener(GameSettings settings) {
-        System.out.println("Game settings changed");
-        System.out.printf("Max victory points %d\n", settings.getMaxVictoryPoints());
+        
+        
         if (settings instanceof LocalGameSettings) {
             this.configurationForm
                     .getPlayersInputContainer()
@@ -129,13 +127,13 @@ class ConfigurationFormController {
      */
     private void updateSettings(GameSettings settings) {
         if (settings instanceof MultiPlayerGuestGameSettings) {
-            System.out.println("Multi player guest settings detected");
-            System.out.println(((MultiPlayerGuestGameSettings) settings).getServerAddress());
+            
+            
         }
         this.settings = this.settings.merge(settings);
         if (this.settings instanceof MultiPlayerGuestGameSettings) {
-            System.out.println("Current settings are now multi player host game settings");
-            System.out.println(((MultiPlayerGuestGameSettings) this.settings).getServerAddress());
+            
+            
         }
         this.updateStartButtonEnabled();
         this.updatePlayersInputContainer();
@@ -152,7 +150,7 @@ class ConfigurationFormController {
 
     /** Updates the enabled property of the start button */
     private void updateStartButtonEnabled() {
-        System.out.printf("Settings are valid ? %b\n", this.settings.isValid());
+        
         this.configurationForm.getStartButton().setEnabled(this.settings.isValid());
         this.configurationForm.getStartButton().revalidate();
         this.configurationForm.getStartButton().repaint();

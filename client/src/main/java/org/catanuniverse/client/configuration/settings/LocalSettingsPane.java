@@ -49,7 +49,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
      * @param victoryPoints The number of victory points
      */
     private void onVictoryPointsUpdated(Integer victoryPoints) {
-        System.out.printf("Victory points selector updated with %d\n", victoryPoints);
+        
         super.settings.setVictoryPoints(victoryPoints);
         super.onGameSettingsChanged.accept(super.settings);
     }
@@ -60,7 +60,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
      * @param difficulty The difficulty value in the difficulty selector
      */
     private void onDifficultySelectorUpdated(Difficulty difficulty) {
-        System.out.printf("Difficulty level changed to %s\n", difficulty);
+        
         super.settings.setDifficulty(difficulty);
         super.onGameSettingsChanged.accept(super.settings);
     }
@@ -71,7 +71,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
      * @param capacity The value of the capacity selector
      */
     private void onCapacitySelectorUpdated(Integer capacity) {
-        System.out.printf("Capacity slider value %d\n", capacity);
+        
         this.numberOfAISelector.setMaximum(capacity - 1);
         this.numberOfAISelector.repaintSlider();
         super.settings.setCapacity(capacity);
@@ -84,11 +84,11 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
      * @param numberOfAI The number of AIs selected in AI selector
      */
     private void onAISelectorUpdated(Integer numberOfAI) {
-        System.out.printf("Number of AI slider value %d\n", numberOfAI);
+        
         boolean disable = numberOfAI == 0;
         if (this.difficultySelector.isSliderEnabled() == disable) {
             this.difficultySelector.setValue(0);
-            System.out.printf("Difficulty slider will be enabled %b", !disable);
+            
             this.difficultySelector.setSliderEnabled(!disable);
             this.difficultySelector.repaintSlider();
         }

@@ -47,7 +47,7 @@ public class Player {
         this.resources = new HashMap<>();
         this.userCards = new HashMap<>();
         this.uid = Player.COUNTER++;
-        System.out.println("PLAYER UID " + this.uid);
+        
         for (Achievements a : Achievements.values()) {
             this.achievements.put(a, 0);
         }

@@ -184,7 +184,7 @@ public class Board {
      * @param diceResult The number of tile
      */
     public void sendResourcesToPlayers(Integer diceResult) {
-        System.out.printf("Send resource to players method called with %d\n", diceResult);
+        
         for (Hextile[] row : this.tiles) {
             for (Hextile innerTile : row) {
                 if (innerTile.getId() == diceResult && innerTile.playable) {

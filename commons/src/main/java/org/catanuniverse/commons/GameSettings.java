@@ -103,9 +103,7 @@ public abstract class GameSettings {
         this.capacity = capacity;
         Player[] oldPlayers = this.players;
         this.players = new Player[this.capacity];
-        System.out.printf(
-                "Capacity %d Requested players number %d old players capacity %d\n",
-                this.capacity, this.getNumberOfRequestedPlayers(), oldPlayers.length);
+        
         System.arraycopy(
                 oldPlayers, 0, this.players, 0, Math.min(oldPlayers.length, this.players.length));
     }
@@ -175,7 +173,7 @@ public abstract class GameSettings {
      * @return True if game settings are valid, false if not
      */
     public boolean isValid() {
-        System.out.printf("Requested players are valid %b\n", this.areRequestedPlayersValid());
+        
         return (this.areRequestedPlayersValid() && this.capacity != -1 && this.areAIsValid());
     }
 
@@ -247,18 +245,12 @@ public abstract class GameSettings {
                 || this.players == null
                 || this.getNumberOfRequestedPlayers() > this.capacity
                 || this.getNumberOfRequestedPlayers() + this.numberOfAI > this.capacity) {
-            System.out.printf(
-                    "Number of requested players %d players null ? %b capacity %d  number of AI"
-                            + " %d\n",
-                    this.getNumberOfRequestedPlayers(),
-                    this.players == null,
-                    this.capacity,
-                    this.numberOfAI);
+            
             return false;
         }
         for (Player p : this.players) {
             if (p == null || !p.isValid()) {
-                System.out.println("Found an invalid player");
+                
                 return false;
             }
         }

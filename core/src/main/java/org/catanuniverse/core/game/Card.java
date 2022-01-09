@@ -64,7 +64,7 @@ public enum Card {
      * @throws IOException If the Image file does not exists
      */
     public Image getImage(int width, int height, int hints) throws IOException {
-        System.out.printf("Current achievement %s\n", this.toString());
+        
         String imagePath =
                 String.format(
                         "/%s.png",
@@ -75,7 +75,7 @@ public enum Card {
                             case MINERAL1 -> "cart3";
                             case KNIGHT -> "cart4";
                         });
-        System.out.printf("Card getImage image path %s\n", imagePath);
+        
         return ImageIO.read(this.getClass().getResource(imagePath))
                 .getScaledInstance(width, height, hints);
     }
