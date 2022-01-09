@@ -140,11 +140,11 @@ public class BoardPane extends JPanel {
      * @param usedCard The card which will be used by the current player
      */
     private void onCardUsed(Card usedCard) {
-        if(usedCard==Card.KNIGHT){
-            this.gameSettings.setRobberActivated(true);
-            return;
+        switch (usedCard) {
+            case KNIGHT -> this.gameSettings.setRobberActivated(true);
+            default -> usedCard.use(this.gameSettings.getCurrentPlayer());
         }
-        usedCard.use(this.gameSettings.getCurrentPlayer());
+        this.updateStatusBars();
     }
 
     /**
@@ -239,6 +239,7 @@ public class BoardPane extends JPanel {
             if (this.gameSettings.isRobberActivated()){
                 System.out.println("Play robber");
                 this.gameBoardPane.getBoard().randomRobber();
+                this.desactivateRobber();
                 this.gameBoardPane.revalidate();
                 this.gameBoardPane.repaint();
                 this.updateStatusBars();
@@ -436,11 +437,12 @@ public class BoardPane extends JPanel {
      * Updates top and bottom status bars
      */
     private void updateStatusBars() {
-        this.bottomStatusPane.updateResources();
         this.topStatusPane.updatePlayerCard();
-        this.bottomStatusPane.updateUserCards();
-        this.bottomStatusPane.updateExchange();
+        this.bottomStatusPane.update();
+        this.boardSidePane.revalidate();
+        this.boardSidePane.repaint();
     }
+
 
     private void desactivateRobber() {
         this.setBackground(this.defaultBackground);

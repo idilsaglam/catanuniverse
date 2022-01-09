@@ -145,6 +145,14 @@ class BottomStatusBar extends JPanel {
         this.exchangePanel.repaint();
     }
 
+    /**
+     * Update all sub-components in the bottom status bar
+     */
+    public void update() {
+        this.updateResources();
+        this.updateUserCards();
+        this.updateExchange();
+    }
 
     /**
      * Update the current player with a new one
