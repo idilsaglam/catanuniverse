@@ -21,7 +21,9 @@ class BoardSidePane extends JPanel {
     private final Dice dice;
     private final Supplier<Boolean> canCardBeDrawn;
    private final  CardPanel cardPanel;
-    public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Card> onCardUsed, Consumer<Card> onCardStocked, Supplier<Boolean> canCardBeDrawn) throws IOException {
+   private final Consumer<Card> onCardDrawn;
+    public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Card> onCardUsed, Consumer<Card> onCardStocked, Supplier<Boolean> canCardBeDrawn,Consumer<Card> onCardDrawn) throws IOException {
+        this.onCardDrawn = onCardDrawn;
         GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
         cardPanel = new CardPanel();
@@ -40,7 +42,6 @@ class BoardSidePane extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-
 
     }
 
@@ -118,6 +119,7 @@ class BoardSidePane extends JPanel {
                 int val = this.updateRandomLabel();
                 card = ImageIO.read(this.getClass().getResource("/cart"+val+".png"));
                 currentCard = Card.fromInt(val);
+                BoardSidePane.this.onCardDrawn.accept(this.currentCard);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
