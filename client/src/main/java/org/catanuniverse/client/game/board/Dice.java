@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.util.function.Predicate;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
@@ -52,7 +51,7 @@ class Dice extends JPanel {
 
 
 
-    void displayDie(){
+    void displayDice(){
         //dieValueTF.setText(String.valueOf(die1));
         Graphics g = diceImage1.getGraphics();
         try {
@@ -96,7 +95,7 @@ class Dice extends JPanel {
 
     }
 
-    void displayDie2(){
+    void displayDice2(){
         //dieValueTF2.setText(String.valueOf(die2));
         Graphics g = diceImage2.getGraphics();
         try {
@@ -143,8 +142,8 @@ class Dice extends JPanel {
     void roll() {
             dice1 = rand.nextInt(6) + 1;
             dice2 = rand.nextInt(6) + 1;
-            this.displayDie();
-            this.displayDie2();
+            this.displayDice();
+            this.displayDice2();
             this.diceLabel2.revalidate();
             this.diceLabel2.repaint();
             this.diceLabel1.revalidate();
