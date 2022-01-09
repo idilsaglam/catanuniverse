@@ -465,6 +465,7 @@ public class BoardPane extends JPanel {
      */
     private void playRobber(Hextile tile) {
         Set<Player> targetPlayers = tile.getSettlementOwners();
+        if (targetPlayers.size() == 0) return;
         Random r = new Random();
         int index = r.nextInt(targetPlayers.size());
         Player targetPlayer = null;
