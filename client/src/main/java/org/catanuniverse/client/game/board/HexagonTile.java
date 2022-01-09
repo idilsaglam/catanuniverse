@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
+import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
@@ -16,6 +17,7 @@ import java.util.function.Predicate;
 import javax.swing.JPanel;
 import org.catanuniverse.core.game.GroundType;
 import org.catanuniverse.core.game.Hextile;
+import org.catanuniverse.core.game.Player;
 
 class HexagonTile extends JPanel implements MouseListener {
     private static final long serialVersionUID = 1L;
@@ -27,7 +29,7 @@ class HexagonTile extends JPanel implements MouseListener {
     public HexagonTile(int x, int y, int radius, Hextile tile) {
         final double r3 = Math.sqrt(3);
         this.setOpaque(false);
-        this.hexagon = new Hexagon((int) Math.ceil(radius * r3 / 2), radius, radius, tile);
+        this.hexagon = new Hexagon((int) Math.ceil(radius * r3 / 2), radius, radius, tile, new Point(this.getBounds().x, this.getBounds().y));
         this.setBounds(
                 (int) Math.ceil(x - radius * r3 / 2),
                 y - radius,
@@ -50,6 +52,15 @@ class HexagonTile extends JPanel implements MouseListener {
 
     public void setOnAddRoadCallback(BiPredicate<Hextile, Integer> onAddRoad) {
         this.onAddRoad = onAddRoad;
+    }
+
+    /**
+     * Get the set of coordinates of the player's roads
+     * @param player The player who owns the roads
+     * @return The set of road's coordinates
+     */
+    public Set<Point> getPlayerRoadCoordinates(Player player) {
+        return this.hexagon.getPlayerRoadCoordinates(player);
     }
 
     @Override

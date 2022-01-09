@@ -11,6 +11,8 @@ import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
+import java.util.HashSet;
+import java.util.Set;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.game.*;
 
@@ -31,10 +33,12 @@ class Hexagon extends Polygon {
     private int rotation = 90;
     private final Hextile hextile;
     private final Line2D[] sides;
+    private final Point parentPosition;
 
-    public Hexagon(Point center, int radius, Hextile hextile) {
+    public Hexagon(Point center, int radius, Hextile hextile, Point parentPos) {
         this.hextile = hextile;
         final double r3 = Math.sqrt(3);
+        this.parentPosition = parentPos;
         this.sides = new Line2D[Hexagon.SIDES];
         super.xpoints =
                 new int[] {
@@ -67,18 +71,20 @@ class Hexagon extends Polygon {
             );
         }
         // updatePoints();
+        System.out.println(center);
+        System.out.println(center);
     }
 
-    public Hexagon(int x, int y, int radius, Hextile hextile) {
-        this(new Point(x, y), radius, hextile);
+    public Hexagon(int x, int y, int radius, Hextile hextile, Point parentPos) {
+        this(new Point(x, y), radius, hextile, parentPos);
     }
 
-    public Hexagon(Point center, int radius, int id, GroundType groundType) {
-        this(center, radius, new Hextile(id, groundType));
+    public Hexagon(Point center, int radius, int id, GroundType groundType, Point parentPos) {
+        this(center, radius, new Hextile(id, groundType), parentPos);
     }
 
-    public Hexagon(int x, int y, int radius, int id, GroundType groundType) {
-        this(new Point(x, y), radius, new Hextile(id, groundType));
+    public Hexagon(int x, int y, int radius, int id, GroundType groundType, Point parentPos) {
+        this(new Point(x, y), radius, new Hextile(id, groundType), parentPos);
     }
 
     public int getRadius() {
@@ -115,6 +121,45 @@ class Hexagon extends Polygon {
 
     Hextile getHextile() {
         return this.hextile;
+    }
+
+    /**
+     * Get the point of the position in the parent of the current hexagon
+     * @param cornerIndex The index of the corner to calculate the position
+     * @return The point of the corner in the parent's plane
+     */
+    private Point getParentPositionOfCorner(int cornerIndex) {
+        return new Point(
+            this.parentPosition.x + this.xpoints[cornerIndex],
+            this.parentPosition.y + this.ypoints[cornerIndex]
+        );
+    }
+
+    /**
+     * Get the set of the corner indexes that given players roads passes
+     * @param player The player we're searching for roads
+     * @return The set of integers with corner indexes
+     */
+    private Set<Integer> getUserRoadCorners(Player player) {
+        Set<Integer> result = new HashSet<>();
+        for (Integer roadIndex: this.hextile.getRoadIndexesOfPlayer(player)) {
+            result.add(roadIndex);
+            result.add((roadIndex+1)%Hextile.NB_SIDES);
+        }
+        return result;
+    }
+
+    /**
+     * Get the set of points coordinates in the parent JPanel's plane that given player's roads passes
+     * @param p The player to get roads
+     * @return The Set of coordinates on parent's plane.
+     */
+    public Set<Point> getPlayerRoadCoordinates(Player p) {
+        Set<Point> result = new HashSet<>();
+        for (Integer cornerIndex: this.getUserRoadCorners(p)) {
+            result.add(this.getParentPositionOfCorner(cornerIndex));
+        }
+        return result;
     }
 
     private Point getStringCoordinates(Rectangle2D rectangle) {
