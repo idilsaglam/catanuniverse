@@ -8,7 +8,7 @@ package org.catanuniverse.commons;
 import org.catanuniverse.core.game.Player;
 
 public abstract class GameSettings {
-    public static int DEFAULT_CAPACITY = 4, DEFAULT_NUMBER_OF_AI = 0;
+    public static int DEFAULT_CAPACITY = 4, DEFAULT_NUMBER_OF_AI = 0, DEFAULT_VICTORY_POINTS = 10;
 
     protected int capacity;
     protected int numberOfAI;
@@ -16,6 +16,7 @@ public abstract class GameSettings {
     protected Player[] players;
     protected int currentPlayerIndex = 0;
     protected boolean robberActivated;
+    protected int maxVictoryPoints;
     private int nextCounter;
     public GameSettings() {
         this.capacity = -1;
@@ -24,6 +25,7 @@ public abstract class GameSettings {
         this.players = new Player[0];
         this.robberActivated = false;
         this.nextCounter = 0;
+        this.maxVictoryPoints = GameSettings.DEFAULT_VICTORY_POINTS;
     }
 
     public GameSettings(int capacity, int numberOfAI, Difficulty difficulty) {
@@ -292,5 +294,13 @@ public abstract class GameSettings {
      */
     public boolean isRobberActivated() {
         return this.robberActivated;
+    }
+
+    /**
+     * Changes the maximum victory points of the game room
+     * @param victoryPoints The maximum victory points
+     */
+    public void setVictoryPoints(Integer victoryPoints) {
+        this.maxVictoryPoints = victoryPoints;
     }
 }

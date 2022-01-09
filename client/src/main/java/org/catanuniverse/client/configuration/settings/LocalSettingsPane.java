@@ -15,7 +15,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
     private final CapacitySelector capacitySelector;
     private final NumberOfAISelector numberOfAISelector;
     private final DifficultySelector difficultySelector;
-
+    private final VictoryPointsSelector victoryPointsSelector;
     protected LocalSettingsPane(Consumer<GameSettings> onGameSettingsChanged) {
         super(onGameSettingsChanged);
         super.settings =
@@ -34,14 +34,25 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
                 new CapacitySelector(
                         GameSettingsPane.DEFAULT_CAPACITY,
                         this::onCapacitySelectorUpdated);
+        this.victoryPointsSelector = new VictoryPointsSelector(this::onVictoryPointsUpdated);
         this.add(this.capacitySelector);
         this.add(this.numberOfAISelector);
         this.add(this.difficultySelector);
+        this.add(this.victoryPointsSelector);
     }
 
     @Override
     boolean isSettingsValid() {
         return true;
+    }
+
+  /**
+   * Handles the update of the victory points
+   * @param victoryPoints The number of victory points
+   */
+  private void onVictoryPointsUpdated(Integer victoryPoints) {
+      super.settings.setVictoryPoints(victoryPoints);
+      super.onGameSettingsChanged.accept(super.settings);
     }
 
   /**
