@@ -22,6 +22,7 @@ public class Player {
     private final boolean ai;
     private int nbSettlement,nbRoad;
     private HashMap<Card,Integer> userCards;
+    private boolean largestArmy;
 
     public HashMap<Card, Integer> getUserCards() {
         return userCards;
@@ -64,6 +65,9 @@ public class Player {
     }
 
     public int getVictoryPoint() {
+        if(this.largestArmy){
+            return victoryPoint+2;
+        }
         return victoryPoint;
     }
 
