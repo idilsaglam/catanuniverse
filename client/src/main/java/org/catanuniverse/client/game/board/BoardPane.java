@@ -146,10 +146,10 @@ public class BoardPane extends JPanel {
      * @param usedCard The card which will be used by the current player
      */
     private void onCardUsed(Card usedCard) {
-        switch (usedCard) {
-            case KNIGHT -> this.gameSettings.setRobberActivated(true);
-            default -> usedCard.use(this.gameSettings.getCurrentPlayer());
+        if (usedCard == Card.KNIGHT) {
+            this.activateRobber();
         }
+        usedCard.use(this.gameSettings.getCurrentPlayer());
         this.updateStatusBars();
     }
 
