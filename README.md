@@ -29,7 +29,8 @@ La commande `java --version` sur votre terminal doit donner résultat suivant:
 openjdk 17 2021-09-14
 OpenJDK Runtime Environment (build 17+35-2724)
 OpenJDK 64-Bit Server VM (build 17+35-2724, mixed mode, sharing)
-	```
+```
+
 - JDK version 15
 
 # Compiler
@@ -45,7 +46,7 @@ gradle :client:build
 
 # Lancer l'application Java Swing (Interface Graphique)
 
-**IMPORTANT:** Pour pouvoir lancer correctement l'interface graphique Java Swing. Rassurez vous que les logiciels pré-requis sont installé avec les précisés dans la partie [Prérequis](#pr-requis).
+**IMPORTANT:** Pour pouvoir lancer correctement l'interface graphique Java Swing. Rassurez vous que les logiciels pré-requis sont installé avec les précisés dans la partie [Pré-requis](#pré-requis).
 
 
 Depuis le dossier où ce README est situé, lancez la commande suivant dans un terminal;
