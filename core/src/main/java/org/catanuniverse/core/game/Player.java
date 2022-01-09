@@ -28,6 +28,7 @@ public class Player {
     private final boolean ai;
     private int nbSettlement,nbRoad;
     private HashMap<Card,Integer> userCards;
+    private boolean largestArmy;
 
     public HashMap<Card, Integer> getUserCards() {
         return userCards;
@@ -70,6 +71,9 @@ public class Player {
     }
 
     public int getVictoryPoint() {
+        if(this.largestArmy){
+            return victoryPoint+2;
+        }
         return victoryPoint;
     }
 
@@ -212,7 +216,7 @@ public class Player {
      */
     public void buyDeveloppementCard(){
         if(canBuyDeveloppementCard()){
-            this.updateResource(Resource.Wood, -1);
+            this.updateResource(Resource.Wool, -1);
             this.updateResource(Resource.Corn, -1);
             this.updateResource(Resource.Mineral, -1);;
         }

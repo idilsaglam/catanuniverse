@@ -9,7 +9,8 @@ public enum Card {
   BLE2,
   MINERAL1,
   VP1,
-  VP2;
+  VP2,
+  KNIGHT;
 
   /**
    * Player use a card
@@ -42,7 +43,8 @@ public enum Card {
       case 0 -> BLE2;
       case 1 -> VP2;
       case 2 -> VP1;
-      default -> MINERAL1;
+      case 3 -> MINERAL1;
+      default -> KNIGHT;
     };
   }
 
@@ -62,6 +64,7 @@ public enum Card {
       case VP2 -> "cart1";
       case BLE2 -> "cart0";
       case MINERAL1 -> "cart3";
+      case KNIGHT -> "cart4";
     });
     System.out.printf("Card getImage image path %s\n", imagePath);
     return ImageIO.read(this.getClass().getResource(imagePath)).getScaledInstance(width, height, hints);

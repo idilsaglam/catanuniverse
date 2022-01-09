@@ -14,7 +14,6 @@ public enum GroundType {
     Meadow(Resource.Wool),
     Farm(Resource.Corn),
     Mountain(Resource.Mineral),
-    // TODO: Update the resource with water or something else
     Water(null),
     Desert(null);
 
@@ -47,7 +46,7 @@ public enum GroundType {
         return switch (this) {
             case Water -> 0x5D9BC2;
             case Forest -> 0x4B7922;
-            case Hill -> 0x19DCCD;
+            case Hill -> 0x6CC87A;
             case Meadow -> 0xB3C92F;
             case Farm -> 0xCD7730;
             case Mountain -> 0xF2D2A9;

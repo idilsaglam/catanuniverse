@@ -48,7 +48,8 @@ public class BoardPane extends JPanel {
         this.boardSidePane = new BoardSidePane(this::onDiceRolled,
             this::onCardUsed,
             this::onCardStocked,
-            this::canDrawCard
+            this::canDrawCard,
+                this::onCardDrawn
             );
         this.gameBoardPane.setOnRobberMoved(this::onRobberMoved);
         this.gameBoardPane.setOnSettlementAdded(this::onSettlementAdded);
@@ -66,7 +67,16 @@ public class BoardPane extends JPanel {
         this.boardSidePane.disableDice();
     }
 
-
+    /**
+     * Method that updates knight card on status bar.
+     * @param card
+     */
+    private void onCardDrawn(Card card){
+        if(card==Card.KNIGHT){
+            this.gameSettings.getCurrentPlayer().incrementAchievement(Achievements.KNIGHT,1);
+        }
+        this.updateStatusBars();
+    }
     /**
      * Method handles the on next button pressed action
      */
@@ -131,6 +141,10 @@ public class BoardPane extends JPanel {
      * @param usedCard The card which will be used by the current player
      */
     private void onCardUsed(Card usedCard) {
+        if(usedCard==Card.KNIGHT){
+            this.gameSettings.setRobberActivated(true);
+            return;
+        }
         usedCard.use(this.gameSettings.getCurrentPlayer());
     }
 
