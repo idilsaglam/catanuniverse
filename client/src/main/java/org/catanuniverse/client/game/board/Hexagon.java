@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
@@ -10,9 +7,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.game.*;
 
@@ -20,7 +17,6 @@ class Hexagon extends Polygon {
 
     private static final long serialVersionUID = 1L;
     private static final int CLICK_DISTANCE = 10;
-    // TODO: Add a static variable for harbor color
 
     private static final Color ROAD_COLOR = new Color(0x19DCCD);
     private static final Color SETTLEMENT_COLOR = new Color(0x000000);
@@ -63,12 +59,12 @@ class Hexagon extends Polygon {
         this.radius = radius;
         this.npoints = SIDES;
         for (int i = 0; i < Hexagon.SIDES; i++) {
-            this.sides[i] = new Line2D.Double(
-                this.xpoints[i],
-                this.ypoints[i],
-                this.xpoints[(i+1) % Hexagon.SIDES],
-                this.ypoints[(i+1) % Hexagon.SIDES]
-            );
+            this.sides[i] =
+                    new Line2D.Double(
+                            this.xpoints[i],
+                            this.ypoints[i],
+                            this.xpoints[(i + 1) % Hexagon.SIDES],
+                            this.ypoints[(i + 1) % Hexagon.SIDES]);
         }
         // updatePoints();
         System.out.println(center);
@@ -125,38 +121,41 @@ class Hexagon extends Polygon {
 
     /**
      * Get the point of the position in the parent of the current hexagon
+     *
      * @param cornerIndex The index of the corner to calculate the position
      * @return The point of the corner in the parent's plane
      */
     private Point getParentPositionOfCorner(int cornerIndex) {
         return new Point(
-            this.parentPosition.x + this.xpoints[cornerIndex],
-            this.parentPosition.y + this.ypoints[cornerIndex]
-        );
+                this.parentPosition.x + this.xpoints[cornerIndex],
+                this.parentPosition.y + this.ypoints[cornerIndex]);
     }
 
     /**
      * Get the set of the corner indexes that given players roads passes
+     *
      * @param player The player we're searching for roads
      * @return The set of integers with corner indexes
      */
     private Set<Integer> getUserRoadCorners(Player player) {
         Set<Integer> result = new HashSet<>();
-        for (Integer roadIndex: this.hextile.getRoadIndexesOfPlayer(player)) {
+        for (Integer roadIndex : this.hextile.getRoadIndexesOfPlayer(player)) {
             result.add(roadIndex);
-            result.add((roadIndex+1)%Hextile.NB_SIDES);
+            result.add((roadIndex + 1) % Hextile.NB_SIDES);
         }
         return result;
     }
 
     /**
-     * Get the set of points coordinates in the parent JPanel's plane that given player's roads passes
+     * Get the set of points coordinates in the parent JPanel's plane that given player's roads
+     * passes
+     *
      * @param p The player to get roads
      * @return The Set of coordinates on parent's plane.
      */
     public Set<Point> getPlayerRoadCoordinates(Player p) {
         Set<Point> result = new HashSet<>();
-        for (Integer cornerIndex: this.getUserRoadCorners(p)) {
+        for (Integer cornerIndex : this.getUserRoadCorners(p)) {
             result.add(this.getParentPositionOfCorner(cornerIndex));
         }
         return result;
@@ -168,21 +167,13 @@ class Hexagon extends Polygon {
 
         return switch (this.hextile.getHarborIndex()) {
             case 0, 1 -> new Point(
-                    (int) Math.ceil(this.center.x - w / 2),
-                    (int) Math.ceil(this.center.y + h)
-            );
+                    (int) Math.ceil(this.center.x - w / 2), (int) Math.ceil(this.center.y + h));
             case 2 -> new Point(
-                    (int) Math.ceil(this.center.x - w),
-                    (int) Math.ceil(this.center.y + h / 2)
-            );
+                    (int) Math.ceil(this.center.x - w), (int) Math.ceil(this.center.y + h / 2));
             case 3, 4 -> new Point(
-                    (int) Math.ceil(this.center.x - w / 2),
-                    (int) Math.ceil(this.center.y)
-            );
+                    (int) Math.ceil(this.center.x - w / 2), (int) Math.ceil(this.center.y));
             case 5 -> new Point(
-                    (int) Math.ceil(this.center.x ),
-                    (int) Math.ceil(this.center.y + h / 2)
-            );
+                    (int) Math.ceil(this.center.x), (int) Math.ceil(this.center.y + h / 2));
             default -> null;
         };
     }
@@ -200,10 +191,17 @@ class Hexagon extends Polygon {
                 try {
                     Harbor h = this.hextile.getHarbor(this.hextile.getHarborIndex());
                     Resource r = h.getResource();
-                    Color c = (r == null) ? Color.BLACK : new Color(GroundType.fromResource(r).getColor());
+                    Color c =
+                            (r == null)
+                                    ? Color.BLACK
+                                    : new Color(GroundType.fromResource(r).getColor());
                     String harborCoeff = String.format("%d:1", h.getCoeff());
                     g.setColor(Color.BLACK);
-                    Point p = this.getStringCoordinates(g.getFont().getStringBounds(harborCoeff, g.getFontRenderContext()));
+                    Point p =
+                            this.getStringCoordinates(
+                                    g.getFont()
+                                            .getStringBounds(
+                                                    harborCoeff, g.getFontRenderContext()));
                     g.drawString(harborCoeff, p.x, p.y);
                     g.setColor(c);
                     g.fillPolygon(this.getTriangle(this.hextile.getHarborIndex()));
@@ -212,42 +210,36 @@ class Hexagon extends Polygon {
                 }
             }
             if (!this.hextile.getPlayable() && this.hextile.getGroundType() != GroundType.Water) {
-                double r = this.radius/2.;
+                double r = this.radius / 2.;
 
                 g.setColor(Color.BLACK);
                 g.fill(this.getRobberEllipse());
             }
-        }
-        else g.drawPolygon(xpoints, ypoints, npoints);
+        } else g.drawPolygon(xpoints, ypoints, npoints);
 
         // Set values to previous when done.
         g.setColor(tmpC);
         g.setStroke(tmpS);
     }
 
-
     /**
      * Get the robber ellipse shape
+     *
      * @return The 2D ellipse for robber
      */
     Ellipse2D getRobberEllipse() {
-        return new Ellipse2D.Double(this.center.x - this.radius/4., this.center.y - this.radius/4., this.radius /2. , this.radius /2.);
+        return new Ellipse2D.Double(
+                this.center.x - this.radius / 4.,
+                this.center.y - this.radius / 4.,
+                this.radius / 2.,
+                this.radius / 2.);
     }
 
     private Polygon getTriangle(int side) {
         return new Polygon(
-                new int[] {
-                 xpoints[side],
-                 this.center.x,
-                 xpoints[(side+1)%Hexagon.SIDES]
-                },
-                new int[]{
-                    ypoints[side],
-                    this.center.y,
-                    ypoints[(side+1)%Hexagon.SIDES]
-                },
-                3
-        );
+                new int[] {xpoints[side], this.center.x, xpoints[(side + 1) % Hexagon.SIDES]},
+                new int[] {ypoints[side], this.center.y, ypoints[(side + 1) % Hexagon.SIDES]},
+                3);
     }
 
     void drawRoads(Graphics2D g) {
@@ -288,12 +280,14 @@ class Hexagon extends Polygon {
 
     /**
      * Check if a given point is in a corner
+     *
      * @param point The point to check
      * @return The number of the corner slot or null
      */
     Integer getCornerFromPoint(Point point) {
-        for (int i = 0; i<Hexagon.SIDES; i++) {
-            if ((new Point2D.Double(this.xpoints[i], this.ypoints[i])).distance(point) <= Hexagon.CLICK_DISTANCE) {
+        for (int i = 0; i < Hexagon.SIDES; i++) {
+            if ((new Point2D.Double(this.xpoints[i], this.ypoints[i])).distance(point)
+                    <= Hexagon.CLICK_DISTANCE) {
                 return i;
             }
         }
@@ -302,7 +296,7 @@ class Hexagon extends Polygon {
 
     Integer getSideFromPoint(Point point) {
         Integer mindex = null;
-        Double minVal = null;
+        java.lang.Double minVal = null;
         double dist;
         for (int i = 0; i < Hexagon.SIDES; i++) {
             dist = this.sides[i].ptLineDist(point);
@@ -328,19 +322,19 @@ class Hexagon extends Polygon {
 
     private void drawCityTriangle(Graphics2D g2d, Point center) {
         double r3 = Math.sqrt(3);
-        Polygon polygon = new Polygon(
-            new int[]{
-                (int)Math.ceil(center.x - (Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2 * r3)),
-                center.x,
-                (int)Math.ceil(center.x + (Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2 * r3)),
-            },
-            new int[]{
-                (int)Math.ceil(center.y + Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2),
-                center.y - Hexagon.SETTLEMENT_CIRCLE_RADIUS,
-                (int)Math.ceil(center.y + Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2),
-            },
-            3
-        );
+        Polygon polygon =
+                new Polygon(
+                        new int[] {
+                            (int) Math.ceil(center.x - (Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2 * r3)),
+                            center.x,
+                            (int) Math.ceil(center.x + (Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2 * r3)),
+                        },
+                        new int[] {
+                            (int) Math.ceil(center.y + Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2),
+                            center.y - Hexagon.SETTLEMENT_CIRCLE_RADIUS,
+                            (int) Math.ceil(center.y + Hexagon.SETTLEMENT_CIRCLE_RADIUS / 2),
+                        },
+                        3);
         g2d.fill(polygon);
     }
 
@@ -366,5 +360,17 @@ class Hexagon extends Polygon {
 
     Point getCenter() {
         return this.center;
+    }
+
+    public Line2D getLineModel(Integer sideIndex) {
+        Function<Integer, Point> absolutePoint =
+                (Integer index) -> {
+                    return new Point(
+                            this.xpoints[index] + this.parentPosition.x,
+                            this.ypoints[index] + this.parentPosition.y);
+                };
+        return new Line2D.Double(
+                absolutePoint.apply(sideIndex),
+                absolutePoint.apply((sideIndex + 1) % this.npoints));
     }
 }

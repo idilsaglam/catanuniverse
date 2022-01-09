@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.chat;
 
 import java.awt.Color;

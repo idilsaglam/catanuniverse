@@ -1,24 +1,18 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.awt.geom.Line2D;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
 import org.catanuniverse.core.game.Board;
 import org.catanuniverse.core.game.Hextile;
+import org.catanuniverse.core.utils.TriPredicate;
 
 class GameBoardPane extends JPanel {
 
@@ -31,10 +25,11 @@ class GameBoardPane extends JPanel {
     private final Board board;
     private FontMetrics metrics;
 
-    private BiPredicate<Hextile, Integer> onRoadAdded, onSettlementAdded;
+    private BiPredicate<Hextile, Integer> onSettlementAdded;
+    private TriPredicate<Hextile, Integer, Line2D> onRoadAdded;
     private Predicate<Hextile> onRobberMoved;
 
-    public GameBoardPane(Dimension size)  {
+    public GameBoardPane(Dimension size) {
         this.size = size;
         try {
             this.board = new Board(GameBoardPane.SIZE);
@@ -46,10 +41,9 @@ class GameBoardPane extends JPanel {
         }
         this.setLayout(null);
         this.setHexagons(7, 35, 0);
-
     }
 
-    void setOnRoadAdded(BiPredicate<Hextile, Integer> onRoadAdded) {
+    void setOnRoadAdded(TriPredicate<Hextile, Integer, Line2D> onRoadAdded) {
         this.onRoadAdded = onRoadAdded;
     }
 
@@ -59,6 +53,7 @@ class GameBoardPane extends JPanel {
 
     /**
      * Updates the onRobberMoved predicate
+     *
      * @param onRobberMoved The new onRobberMoved predicate
      */
     void setOnRobberMoved(Predicate<Hextile> onRobberMoved) {
@@ -93,6 +88,7 @@ class GameBoardPane extends JPanel {
 
     /**
      * Method called when the robber moved
+     *
      * @param hextile The hextile on which the robber moved
      * @return True if the robber can moved, false if not
      */
@@ -105,12 +101,12 @@ class GameBoardPane extends JPanel {
         return false;
     }
 
-    private boolean addRoad(Hextile tile , Integer roadSlot) {
+    private boolean addRoad(Hextile tile, Integer roadSlot, Line2D lineModel) {
         System.out.println("Add road");
         if (this.onRoadAdded == null) {
             return false;
         }
-        return this.onRoadAdded.test(tile, roadSlot);
+        return this.onRoadAdded.test(tile, roadSlot, lineModel);
     }
 
     private boolean addSettlement(Hextile tile, Integer settlementSlot) {
@@ -123,6 +119,7 @@ class GameBoardPane extends JPanel {
 
     /**
      * Handles dice roll action
+     *
      * @param diceResult The total number on dice
      * @return true if tile exists, false if not
      */

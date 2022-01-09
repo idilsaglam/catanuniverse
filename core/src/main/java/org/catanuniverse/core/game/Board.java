@@ -1,14 +1,9 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.core.game;
 
-import java.awt.Point;
 import java.util.*;
 import java.util.function.Supplier;
-
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
 import org.catanuniverse.core.exceptions.SlotAlreadyTakenException;
 import org.catanuniverse.core.exceptions.TileTypeNotSupportedException;
@@ -35,44 +30,44 @@ public class Board {
 
     /**
      * Method returns harbor if player can exchange their resources
+     *
      * @param player The player to check
      * @return Harbor owned by the given player
      */
-    public java.util.Set<Harbor> getHarborsOfPlayer(Player  player){
+    public java.util.Set<Harbor> getHarborsOfPlayer(Player player) {
         // resouces && settlement
         Hextile tile;
         Harbor harbor;
         Resource harborResource;
         Set<Harbor> harbors = new HashSet<>();
         for (int row = 0; row < this.tiles.length; row++) {
-            for (int column = 0; column<this.tiles[row].length; column++) {
-                if (
-                    (
-                        (row == 1) ||
-                        (row == this.tiles.length - 2) ||
-                        (column == 0) ||
-                        (column == this.tiles[row].length - 2)
-                    ) && this.tiles[row][column].hasHarbor()
-                ) {
+            for (int column = 0; column < this.tiles[row].length; column++) {
+                if (((row == 1)
+                                || (row == this.tiles.length - 2)
+                                || (column == 0)
+                                || (column == this.tiles[row].length - 2))
+                        && this.tiles[row][column].hasHarbor()) {
                     int harborIndex = this.tiles[row][column].getHarborIndex();
                     tile = this.tiles[row][column];
-                    if (
-                            (tile.getSettlementSlot(harborIndex) != null &&
-                            tile.getSettlementSlot(harborIndex).getOwner().uid == player.uid) ||
-                            (tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES) != null && tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES).getOwner().uid == player.uid))
-                    {
+                    if ((tile.getSettlementSlot(harborIndex) != null
+                                    && tile.getSettlementSlot(harborIndex).getOwner().uid
+                                            == player.uid)
+                            || (tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES) != null
+                                    && tile.getSettlementSlot((harborIndex + 1) % Hextile.NB_SIDES)
+                                                    .getOwner()
+                                                    .uid
+                                            == player.uid)) {
 
                         try {
                             harbor = tile.getHarbor(tile.getHarborIndex());
                             harborResource = harbor.getResource();
                             if (harborResource == null) {
-                                 harbors.add(harbor);
-                                    continue;
+                                harbors.add(harbor);
+                                continue;
                             }
                             harbors.add(harbor);
                         } catch (NoSuchSlotException ignore) {
                         }
-
                     }
                 }
             }
@@ -121,16 +116,16 @@ public class Board {
                     this.tiles[i][j] = new Hextile(7, GroundType.Desert);
                     continue;
                 }
-                Supplier<Integer> generateLabelId = () -> {
-                    Random r = new Random();
-                    int result;
-                    do {
-                        result = r.nextInt(12) + 1;
-                    } while(result == 7);
-                    return result;
-                };
+                Supplier<Integer> generateLabelId =
+                        () -> {
+                            Random r = new Random();
+                            int result;
+                            do {
+                                result = r.nextInt(12) + 1;
+                            } while (result == 7);
+                            return result;
+                        };
                 this.tiles[i][j] = new Hextile(generateLabelId.get(), groundType);
-
             }
         }
     }
@@ -156,17 +151,18 @@ public class Board {
                 tile[j].addNeighbor(2, tile[j + 1]);
             }
         }
-        for (int i = 0; i<this.tiles.length; i++) {
-            if (i == 0 || i == this.tiles.length -1) {
+        for (int i = 0; i < this.tiles.length; i++) {
+            if (i == 0 || i == this.tiles.length - 1) {
                 this.tiles[i][0].addHarbor(Harbor.random());
                 this.tiles[i][2].addHarbor(Harbor.random());
             }
-            this.tiles[i][(i%2 == 0) ? 0 : this.tiles[i].length-1].addHarbor(Harbor.random());
+            this.tiles[i][(i % 2 == 0) ? 0 : this.tiles[i].length - 1].addHarbor(Harbor.random());
         }
     }
 
     /**
      * Checks if a tile with given number exists or not
+     *
      * @param diceResult The number to check
      * @return True if a tile with given number exists or false
      */
@@ -183,12 +179,13 @@ public class Board {
 
     /**
      * Send related resources to players who have settlements or cities on this tile
+     *
      * @param diceResult The number of tile
      */
     public void sendResourcesToPlayers(Integer diceResult) {
         System.out.printf("Send resource to players method called with %d\n", diceResult);
         for (Hextile[] row : this.tiles) {
-            for (Hextile innerTile: row) {
+            for (Hextile innerTile : row) {
                 if (innerTile.getId() == diceResult && innerTile.playable) {
                     innerTile.sendResources();
                 }
@@ -196,13 +193,11 @@ public class Board {
         }
     }
 
-    /**
-     * Make all playable except for water and desert
-     */
+    /** Make all playable except for water and desert */
     public void resetRobber() {
-        for (Hextile[] row: this.tiles) {
-            for (Hextile tile: row) {
-                if ( tile.getGroundType() == GroundType.Water) continue;
+        for (Hextile[] row : this.tiles) {
+            for (Hextile tile : row) {
+                if (tile.getGroundType() == GroundType.Water) continue;
                 tile.setPlayable(true);
             }
         }
@@ -210,33 +205,32 @@ public class Board {
 
     /**
      * Add a city on behalf of the given player
+     *
      * @param p The player who adds the city
      */
-    public void addCity(Player p){
+    public void addCity(Player p) {
         List<Settlement> settlements;
-        for(int i=0; i< tiles.length; i++){
-           for(int j=0; j<tiles[i].length; j++){
-               for (int settlementSlot = 0; i<Hextile.NB_SIDES; settlementSlot++) {
-                   if (
-                       this.tiles[i][j].getSettlementSlot(settlementSlot) != null &&
-                       this.tiles[i][j].getSettlementSlot(settlementSlot).getOwner().uid == p.uid
-                   ) {
-                       try {
-                           this.tiles[i][j].upgradeSettlement(settlementSlot);
-                           return;
-                       } catch (NoSuchSlotException e) {
-                           e.printStackTrace();
-                       }
-                   }
-               }
-
-           }
+        for (int i = 0; i < tiles.length; i++) {
+            for (int j = 0; j < tiles[i].length; j++) {
+                for (int settlementSlot = 0; i < Hextile.NB_SIDES; settlementSlot++) {
+                    if (this.tiles[i][j].getSettlementSlot(settlementSlot) != null
+                            && this.tiles[i][j].getSettlementSlot(settlementSlot).getOwner().uid
+                                    == p.uid) {
+                        try {
+                            this.tiles[i][j].upgradeSettlement(settlementSlot);
+                            return;
+                        } catch (NoSuchSlotException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
     }
 
-
     /**
      * Make build a road to the first eligible slot the given player
+     *
      * @param currentPlayer The player to build the road
      */
     public void buildRoad(Player currentPlayer) {
@@ -257,12 +251,13 @@ public class Board {
 
     /**
      * Make the given player build a settlement to the first eligible place in the board
+     *
      * @param player The player who will build the settlement on the board
      */
     public void buildSettlement(Player player) {
         Settlement settlement = new Settlement(player);
-        for (Hextile[] row: this.tiles) {
-            for (Hextile tile: row) {
+        for (Hextile[] row : this.tiles) {
+            for (Hextile tile : row) {
                 Integer settlementSlot = tile.getFirstEligibleSettlementSlot(settlement);
                 if (settlementSlot == null) continue;
                 try {
@@ -277,11 +272,12 @@ public class Board {
 
     /**
      * Find the robber in the board
+     *
      * @return The Hextile with the robber
      */
     private Hextile getRobber() {
         for (Hextile[] row : this.tiles) {
-            for (Hextile tile: row) {
+            for (Hextile tile : row) {
                 if (!tile.getPlayable() && tile.isNotWater()) {
                     return tile;
                 }
@@ -290,9 +286,7 @@ public class Board {
         return null;
     }
 
-    /**
-     * Move the robber to a random tile
-     */
+    /** Move the robber to a random tile */
     public void randomRobber() {
         Hextile initialTile = this.getRobber();
         Random r = new Random();
@@ -300,7 +294,7 @@ public class Board {
         do {
             i = r.nextInt(this.tiles.length - 2) + 1;
             j = r.nextInt(this.tiles[i].length - 2) + 1;
-        } while(!this.tiles[i][j].playable && this.tiles[i][j].isNotWater());
+        } while (!this.tiles[i][j].playable && this.tiles[i][j].isNotWater());
         this.tiles[i][j].setPlayable(false);
         if (initialTile == null) return;
         initialTile.setPlayable(true);

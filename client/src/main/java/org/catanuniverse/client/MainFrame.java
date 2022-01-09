@@ -1,15 +1,10 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import javax.swing.*;
-
 import org.catanuniverse.client.configuration.ConfigurationPane;
 import org.catanuniverse.client.game.GameBoard;
 import org.catanuniverse.commons.GameSettings;
@@ -23,6 +18,7 @@ public class MainFrame extends JFrame {
     private Dimension size;
     private Point position;
     private Rectangle defaultSize;
+
     public MainFrame() {
         this.init();
         this.configurationPane = new ConfigurationPane(this::setGameSettings);
@@ -51,7 +47,8 @@ public class MainFrame extends JFrame {
         // the maximum size of the screen should not be bigger than the screen size
         super.setMaximumSize(screenSize);
         // Set the JFrame bound with the given position and the given size
-        defaultSize = new Rectangle(this.position.x, this.position.y, this.size.width, this.size.height);
+        defaultSize =
+                new Rectangle(this.position.x, this.position.y, this.size.width, this.size.height);
         super.setBounds(defaultSize);
     }
 
@@ -61,11 +58,11 @@ public class MainFrame extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         // Update the position. The position should be top left corner of the screen
-        this.position = new Point((screenSize.width) / 2, (screenSize.height) /2);
+        this.position = new Point((screenSize.width) / 2, (screenSize.height) / 2);
         // The frame size should be the screen size
         this.size = screenSize;
         // Update the bounds of the current frame
-        super.setBounds(0,0,screenSize.width,screenSize.height);
+        super.setBounds(0, 0, screenSize.width, screenSize.height);
         // Update the minimum frame size
         super.setMinimumSize(this.size);
         // Update the maximum frame size
@@ -91,12 +88,13 @@ public class MainFrame extends JFrame {
 
     /** Load the game board after the configuration */
     private void loadGameBoard() throws IOException {
-        if(this.gameSettings instanceof LocalGameSettings) {
+        if (this.gameSettings instanceof LocalGameSettings) {
             JWindow window = new JWindow();
-            //TODO: Add loading picture here or anything here
+            // TODO: Add loading picture here or anything here
             window.setBounds(defaultSize);
             window.setVisible(true);
-            GameBoard gameBoard = new GameBoard(this.getSafeAreaSize(), this.gameSettings, this::onGameEnd);
+            GameBoard gameBoard =
+                    new GameBoard(this.getSafeAreaSize(), this.gameSettings, this::onGameEnd);
             window.setVisible(false);
             this.setVisible(true);
             window.dispose();
@@ -106,9 +104,13 @@ public class MainFrame extends JFrame {
             return;
         }
 
-        JOptionPane.showMessageDialog(this, "Due to time restrictions, this feature is under active development", "Information", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this,
+                "Due to time restrictions, this feature is under active development",
+                "Information",
+                JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
-/*        // Create a dialog
+        /*        // Create a dialog
         JDialog d = new JDialog(this, "Dialog box");
         // Create a label
         JLabel l = new JLabel("This is a dialog box.");
@@ -133,11 +135,16 @@ public class MainFrame extends JFrame {
 
     /**
      * Method handles the end of game callback
+     *
      * @param player The winner
      */
     private void onGameEnd(Player player) {
         this.setVisible(false);
-        JOptionPane.showMessageDialog(this, String.format("%s won!", player.getUsername()), "End of game", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(
+                this,
+                String.format("%s won!", player.getUsername()),
+                "End of game",
+                JOptionPane.INFORMATION_MESSAGE);
         System.exit(0);
     }
 

@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.core.game;
 
 public class Settlement extends Pin {
@@ -26,9 +23,7 @@ public class Settlement extends Pin {
         super(owner);
     }
 
-    /**
-     * Send resource to the
-     */
+    /** Send resource to the */
     public void sendResource(Resource r) {
         this.owner.updateResource(r, 1);
     }

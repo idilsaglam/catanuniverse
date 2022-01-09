@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.core.game;
 
 import java.util.Random;
@@ -13,6 +10,7 @@ public class Harbor {
 
     /**
      * Creates a new Harbor instance with given resource type and coefficient
+     *
      * @param resource The resource type of the harbor
      * @param coeff The coefficient of the harbor
      */
@@ -23,6 +21,7 @@ public class Harbor {
 
     /**
      * Creates a new Harbor instance with a coefficient
+     *
      * @param coeff The coefficient of the harbor
      */
     public Harbor(int coeff) {
@@ -31,6 +30,7 @@ public class Harbor {
 
     /**
      * Verify if the current harbor is specialised or not
+     *
      * @return True if the current harbor is specialised
      */
     public boolean isSpecialised() {
@@ -39,6 +39,7 @@ public class Harbor {
 
     /**
      * Get the resource of the current Harbor
+     *
      * @return The resource of the current harbor
      */
     public Resource getResource() {
@@ -47,6 +48,7 @@ public class Harbor {
 
     /**
      * Get the coefficient of the current Harbor
+     *
      * @return The coefficient of the current harbor
      */
     public int getCoeff() {
@@ -55,6 +57,7 @@ public class Harbor {
 
     /**
      * Creates a random harbor with random coefficient and random resource type
+     *
      * @return The created Harbor instance
      */
     public static Harbor random() {
@@ -64,8 +67,10 @@ public class Harbor {
 
     @Override
     public String toString() {
-        return (this.isSpecialised() ?
-                String.format("Harbor resource type %s with exchange rate %d:1", this.getResource(), this.getCoeff())
-        : String.format("harbor generic with an exchange rate %d:1", this.getCoeff()));
+        return (this.isSpecialised()
+                ? String.format(
+                        "Harbor resource type %s with exchange rate %d:1",
+                        this.getResource(), this.getCoeff())
+                : String.format("harbor generic with an exchange rate %d:1", this.getCoeff()));
     }
 }

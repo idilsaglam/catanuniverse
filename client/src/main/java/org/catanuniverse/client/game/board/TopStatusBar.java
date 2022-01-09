@@ -1,17 +1,10 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
 import org.catanuniverse.core.game.Player;
 
 class TopStatusBar extends JPanel {
@@ -25,18 +18,15 @@ class TopStatusBar extends JPanel {
         this.players = players;
         this.playerCards = new PlayerCard[players.length];
         for (int i = 0; i < players.length; i++) {
-            this.playerCards[i] = new PlayerCard(this.players[i], i+1);
+            this.playerCards[i] = new PlayerCard(this.players[i], i + 1);
             this.add(this.playerCards[i]);
         }
     }
 
-    /**
-     * Updates player cards
-     */
+    /** Updates player cards */
     public void updatePlayerCard() {
-        for (PlayerCard playerCard: this.playerCards) {
+        for (PlayerCard playerCard : this.playerCards) {
             playerCard.updateAchievements();
         }
     }
-
 }

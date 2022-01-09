@@ -1,35 +1,39 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.geom.Ellipse2D;
+import java.awt.geom.Line2D;
 import java.util.Set;
-import java.util.function.BiConsumer;
 import java.util.function.BiPredicate;
 import java.util.function.Predicate;
-
 import javax.swing.JPanel;
 import org.catanuniverse.core.game.GroundType;
 import org.catanuniverse.core.game.Hextile;
 import org.catanuniverse.core.game.Player;
+import org.catanuniverse.core.utils.TriPredicate;
 
 class HexagonTile extends JPanel implements MouseListener {
     private static final long serialVersionUID = 1L;
 
     private final Hexagon hexagon;
     private FontMetrics metrics;
-    private BiPredicate<Hextile, Integer> onAddSettlement, onAddRoad;
+    private BiPredicate<Hextile, Integer> onAddSettlement;
+    private TriPredicate<Hextile, Integer, Line2D> onAddRoad;
     private Predicate<Hextile> onRobberMoved;
+
     public HexagonTile(int x, int y, int radius, Hextile tile) {
         final double r3 = Math.sqrt(3);
         this.setOpaque(false);
-        this.hexagon = new Hexagon((int) Math.ceil(radius * r3 / 2), radius, radius, tile, new Point(this.getBounds().x, this.getBounds().y));
+        this.hexagon =
+                new Hexagon(
+                        (int) Math.ceil(radius * r3 / 2),
+                        radius,
+                        radius,
+                        tile,
+                        new Point(this.getBounds().x, this.getBounds().y));
         this.setBounds(
                 (int) Math.ceil(x - radius * r3 / 2),
                 y - radius,
@@ -38,24 +42,26 @@ class HexagonTile extends JPanel implements MouseListener {
         this.addMouseListener(this);
     }
 
-    public void setOnAddSettlementCallback(BiPredicate<Hextile,Integer> onAddSettlement) {
+    public void setOnAddSettlementCallback(BiPredicate<Hextile, Integer> onAddSettlement) {
         this.onAddSettlement = onAddSettlement;
     }
 
     /**
      * Updates the onRobberMoved predicate
+     *
      * @param onRobberMoved The nex onRobberMoved predicate function
      */
     public void setOnRobberMoved(Predicate<Hextile> onRobberMoved) {
         this.onRobberMoved = onRobberMoved;
     }
 
-    public void setOnAddRoadCallback(BiPredicate<Hextile, Integer> onAddRoad) {
+    public void setOnAddRoadCallback(TriPredicate<Hextile, Integer, Line2D> onAddRoad) {
         this.onAddRoad = onAddRoad;
     }
 
     /**
      * Get the set of coordinates of the player's roads
+     *
      * @param player The player who owns the roads
      * @return The set of road's coordinates
      */
@@ -90,6 +96,7 @@ class HexagonTile extends JPanel implements MouseListener {
 
     /**
      * Checks if clicked in the robber zone
+     *
      * @param clickPoint The clicked point
      * @return True if clicked inside the robber ellipse
      */
@@ -105,18 +112,22 @@ class HexagonTile extends JPanel implements MouseListener {
             }
         }
         Integer cornerIndex = this.hexagon.getCornerFromPoint(e.getPoint()),
-            sideIndex = this.hexagon.getSideFromPoint(e.getPoint());
+                sideIndex = this.hexagon.getSideFromPoint(e.getPoint());
         boolean updated =
-            cornerIndex != null && this.onAddSettlement != null && this.onAddSettlement
-                .test(this.hexagon.getHextile(), cornerIndex);
+                cornerIndex != null
+                        && this.onAddSettlement != null
+                        && this.onAddSettlement.test(this.hexagon.getHextile(), cornerIndex);
         if (updated) {
             return;
         }
-        if (sideIndex != null && this.onAddRoad != null && this.onAddRoad.test(this.hexagon.getHextile(), sideIndex)) {
+        if (sideIndex != null
+                && this.onAddRoad != null
+                && this.onAddRoad.test(
+                        this.hexagon.getHextile(),
+                        sideIndex,
+                        this.hexagon.getLineModel(sideIndex))) {
             updated = true;
         }
-
-
     }
 
     @Override

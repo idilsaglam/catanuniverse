@@ -1,18 +1,19 @@
+/*
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.board;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
-import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Random;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
+import javax.imageio.ImageIO;
+import javax.swing.*;
 import org.catanuniverse.core.game.Card;
 
 class BoardSidePane extends JPanel {
@@ -20,9 +21,16 @@ class BoardSidePane extends JPanel {
     private final Consumer<Card> onCardStocked;
     private final Dice dice;
     private final Supplier<Boolean> canCardBeDrawn;
-   private final  CardPanel cardPanel;
-   private final Consumer<Card> onCardDrawn;
-    public BoardSidePane(Predicate<Integer> onDiceRolled, Consumer<Card> onCardUsed, Consumer<Card> onCardStocked, Supplier<Boolean> canCardBeDrawn,Consumer<Card> onCardDrawn) throws IOException {
+    private final CardPanel cardPanel;
+    private final Consumer<Card> onCardDrawn;
+
+    public BoardSidePane(
+            Predicate<Integer> onDiceRolled,
+            Consumer<Card> onCardUsed,
+            Consumer<Card> onCardStocked,
+            Supplier<Boolean> canCardBeDrawn,
+            Consumer<Card> onCardDrawn)
+            throws IOException {
         this.onCardDrawn = onCardDrawn;
         GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
@@ -31,10 +39,10 @@ class BoardSidePane extends JPanel {
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         this.dice = new Dice(onDiceRolled);
-        this.add(this.dice,gbc);
+        this.add(this.dice, gbc);
 
         gbc.gridx = 1;
-        this.add(cardPanel,gbc);
+        this.add(cardPanel, gbc);
 
         this.onCardUsed = onCardUsed;
         this.onCardStocked = onCardStocked;
@@ -42,18 +50,17 @@ class BoardSidePane extends JPanel {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-
     }
 
-    public void roll(){
+    public void roll() {
         this.dice.roll();
     }
 
-    public void stockCard(){
+    public void stockCard() {
         this.cardPanel.stockCard(null);
     }
 
-    public void useCard(){
+    public void useCard() {
         this.cardPanel.useCard(null);
     }
 
@@ -61,7 +68,7 @@ class BoardSidePane extends JPanel {
         this.dice.setDisabled();
     }
 
-    public void resetDice(){
+    public void resetDice() {
         this.dice.reset();
     }
 
@@ -82,12 +89,12 @@ class BoardSidePane extends JPanel {
             this.useButton.addActionListener(this::useCard);
             this.buttonContainer = new JPanel();
             this.cardContainer = new JPanel();
-            this.cardContainer.setLayout(new GridLayout(1,2));
+            this.cardContainer.setLayout(new GridLayout(1, 2));
             this.buttonContainer.setLayout(new GridLayout(2, 1));
             this.buttonContainer.add(this.useButton);
             this.buttonContainer.add(this.stockButton);
             BufferedImage card = ImageIO.read(this.getClass().getResource("/card2.png"));
-            Image simg = card.getScaledInstance(200,400,Image.SCALE_SMOOTH);
+            Image simg = card.getScaledInstance(200, 400, Image.SCALE_SMOOTH);
             cardLabel = new JLabel(new ImageIcon(simg));
             GridBagConstraints gbc = new GridBagConstraints();
             this.setLayout(new GridBagLayout());
@@ -101,8 +108,6 @@ class BoardSidePane extends JPanel {
             this.addMouseListener(this);
             this.buttonContainer.setVisible(false);
         }
-
-
 
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -121,24 +126,21 @@ class BoardSidePane extends JPanel {
             BufferedImage card = null;
             try {
                 int val = this.updateRandomLabel();
-                card = ImageIO.read(this.getClass().getResource("/cart"+val+".png"));
+                card = ImageIO.read(this.getClass().getResource("/cart" + val + ".png"));
                 currentCard = Card.fromInt(val);
                 BoardSidePane.this.onCardDrawn.accept(this.currentCard);
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            Image simg = card.getScaledInstance(200,400,Image.SCALE_SMOOTH);
+            Image simg = card.getScaledInstance(200, 400, Image.SCALE_SMOOTH);
             label = new JLabel(new ImageIcon(simg));
 
             this.cardContainer.add(label);
             this.revalidate();
             this.repaint();
-
         }
 
-        /**
-         * Remove the drawn card from JPanel
-         */
+        /** Remove the drawn card from JPanel */
         private void resetDrawnCard() {
             this.currentCard = null;
             this.buttonContainer.setVisible(false);
@@ -151,6 +153,7 @@ class BoardSidePane extends JPanel {
 
         /**
          * Method calls the onCardStocked callback method to the drawn card
+         *
          * @param e The action event
          */
         private void stockCard(ActionEvent e) {
@@ -160,6 +163,7 @@ class BoardSidePane extends JPanel {
 
         /**
          * Method calls the onCardUsed callback method with the drawn card
+         *
          * @param e The action event
          */
         private void useCard(ActionEvent e) {
@@ -168,35 +172,22 @@ class BoardSidePane extends JPanel {
             CardPanel.this.resetDrawnCard();
         }
 
-        /**
-         * Create the random integer for the card value
-         * @return The integer for the card value
-         */
+        /** Create the random integer for the card valuew */
         private int updateRandomLabel() {
             Random r = new Random();
             return (r.nextInt(5));
         }
 
-
+        @Override
+        public void mousePressed(MouseEvent e) {}
 
         @Override
-        public void mousePressed(MouseEvent e) {
-
-        }
+        public void mouseReleased(MouseEvent e) {}
 
         @Override
-        public void mouseReleased(MouseEvent e) {
-
-        }
+        public void mouseEntered(MouseEvent e) {}
 
         @Override
-        public void mouseEntered(MouseEvent e) {
-
-        }
-
-        @Override
-        public void mouseExited(MouseEvent e) {
-
-        }
+        public void mouseExited(MouseEvent e) {}
     }
 }

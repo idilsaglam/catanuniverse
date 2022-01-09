@@ -1,23 +1,15 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Console;
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.*;
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import org.catanuniverse.core.game.Card;
 import org.catanuniverse.core.game.Harbor;
 import org.catanuniverse.core.game.Player;
@@ -34,14 +26,15 @@ class BottomStatusBar extends JPanel {
     private final Supplier<Set<Harbor>> getCurrentPlayerHarbors;
     private Exchange exchangePanel;
     private Set<Harbor> harbors;
+
     public BottomStatusBar(
             Player currentPlayer,
             int playerIndex,
             EmptyCallback onNextButtonPressed,
             Consumer<Card> onCardUsed,
             Supplier<Set<Harbor>> harborSupplier,
-            EmptyCallback onExchangeCompleted
-    ) throws IOException {
+            EmptyCallback onExchangeCompleted)
+            throws IOException {
         this.onExchangeCompleted = onExchangeCompleted;
         this.harbors = harborSupplier.get();
         this.getCurrentPlayerHarbors = harborSupplier;
@@ -50,15 +43,14 @@ class BottomStatusBar extends JPanel {
         this.resourceCards = new ArrayList<ResourceCard>();
         GridBagConstraints gbc = new GridBagConstraints();
         this.setLayout(new GridBagLayout());
-        this.playerCard = new PlayerCard(currentPlayer, playerIndex+1,64,64);
+        this.playerCard = new PlayerCard(currentPlayer, playerIndex + 1, 64, 64);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 0.25;
-        this.exchangePanel = new Exchange(this::onExchangeConfirmed,
-                this.currentPlayer.getResources(),
-                this.harbors
-        );
+        this.exchangePanel =
+                new Exchange(
+                        this::onExchangeConfirmed, this.currentPlayer.getResources(), this.harbors);
         this.add(this.exchangePanel, gbc);
         gbc.gridx = 1;
         this.add(this.playerCard, gbc);
@@ -68,45 +60,46 @@ class BottomStatusBar extends JPanel {
         this.add(cartDeck, gbc);
         gbc.gridx = 4;
         this.add(nextPlayerButton(), gbc);
-        gbc.gridx=5;
+        gbc.gridx = 5;
 
         this.onNextButtonClicked = onNextButtonPressed;
     }
 
-
     /**
      * Handles the exchange confirmation event from exchange form
+     *
      * @param resourcesToExchange The hash map of resources that current user will lose
      * @param resourceToReceive The resource type and the resource value that current user receives
      */
-    private void onExchangeConfirmed (
+    private void onExchangeConfirmed(
             HashMap<Resource, Integer> resourcesToExchange,
-            AbstractMap.Entry<Resource,Integer> resourceToReceive) {
+            AbstractMap.Entry<Resource, Integer> resourceToReceive) {
         // Current user will lose resources in the hashmap
-        for (Map.Entry<Resource, Integer> e: resourcesToExchange.entrySet()) {
+        for (Map.Entry<Resource, Integer> e : resourcesToExchange.entrySet()) {
             this.currentPlayer.updateResource(e.getKey(), -1 * e.getValue());
         }
         // Current user will receive resource and value from Entry
         this.currentPlayer.updateResource(resourceToReceive.getKey(), resourceToReceive.getValue());
         try {
             this.onExchangeCompleted.call();
-        } catch (IOException ignore) {}
+        } catch (IOException ignore) {
+        }
     }
 
-
-    public JButton nextPlayerButton(){
+    public JButton nextPlayerButton() {
         JButton button = new JButton();
         button.setText("Next player");
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    onNextButtonClicked.call();
-                } catch (IOException ioException) {
-                    ioException.printStackTrace();
-                }
-            }
-        });
+        button.addActionListener(
+                new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        try {
+                            onNextButtonClicked.call();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
+                    }
+                });
         return button;
     }
 
@@ -114,7 +107,7 @@ class BottomStatusBar extends JPanel {
         JPanel result = new JPanel();
         result.setLayout(new GridLayout(2, 0));
         ResourceCard resourceCard;
-        for (Resource r: Resource.values()) {
+        for (Resource r : Resource.values()) {
             resourceCard = new ResourceCard(r);
             this.resourceCards.add(resourceCard);
             result.add(resourceCard);
@@ -123,16 +116,15 @@ class BottomStatusBar extends JPanel {
     }
 
     public void updateResources() {
-        this.resourceCards.forEach((ResourceCard card) -> {
-            card.updateResource();
-            card.revalidate();
-            card.repaint();
-        });
+        this.resourceCards.forEach(
+                (ResourceCard card) -> {
+                    card.updateResource();
+                    card.revalidate();
+                    card.repaint();
+                });
     }
 
-    /**
-     * Updates the harbors with the given harbor list supplier
-     */
+    /** Updates the harbors with the given harbor list supplier */
     public void updateExchange() {
         System.out.println("Update exchange method called");
         System.out.println("Current player username " + this.currentPlayer.getUsername());
@@ -145,9 +137,7 @@ class BottomStatusBar extends JPanel {
         this.exchangePanel.repaint();
     }
 
-    /**
-     * Update all sub-components in the bottom status bar
-     */
+    /** Update all sub-components in the bottom status bar */
     public void update() {
         this.updateResources();
         this.updateUserCards();
@@ -156,6 +146,7 @@ class BottomStatusBar extends JPanel {
 
     /**
      * Update the current player with a new one
+     *
      * @param currentPlayer The new current player
      */
     public void setCurrentPlayer(Player currentPlayer, int currentPlayerIndex) throws IOException {
@@ -171,33 +162,30 @@ class BottomStatusBar extends JPanel {
         this.cartDeck.updateCards();
     }
 
-
     private class ResourceCard extends JPanel {
         private final Resource resource;
         private final JLabel imageLabel, countLabel;
         /**
          * Creates a resource card for given resource type
+         *
          * @param resource The type of resource
          * @throws IOException when t
          */
         ResourceCard(Resource resource) throws IOException {
             this.resource = resource;
-            this.countLabel = new JLabel(""+BottomStatusBar.this.currentPlayer.getResource(resource));
+            this.countLabel =
+                    new JLabel("" + BottomStatusBar.this.currentPlayer.getResource(resource));
             this.imageLabel = new JLabel();
             this.imageLabel.setIcon(new ImageIcon(resource.getImage()));
             this.add(imageLabel);
             this.add(countLabel);
         }
 
-        /**
-         * Updates the resources
-         */
+        /** Updates the resources */
         private void updateResource() {
-            this.countLabel.setText(""+BottomStatusBar.this.currentPlayer.getResource(resource));
+            this.countLabel.setText("" + BottomStatusBar.this.currentPlayer.getResource(resource));
             this.countLabel.revalidate();
             this.countLabel.repaint();
         }
     }
-
-
 }

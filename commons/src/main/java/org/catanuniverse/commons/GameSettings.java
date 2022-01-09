@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.commons;
 
 import org.catanuniverse.core.game.Player;
@@ -18,6 +15,7 @@ public abstract class GameSettings {
     protected boolean robberActivated;
     protected int maxVictoryPoints;
     private int nextCounter;
+
     public GameSettings() {
         this.capacity = -1;
         this.numberOfAI = -1;
@@ -44,7 +42,6 @@ public abstract class GameSettings {
         this.robberActivated = false;
         this.nextCounter = 0;
         this.maxVictoryPoints = maxVictoryPoints;
-
     }
 
     public GameSettings(int capacity, int maxVictoryPoints) {
@@ -57,11 +54,11 @@ public abstract class GameSettings {
 
     public void next() {
         this.nextCounter++;
-        this.currentPlayerIndex = (this.currentPlayerIndex + 1)%this.players.length;
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     }
 
     public int getRoundNumber() {
-        return this.nextCounter/this.capacity;
+        return this.nextCounter / this.capacity;
     }
 
     public Player getCurrentPlayer() {
@@ -206,7 +203,11 @@ public abstract class GameSettings {
     public GameSettings merge(GameSettings settings) {
         GameSettings result = null;
         if (settings instanceof LocalGameSettings) {
-            result = new LocalGameSettings(settings.getCapacity(), settings.getNumberOfAI(), settings.getMaxVictoryPoints());
+            result =
+                    new LocalGameSettings(
+                            settings.getCapacity(),
+                            settings.getNumberOfAI(),
+                            settings.getMaxVictoryPoints());
         }
         if (settings instanceof MultiPlayerHostGameSettings) {
             result =
@@ -276,6 +277,7 @@ public abstract class GameSettings {
 
     /**
      * Get the current player index
+     *
      * @return The index of the current player
      */
     public int getCurrentPlayerIndex() {
@@ -284,6 +286,7 @@ public abstract class GameSettings {
 
     /**
      * Update robberActivated value
+     *
      * @param robberActivated the new robber activated
      */
     public void setRobberActivated(boolean robberActivated) {
@@ -292,6 +295,7 @@ public abstract class GameSettings {
 
     /**
      * Return robber activated value
+     *
      * @return If robber activated
      */
     public boolean isRobberActivated() {
@@ -300,6 +304,7 @@ public abstract class GameSettings {
 
     /**
      * Changes the maximum victory points of the game room
+     *
      * @param victoryPoints The maximum victory points
      */
     public void setVictoryPoints(Integer victoryPoints) {
@@ -308,6 +313,7 @@ public abstract class GameSettings {
 
     /**
      * Get the number of victory points to win the game
+     *
      * @return The number of victory points to win the game
      */
     public int getMaxVictoryPoints() {
@@ -316,6 +322,7 @@ public abstract class GameSettings {
 
     /**
      * Check if the game ends or not
+     *
      * @return True if the current player has more than maxVictoryPoints
      */
     public boolean isGameEnd() {

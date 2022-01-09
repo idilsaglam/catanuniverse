@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.commons;
 
 import org.catanuniverse.core.game.Player;
@@ -57,15 +54,12 @@ public class LocalGameSettings extends GameSettings {
     @Override
     public void completePlayers() {
         System.out.printf(
-            "Room capacity %d\nNumber of requested players: %d\nNumber of AIs: %d\n",
-            super.getCapacity(),
-            this.getNumberOfRequestedPlayers(),
-            this.getNumberOfAI()
-        );
+                "Room capacity %d\nNumber of requested players: %d\nNumber of AIs: %d\n",
+                super.getCapacity(), this.getNumberOfRequestedPlayers(), this.getNumberOfAI());
         Player[] oldPlayers = this.players;
         this.players = new Player[this.getCapacity()];
         System.arraycopy(oldPlayers, 0, this.players, 0, oldPlayers.length);
-        for (int i = 0; i<getNumberOfAI(); i++) {
+        for (int i = 0; i < getNumberOfAI(); i++) {
             this.players[i + this.getNumberOfRequestedPlayers()] = new Player();
         }
     }

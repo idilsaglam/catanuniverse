@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.core.game;
 
 import org.catanuniverse.core.exceptions.NoSuchSlotException;
@@ -60,20 +57,26 @@ public final class Hextile extends Tile {
     }
 
     @Override
-    public void addSettlement(int index, Settlement settlement) throws SlotAlreadyTakenException, NoSuchSlotException {
+    public void addSettlement(int index, Settlement settlement)
+            throws SlotAlreadyTakenException, NoSuchSlotException {
         {
             this.isSlotExists(index);
-            if (this.playable(new int[]{index, (index + this.neighbors.length - 1) % this.neighbors.length})) {
+            if (this.playable(
+                    new int[] {
+                        index, (index + this.neighbors.length - 1) % this.neighbors.length
+                    })) {
                 if (this.settlementSlots[index] == null) {
                     int compIndex = complementaryIndex(index);
                     // We can insert only if the slot is null
                     this.settlementSlots[index] = settlement;
                     if (this.neighbors[index] != null) {
 
-                        System.out
-                                .printf("Will add neighbor id: %d slot %d\n", this.neighbors[index].getId(),
-                                        compIndex);
-                        this.neighbors[index].settlementSlots[(compIndex + 1) % this.neighbors.length] = settlement;
+                        System.out.printf(
+                                "Will add neighbor id: %d slot %d\n",
+                                this.neighbors[index].getId(), compIndex);
+                        this.neighbors[index]
+                                        .settlementSlots[(compIndex + 1) % this.neighbors.length] =
+                                settlement;
                     }
                     index = (index + this.neighbors.length - 1) % this.neighbors.length;
                     compIndex = complementaryIndex(index);
@@ -92,30 +95,33 @@ public final class Hextile extends Tile {
         if (!this.playable) return;
         Resource r = this.getGroundType().produces();
         if (r == null) return;
-        for (Settlement s: this.settlementSlots) {
+        for (Settlement s : this.settlementSlots) {
             if (s == null) continue;
             s.sendResource(r);
         }
     }
 
-
-
-
-
     @Override
     public boolean canAddSettlement(int index) throws NoSuchSlotException {
-        if(this.playable(new int[]{index, (index + this.neighbors.length - 1) % this.neighbors.length})) {
+        if (this.playable(
+                new int[] {index, (index + this.neighbors.length - 1) % this.neighbors.length})) {
             System.out.println("Playable");
             boolean result = this.hasSettlementsOnBothSidesIntersection(index);
             System.out.printf("Both sides safe %b\n", result);
             if (!result) return false;
             int compIndex = complementaryIndex(index);
-            result = this.neighbors[index] != null && this.neighbors[index].hasSettlementsOnBothSidesIntersection((compIndex + 1) % this.neighbors.length);
+            result =
+                    this.neighbors[index] != null
+                            && this.neighbors[index].hasSettlementsOnBothSidesIntersection(
+                                    (compIndex + 1) % this.neighbors.length);
             System.out.printf("Both sides safe at neighbor index %d %b\n", index, result);
             if (!result) return false;
             index = (index + this.neighbors.length - 1) % this.neighbors.length;
             compIndex = complementaryIndex(index);
-            result = this.neighbors[compIndex] != null && this.neighbors[compIndex].hasSettlementsOnBothSidesIntersection(index);
+            result =
+                    this.neighbors[compIndex] != null
+                            && this.neighbors[compIndex].hasSettlementsOnBothSidesIntersection(
+                                    index);
             System.out.printf("Both sides safe at neighbor index %d %b\n", index, result);
             return result;
         }
@@ -124,7 +130,7 @@ public final class Hextile extends Tile {
 
     @Override
     public Integer getFirstEligibleSettlementSlot(Settlement settlement) {
-        for (int i = 0; i<this.settlementSlots.length; i++) {
+        for (int i = 0; i < this.settlementSlots.length; i++) {
             try {
                 if (this.canAddSettlement(i)) {
                     return i;
@@ -138,7 +144,8 @@ public final class Hextile extends Tile {
 
     @Override
     public String toString() {
-        return String.format("Hextile id: %d, ground type %s Is playable? %b", this.uid, this.getGroundType(), this.playable);
+        return String.format(
+                "Hextile id: %d, ground type %s Is playable? %b",
+                this.uid, this.getGroundType(), this.playable);
     }
-
 }

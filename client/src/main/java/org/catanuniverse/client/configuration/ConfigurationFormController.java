@@ -1,8 +1,5 @@
 /*
-	Binôme 35
-	22015094 - Idil Saglam
-	 - Abderrahim Arous
-*/
+	22015094 - Idil Saglam*/
 package org.catanuniverse.client.configuration;
 
 import java.awt.event.ActionEvent;
@@ -110,7 +107,9 @@ class ConfigurationFormController {
         this.settings =
                 switch (type) {
                     case LOCAL -> new LocalGameSettings(
-                            GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI, GameSettings.DEFAULT_VICTORY_POINTS);
+                            GameSettings.DEFAULT_CAPACITY,
+                            GameSettings.DEFAULT_NUMBER_OF_AI,
+                            GameSettings.DEFAULT_VICTORY_POINTS);
                     case MP_GUEST -> new MultiPlayerGuestGameSettings();
                     case MP_HOST -> new MultiPlayerHostGameSettings(
                             GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI);
