@@ -214,16 +214,22 @@ public class BoardPane extends JPanel {
 
     /**
      * let the AI play
-     * FIXME: Block the UI thread
      */
     private void playAI() throws IOException {
         Random r = new Random();
         System.out.println("AI is playing");
-        System.out.println(this.gameSettings.getRoundNumber());
         // TODO: Check if the roll button is present
         if(this.gameSettings.getRoundNumber() > 1 ){
             System.out.println("Will roll the dice");
             boardSidePane.roll();
+            if (this.gameSettings.isRobberActivated()){
+                System.out.println("Play robber");
+                this.gameBoardPane.getBoard().randomRobber();
+                this.gameBoardPane.revalidate();
+                this.gameBoardPane.repaint();
+                this.updateStatusBars();
+                return;
+            }
             return;
         }
 
@@ -248,18 +254,9 @@ public class BoardPane extends JPanel {
         ){
             System.out.println("Can do nothing here. Pass the next");
             System.out.println("NEXT");
-            //next();
             return;
         }
-        if (this.gameSettings.isRobberActivated()){
-            System.out.println("Play robber");
-            this.gameBoardPane.getBoard().randomRobber();
-            this.gameBoardPane.revalidate();
-            this.gameBoardPane.repaint();
-            this.updateStatusBars();
-            this.playAI();
-            return;
-        }
+
         if(this.gameSettings.getCurrentPlayer().canBuildCity()){
             System.out.println("Building a CITY");
             boolean res = r.nextBoolean();
@@ -307,7 +304,6 @@ public class BoardPane extends JPanel {
                     this.boardSidePane.useCard();
                 }
                 this.playAI();
-                return;
             }
         }
     }
