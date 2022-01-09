@@ -1,5 +1,6 @@
 /*
-	22015094 - Idil Saglam*/
+	22015094 - Idil Saglam
+*/
 package org.catanuniverse.client.configuration.settings;
 
 import javax.swing.text.AttributeSet;

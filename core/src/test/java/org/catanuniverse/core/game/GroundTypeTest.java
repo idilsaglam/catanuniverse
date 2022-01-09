@@ -1,5 +1,6 @@
 /*
-	22015094 - Idil Saglam*/
+	22015094 - Idil Saglam
+*/
 package org.catanuniverse.core.game;
 
 import static org.junit.jupiter.params.provider.Arguments.arguments;
