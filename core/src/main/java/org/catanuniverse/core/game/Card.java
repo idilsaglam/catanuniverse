@@ -31,6 +31,7 @@ public enum Card {
         p.addVictoryPoint(2);
       }
     }
+    p.incrementUserCards(this, -1);
   }
 
   /**
