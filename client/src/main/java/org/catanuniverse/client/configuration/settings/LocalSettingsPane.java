@@ -20,7 +20,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
         super(onGameSettingsChanged);
         super.settings =
                 new LocalGameSettings(
-                        GameSettingsPane.DEFAULT_CAPACITY, GameSettingsPane.DEFAULT_NB_AI);
+                        GameSettingsPane.DEFAULT_CAPACITY, GameSettingsPane.DEFAULT_NB_AI, GameSettings.DEFAULT_VICTORY_POINTS);
 
         this.difficultySelector =
                 new DifficultySelector(this::onDifficultySelectorUpdated);
@@ -51,6 +51,7 @@ final class LocalSettingsPane extends GameSettingsPane<LocalGameSettings> {
    * @param victoryPoints The number of victory points
    */
   private void onVictoryPointsUpdated(Integer victoryPoints) {
+      System.out.printf("Victory points selector updated with %d\n", victoryPoints);
       super.settings.setVictoryPoints(victoryPoints);
       super.onGameSettingsChanged.accept(super.settings);
     }

@@ -23,9 +23,10 @@ public class LocalGameSettings extends GameSettings {
      *
      * @param capacity the capacity of the game room
      * @param nbOfAI The number of AIs in the game room
+     * @param maxVictoryPoints The maximum of the victory points of the game room
      */
-    public LocalGameSettings(int capacity, int nbOfAI) {
-        super(capacity, nbOfAI);
+    public LocalGameSettings(int capacity, int nbOfAI, int maxVictoryPoints) {
+        super(capacity, nbOfAI, maxVictoryPoints);
     }
 
     @Override

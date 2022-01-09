@@ -91,6 +91,7 @@ class ConfigurationFormController {
      */
     void gameSettingsPaneListener(GameSettings settings) {
         System.out.println("Game settings changed");
+        System.out.printf("Max victory points %d\n", settings.getMaxVictoryPoints());
         if (settings instanceof LocalGameSettings) {
             this.configurationForm
                     .getPlayersInputContainer()
@@ -109,7 +110,7 @@ class ConfigurationFormController {
         this.settings =
                 switch (type) {
                     case LOCAL -> new LocalGameSettings(
-                            GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI);
+                            GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI, GameSettings.DEFAULT_VICTORY_POINTS);
                     case MP_GUEST -> new MultiPlayerGuestGameSettings();
                     case MP_HOST -> new MultiPlayerHostGameSettings(
                             GameSettings.DEFAULT_CAPACITY, GameSettings.DEFAULT_NUMBER_OF_AI);

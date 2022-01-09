@@ -28,7 +28,7 @@ public abstract class GameSettings {
         this.maxVictoryPoints = GameSettings.DEFAULT_VICTORY_POINTS;
     }
 
-    public GameSettings(int capacity, int numberOfAI, Difficulty difficulty) {
+    public GameSettings(int capacity, int numberOfAI, Difficulty difficulty, int maxVictoryPoints) {
         if (numberOfAI >= capacity)
             throw new IllegalArgumentException(
                     "There should be at least one non AI player in the room");
@@ -43,14 +43,16 @@ public abstract class GameSettings {
         this.players = new Player[this.capacity];
         this.robberActivated = false;
         this.nextCounter = 0;
+        this.maxVictoryPoints = maxVictoryPoints;
+
     }
 
-    public GameSettings(int capacity) {
-        this(capacity, 0, null);
+    public GameSettings(int capacity, int maxVictoryPoints) {
+        this(capacity, 0, null, maxVictoryPoints);
     }
 
-    public GameSettings(int capacity, int numberOfAI) {
-        this(capacity, numberOfAI, numberOfAI == 0 ? null : Difficulty.EASY);
+    public GameSettings(int capacity, int numberOfAI, int maxVictoryPoints) {
+        this(capacity, numberOfAI, numberOfAI == 0 ? null : Difficulty.EASY, maxVictoryPoints);
     }
 
     public void next() {
@@ -204,7 +206,7 @@ public abstract class GameSettings {
     public GameSettings merge(GameSettings settings) {
         GameSettings result = null;
         if (settings instanceof LocalGameSettings) {
-            result = new LocalGameSettings(settings.getCapacity(), settings.getNumberOfAI());
+            result = new LocalGameSettings(settings.getCapacity(), settings.getNumberOfAI(), settings.getMaxVictoryPoints());
         }
         if (settings instanceof MultiPlayerHostGameSettings) {
             result =
@@ -302,5 +304,13 @@ public abstract class GameSettings {
      */
     public void setVictoryPoints(Integer victoryPoints) {
         this.maxVictoryPoints = victoryPoints;
+    }
+
+    /**
+     * Get the number of victory points to win the game
+     * @return The number of victory points to win the game
+     */
+    public int getMaxVictoryPoints() {
+        return this.maxVictoryPoints;
     }
 }
