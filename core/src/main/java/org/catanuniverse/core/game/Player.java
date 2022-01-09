@@ -7,6 +7,12 @@ package org.catanuniverse.core.game;
 
 import java.awt.Color;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.catanuniverse.core.utils.Helpers;
 
 public class Player {
@@ -300,5 +306,17 @@ public class Player {
      */
     public void exchange(HashMap<Resource, Integer> resourcesTable, Resource resourceToReceive, int exchangeRate) {
         // TODO: COMPLETE
+    }
+
+    /**
+     * Choose a random resource between non null resources
+     * @return A random resource between non null resources
+     */
+    public Resource getRandomResource() {
+        List<Entry<Resource, Integer>> notNullResources = this.resources.entrySet().stream().filter((Entry<Resource, Integer> entry) -> entry.getValue() != 0).collect(
+            Collectors.toList());
+        Random r = new Random();
+        int index = r.nextInt(notNullResources.size());
+        return notNullResources.get(index).getKey();
     }
 }

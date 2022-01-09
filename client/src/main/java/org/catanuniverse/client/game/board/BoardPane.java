@@ -7,6 +7,7 @@ package org.catanuniverse.client.game.board;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Set;
@@ -164,6 +165,7 @@ public class BoardPane extends JPanel {
     private boolean onRobberMoved(Hextile tile) {
         System.out.printf("Robber moved tile id %d\n", tile.getId());
         if (this.gameSettings.isRobberActivated() && tile.getPlayable()) {
+            this.playRobber(tile);
             this.gameSettings.setRobberActivated(false);
             this.desactivateRobber();
             tile.setPlayable(false);
@@ -405,7 +407,6 @@ public class BoardPane extends JPanel {
 
     /**
      * Passes to the next player
-     * @throws IOException
      */
     private void next() throws IOException {
         System.out.println("Next called usta");
@@ -443,8 +444,11 @@ public class BoardPane extends JPanel {
         this.boardSidePane.repaint();
     }
 
-
+    /**
+     * Deactivates robber
+     */
     private void desactivateRobber() {
+        this.gameSettings.setRobberActivated(false);
         this.setBackground(this.defaultBackground);
         this.robberLabel.setVisible(false);
     }
@@ -457,30 +461,29 @@ public class BoardPane extends JPanel {
         this.boardSidePane.disableDice();
         this.gameSettings.setRobberActivated(true);
         this.robberLabel.setVisible(true);
-        int nbCardsForThief;
-        for(int i=0; i<gameSettings.getPlayers().length; i++){
-            if (gameSettings.getPlayers()[i].getRessourceNumber() <= 7) {
-                continue;
-            }
-            Player player = this.gameSettings.getPlayers()[i];
-            // Robber does not impact resources of the current player
-            if (player.uid == this.gameSettings.getCurrentPlayer().uid) continue;
-            nbCardsForThief = player.getRessourceNumber()/2;
-            for (Resource r: Resource.values()) {
-                if(nbCardsForThief == 0){
-                    break;
-                }
-                if(player.getResource(r) > nbCardsForThief){
-                    player.updateResource(r, nbCardsForThief * -1);
-                    nbCardsForThief = 0;
-                    continue;
-                }
-                if(player.getResource(r) <= nbCardsForThief){
-                    nbCardsForThief -= player.getResource(r);
-                    player.updateResource(r, player.getResource(r) * -1);
-                }
-            }
         }
+
+    /**
+     * Method plays robber
+     * @param tile The hextile that the robber is placed
+     */
+    private void playRobber(Hextile tile) {
+        Set<Player> targetPlayers = tile.getSettlementOwners();
+        if (targetPlayers.size() == 0) return;
+        Random r = new Random();
+        int index = r.nextInt(targetPlayers.size());
+        Player targetPlayer = null;
+        for (Player p: targetPlayers) {
+            if (index == 0) {
+                targetPlayer = p;
+                break;
+            }
+            index--;
+        }
+        if (targetPlayer == null) return;
+        Resource resource = targetPlayer.getRandomResource();
+        this.gameSettings.getCurrentPlayer().updateResource(resource, 1);
+        targetPlayer.updateResource(resource, -1);
         this.updateStatusBars();
         this.revalidate();
         this.repaint();

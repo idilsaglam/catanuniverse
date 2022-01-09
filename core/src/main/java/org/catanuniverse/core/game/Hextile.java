@@ -136,4 +136,9 @@ public final class Hextile extends Tile {
         return null;
     }
 
+    @Override
+    public String toString() {
+        return String.format("Hextile id: %d, ground type %s Is playable? %b", this.uid, this.getGroundType(), this.playable);
+    }
+
 }
