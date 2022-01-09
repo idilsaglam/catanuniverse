@@ -315,6 +315,7 @@ public class Player {
     public Resource getRandomResource() {
         List<Entry<Resource, Integer>> notNullResources = this.resources.entrySet().stream().filter((Entry<Resource, Integer> entry) -> entry.getValue() != 0).collect(
             Collectors.toList());
+        if (notNullResources.size() == 0) return null;
         Random r = new Random();
         int index = r.nextInt(notNullResources.size());
         return notNullResources.get(index).getKey();

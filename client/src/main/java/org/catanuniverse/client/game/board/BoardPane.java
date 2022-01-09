@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 import org.catanuniverse.commons.GameSettings;
@@ -468,7 +469,7 @@ public class BoardPane extends JPanel {
      * @param tile The hextile that the robber is placed
      */
     private void playRobber(Hextile tile) {
-        Set<Player> targetPlayers = tile.getSettlementOwners();
+        Set<Player> targetPlayers = tile.getSettlementOwners().stream().filter((Player p) -> p.getRessourceNumber() != 0).collect(Collectors.toSet());
         if (targetPlayers.size() == 0) return;
         Random r = new Random();
         int index = r.nextInt(targetPlayers.size());

@@ -173,7 +173,7 @@ class BoardSidePane extends JPanel {
          */
         private int updateRandomLabel() {
             Random r = new Random();
-            return (r.nextInt(4));
+            return (r.nextInt(5));
         }
 
 
