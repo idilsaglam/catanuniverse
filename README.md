@@ -1,7 +1,7 @@
 
 # Catanuniverse
 
-Réalisé par Idil Saglam 22015094 dans cadre du module Programmation Orienté Objet et Interface Graphique à l'Université Paris.
+Réalisé par Idil Saglam 22015094 dans le cadre du module Programmation Orienté Objet et Interface Graphique à l'Université Paris.
 
 # Pré-requis
 
