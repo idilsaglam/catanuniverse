@@ -376,7 +376,7 @@ public class BoardPane extends JPanel {
     /** Initialise panes and add them to the current JPanel */
     private void initPanes(Dimension size) {
         final Dimension topSize = new Dimension(size.width, size.height / 8),
-                bottomSize = new Dimension(size.width, size.height / 8),
+                bottomSize = new Dimension(size.width, 3 * size.height / 16),
                 centerSize = new Dimension(size.width, 10 * size.height / 16);
 
         this.topStatusPane.setSize(topSize);
